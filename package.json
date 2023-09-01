@@ -5,7 +5,7 @@
     "@types/yargs": "^17.0.24",
     "allure-commandline": "^2.21.0",
     "async": "^3.2.4",
-    "cypress": "^12.13.0",
+    "cypress": "^12.17.4",
     "fs": "^0.0.1-security",
     "liquid-json": "^0.3.1",
     "lodash": "^4.17.21",
@@ -22,12 +22,15 @@
     "start": "npx cypress open",
     "test": "npx as-a spec npx cypress open ",
     "cy:parallel": "cypress-parallel -d cypress/e2e -t 5 -s cy:run",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "run": "npx cypress run"
   },
   "dependencies": {
+    "as-a": "^2.2.2",
     "axios": "^1.4.0",
     "cypress-parallel": "^0.13.0",
     "cypress-plugin-api": "^2.11.0",
+    "cypress-testing-library": "^4.0.0",
     "dayjs": "^1.11.7",
     "fs-extra": "^11.1.1",
     "minimatch": "^9.0.3",

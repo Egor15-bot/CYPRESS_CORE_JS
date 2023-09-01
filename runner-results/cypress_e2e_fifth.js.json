@@ -1,0 +1,10 @@
+{
+  "suites": 5,
+  "tests": 24,
+  "passes": 24,
+  "pending": 0,
+  "failures": 0,
+  "start": "2023-09-01T07:56:56.492Z",
+  "duration": 293229,
+  "file": "cypress\\e2e\\fifth.js"
+}

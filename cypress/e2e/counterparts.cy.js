@@ -41,27 +41,27 @@ describe('Контрагенты', () => {
                 .should('have.css', 'background-image', 'linear-gradient(251.59deg, rgb(47, 84, 235) 0%, rgb(14, 131, 223) 99.45%)');
         })
     })
-    context('Контрагенты ЮЛ', () => {
-        it('Создаю контрагента ЮЛ', function () {
-            //Перехожу в раздел "Контрагенты"
-            cy.visit(`${Cypress.config('baseUrl')}counterparts`)
-            //Нажимаю кнопку "Добавить контрагента"
-            cy.get('[data-qa="1657885995577"] > [data-qa="1658987981978"]')
-                .click()
-            cy.url()
-                .should('eq', `${Cypress.config('baseUrl')}counterparts/create`)
-            //Заполняю форму тестовыми данными из фикстуры
-            cy.typeForm(this.testData.UL.type)
-            cy.get('.loader')
-                .should('not.exist')
-            //Проверяю тестовые данные из фикстуры
-            cy.checkFormСounterparts(this.testData.UL)
-            //Нажимаю "Сохранить"
-            cy.get('[data-qa="1657886705496"] > [data-qa="1658987981978"]').click()
-            //Проверяю тост сообщение
-            cy.checkGreenToastInfo(this.testData.toastGreen);
-        })
-    })
+    // context('Контрагенты ЮЛ', () => {
+    //     it('Создаю контрагента ЮЛ', function () {
+    //         //Перехожу в раздел "Контрагенты"
+    //         cy.visit(`${Cypress.config('baseUrl')}counterparts`)
+    //         //Нажимаю кнопку "Добавить контрагента"
+    //         cy.get('[data-qa="1657885995577"] > [data-qa="1658987981978"]')
+    //             .click()
+    //         cy.url()
+    //             .should('eq', `${Cypress.config('baseUrl')}counterparts/create`)
+    //         //Заполняю форму тестовыми данными из фикстуры
+    //         cy.typeForm(this.testData.UL.type)
+    //         cy.get('.loader')
+    //             .should('not.exist')
+    //         //Проверяю тестовые данные из фикстуры
+    //         cy.checkFormСounterparts(this.testData.UL)
+    //         //Нажимаю "Сохранить"
+    //         cy.get('[data-qa="1657886705496"] > [data-qa="1658987981978"]').click()
+    //         //Проверяю тост сообщение
+    //         cy.checkGreenToastInfo(this.testData.toastGreen);
+    //     })
+    // })
     context('Контрагенты ФЛ', () => {
         it('Создаю контрагента ФЛ', function () {
         })

@@ -24,8 +24,8 @@ Cypress.Commands.add('getLocalStorageValue', (key) => {
 Cypress.Commands.add('loginStand', () => {
     cy.session([], () => {
         cy.visit("/")
-        cy.get('input[data-qa="1658988187497"][type="text"]').type(Cypress.env('username'), { log: false })
-        cy.get('input[data-qa="1658988187497"][type="password"]').type(Cypress.env('password'), { log: false })
+        cy.get('input[data-qa="1658988187497"][type="text"]').type("qa_eybondar_ul", { log: false })
+        cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345678", { log: false })
         cy.get('div[data-qa="1658987981978"]').click()
         cy.url().should('contain', 'desktop')
     })

@@ -1,9 +1,9 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
-  projectId: 'dj569a',
+  projectId: 'qc56ne',
   env: {
-
+//enviroment variables
   },
   e2e: {  
     baseUrl: "https://pred-ul.metib.online/",
