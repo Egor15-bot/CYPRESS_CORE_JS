@@ -66,6 +66,11 @@ Cypress.Commands.add('typeForm', (fixture) => {
             .type(`${value}`)
     });
 })
+Cypress.Commands.add('tearUp',() => {
+    cy.session('session',() => {
+        cy.visit('/')
+    })
+})
 //Проверка заполненых полей в форме в разделе "Контрагенты"
 Cypress.Commands.add('checkFormСounterparts', (fixture) => {
     cy.contains('.dynamic-input', 'Название банка получателя')

@@ -3,20 +3,40 @@ describe('Страница авторизации', () => {
     cy.visit('/')
   })
   context('Блок тестов авторизации', () => {
-    it('#2238 - Страница входа. Проверка редиректа на боевой сайт', function () {
-      cy.getByDataQa('1657808668688').click()
+    it('#2238 - Страница входа. Лого Проверка редиректа на боевой сайт', function () {
+      cy.getByDataQa('1657808668688')
+      .should('be,visible')
+      .click()
       cy.url().should('eq', 'https://metib.online/')
     })
-    it('#2239 - Страница входа. Проверка отображения номера телефона', function () {
+    it('#2239 - Страница входа. Номер контакт центра', () => {
       cy.getByClass('phone__value')
         .should('be.visible')
         .should('contain', '8 (800) 500-81-97')
+    })
+    it.only('#2240 - Страница входа. Новости хедер', () =>{
+      //FIXME:Дописать метод проверки новостей в хедере
+      cy.get('.main-news').should('be.visible')
+      cy.get('.main-news__info').within(() => {
+        cy.get('main-news__date').should('contain',' 07.11.2022 ')
+        cy.get('main-news__content_title').should('contain','Для клиентов ДО Новосибирский')
+        cy.get('main-news__content_text').should('be.visible')
+      })
+      cy.get('.main-news__content_link').click()
+      cy.getByDataQa('1657809113674').should('exist')
+      cy.getByDataQa('1657809117566').should('contain', 'Новости')
+      cy.getByDataQa("1657809113674").should('be.visible')
+      cy.get('.news__title_close').click()
+      cy.getByClass("block-content ng-tns-c310-2").should('not.exist')
     })
     it('#2241 - Страница входа. Заголовок ', () => {
       cy.getByClass('panel-title')
         .should('be.visible')
         .should('contain', 'Интернет-банк для бизнеса')
     })  
+    it('#2242 - Страница входа. Лолин с валидными данными',()=>{
+      cy.loginStand()
+    })
     it('#2243 - Страница входа. Мобильное приложение', () => {
       cy.chooseItemFromFooter('Мобильное приложение')
       cy.getByClass("apps__close_header").should('contain', "Мобильное приложение")
@@ -31,7 +51,11 @@ describe('Страница авторизации', () => {
       cy.url().should('eq', "https://pred-ul.metib.online/auth/places")
       cy.getByClass("places__filtered ng-star-inserted").should('be.visible')
     })
-    it('#2246 - Страница входа. Новость', () => {
+    it.only('#2244 - Страница входа. Инструкция пользователя', () => {
+      cy.chooseItemFromFooter('Инструкция пользователя')
+      //TODO: дописать метод проверки открывшегося пдф документа и проверять УРЛ
+    })
+    it('#2246 - Страница входа. Новости', () => {
       cy.chooseItemFromFooter('Новости')
       cy.getByDataQa('1657809117566').should('contain', 'Новости')
       cy.getByDataQa("1657809113674").should('be.visible')
