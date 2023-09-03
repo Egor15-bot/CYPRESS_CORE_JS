@@ -1,11 +1,13 @@
 {
   "devDependencies": {
     "@shelex/cypress-allure-plugin": "^2.40.0",
+    "@testing-library/cypress": "^9.0.0",
     "@types/fs-extra": "^11.0.1",
     "@types/yargs": "^17.0.24",
     "allure-commandline": "^2.21.0",
     "async": "^3.2.4",
     "cypress": "^12.17.4",
+    "cypress-real-events": "^1.10.1",
     "fs": "^0.0.1-security",
     "liquid-json": "^0.3.1",
     "lodash": "^4.17.21",
@@ -24,7 +26,7 @@
     "cy:parallel": "cypress-parallel -d cypress/e2e -t 5 -s cy:run",
     "cy:run": "cypress run",
     "run": "npx cypress run",
-    "record":"npx cypress run --record --key d43973ab-655d-4198-9f44-11126ff677d3",
+    "record": "npx cypress run --record --key d43973ab-655d-4198-9f44-11126ff677d3",
     "cy:parallel-record": "cypress-parallel -d cypress/e2e -t 5 -s cy:run --record --key d43973ab-655d-4198-9f44-11126ff677d3"
   },
   "dependencies": {

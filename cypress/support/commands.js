@@ -1,14 +1,16 @@
+import '@testing-library/cypress/add-commands'
+import 'cypress-real-events/support';
 //Ошибки, которые сайпрес должен игнорировать при работе
 Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop limit exceeded'))
 Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop completed with undelivered notifications'))
 
 //Метод поиска по data-qa
 Cypress.Commands.add('getByDataQa', (selector) => {
-    return cy.get(`[data-qa=${selector}]`)
+    cy.get(`[data-qa="${selector}"]`)
 })
 //Метод поиска по классу 
-Cypress.Commands.add('getByClass', (selector) => {
-    return cy.get(`[class=${selector}]`)
+Cypress.Commands.add('getByClass', (className) => {
+    cy.get(`[class="${className}"]`)
 })
 Cypress.Commands.add('waitUntil', (element) => {
     cy.get(element).should('be.visible')
@@ -66,6 +68,11 @@ Cypress.Commands.add('typeForm', (fixture) => {
             .type(`${value}`)
     });
 })
+Cypress.Commands.add('tearUp',() => {
+    cy.session('session',() => {
+        cy.visit('/')
+    })
+})
 //Проверка заполненых полей в форме в разделе "Контрагенты"
 Cypress.Commands.add('checkFormСounterparts', (fixture) => {
     cy.contains('.dynamic-input', 'Название банка получателя')
@@ -104,6 +111,13 @@ Cypress.Commands.add('loaderNotExist', (endpoint) => {
     cy.get('.loader')
         .should('not.exist')
 })
+Cypress.Commands.add('chooseItemFromFooter',(footerItemName) =>{
+    cy.get('div[data-qa="1657808685688"')
+        .find('.add-menu__item')
+        .contains(footerItemName)
+        .click()
+})
+
 //
 //ИЗМЕНЕНИЕ ФОРМАТА СЧЕТА - это функции!!!
 //Делаю номер счета accNumber в формате "00000 000 0 00000000000"
