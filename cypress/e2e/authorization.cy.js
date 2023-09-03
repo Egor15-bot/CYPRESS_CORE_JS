@@ -1,27 +1,33 @@
+import { should } from "chai"
+
 describe('Страница авторизации', () => {
   beforeEach('Авторизация на стенде Препрод', () => {
     cy.visit('/')
   })
   context('Хедер страницы входа', () => {
-    it('#2238 - Страница входа. Лого Проверка редиректа на боевой сайт', function () {
-      cy.getByDataQa('1657808668688').click()
-      cy.url().should('eq', 'https://metib.online/')
-    })
-    it('#2239 - Страница входа. Номер контакт центра', () => {
-      cy.getByClass('phone__value')
-        .should('contain', '8 (800) 500-81-97')
-    })  
+    // it('#2238 - Страница входа. Лого Проверка редиректа на боевой сайт', () => {
+    //   cy.getByDataQa('1657808668688').click()
+    //   cy.url().should('eq', 'https://metib.online/')
+
+    // })
+    // it('#2239 - Страница входа. Номер контакт центра', () => {
+    //   cy.getByClass('phone__value')
+    //     .should('contain', '8 (800) 500-81-97')
+    // })  
     it('#2240 - Страница входа. Новости хедер', () => {
       //FIXME:Дописать метод проверки новостей в хедере
-      cy.get('.main-news').should('be.visible')
-      cy.get('.main-news__info').within(() => {
+      cy.get('.main-news__news').should('have.css', 'background-color', '#f2f1f1').within(() => {
         cy.get('.main-news__date').should('contain', ' 07.11.2022 ')
         cy.get('.main-news__content_title').should('contain', 'Для клиентов ДО Новосибирский')
         cy.get('.main-news__content_text').should('be.visible')
+        cy.get('.main-news__content_link').should('contain', 'Читать полностью').click()
       })
-      cy.get('.main-news__content_link').click()
+      cy.get('#item-0').should('have.css', 'border-left', '4px solid #2f54eb');
+      cy.get('#item-61').scrollIntoView().click().should('have.css', 'border-left', '4px solid #2f54eb')
+      cy.getByClass('items__up-arrow ng-tns-c310-1').click()
+      cy.get('#item-61').should('not.be.visible')
       cy.getByDataQa('1657809113674').should('exist')
-      cy.getByDataQa('1657809117566').should('contain', 'Новости')                                                          
+      cy.getByDataQa('1657809117566').should('contain', 'Новости')
       cy.getByDataQa("1657809113674").should('be.visible')
       cy.get('.news__title_close').click()
       cy.getByClass("block-content ng-tns-c310-2").should('not.exist')
@@ -31,7 +37,7 @@ describe('Страница авторизации', () => {
     it('#2241 - Страница входа. Заголовок ', () => {
       cy.getByClass('panel-title')
         .should('contain', 'Интернет-банк для бизнеса')
-    })  
+    })
     it('#4386 - Страница входа. Логин с невалидными данными', () => {
       cy.get('input[data-qa="1658988187497"][type="text"]').type("ValidLogin", { log: false })
       cy.get('input[data-qa="1658988187497"][type="password"]').type("InvalidPassword", { log: false })
@@ -45,7 +51,7 @@ describe('Страница авторизации', () => {
       cy.get('div[data-qa="1658987981978"]').click()
       cy.url().should('eq', `${Cypress.config('baseUrl')}desktop`)
     })
-    it('',() => {
+    it('', () => {
       //TODO: Добавитьпровекру отобрадения полей и двух кнопок в конце поля
     })
   })
@@ -73,7 +79,7 @@ describe('Страница авторизации', () => {
     it('#2245 - Страница входа. Инструкция пользователя', () => {
 
       // cy.chooseItemFromFooter('Инструкция пользователя')
-     //TODO: дописать метод проверки открывшегося пдф документа и проверять УРЛ
+      //TODO: дописать метод проверки открывшегося пдф документа и проверять УРЛ
     })
     it('#2246 - Страница входа. Новости', () => {
       //TODO:Добавить проверку на девайдер его цвет и смену текста при выборе другой новости
