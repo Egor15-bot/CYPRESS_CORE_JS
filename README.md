@@ -195,3 +195,33 @@ cy.get('.my-input').type('Some text');
 // Используя только cy.contains()
 cy.contains('Some element with text');
 // Можно избежать should('be.visible'), так как cy.contains() сам ожидает видимости элемента      
+
+
+## Основные методы cypress-testing-library
+1. cy.findByText(text, [options]): Поиск элемента по его текстовому содержанию.
+
+2. cy.findByPlaceholderText(placeholder, [options]): Поиск элемента по тексту атрибута placeholder.
+
+3. cy.findByLabelText(labelText, [options]): Поиск элемента по тексту атрибута label элемента.
+
+4. cy.findByAltText(altText, [options]): Поиск элемента по тексту атрибута alt изображения.
+
+5. cy.findByTestId(testId, [options]): Поиск элемента по значению атрибута data-testid.
+
+6. cy.findAllByText(text, [options]): Поиск всех элементов, содержащих указанный текст.
+
+7. cy.findAllByPlaceholderText(placeholder, [options]): Поиск всех элементов с указанным текстом атрибута placeholder.
+
+8. cy.findAllByLabelText(labelText, [options]): Поиск всех элементов с указанным текстом атрибута label.
+
+9. cy.findAllByAltText(altText, [options]): Поиск всех элементов с указанным текстом атрибута alt изображения.
+
+10. cy.findAllByTestId(testId, [options]): Поиск всех элементов с указанным значением атрибута data-testid.
+
+11. cy.findByRole(role, [options]): Поиск элемента по его роли (например, "button", "link", "list").
+
+12. cy.findAllByRole(role, [options]): Поиск всех элементов с указанной ролью.
+
+13. cy.findBySelectText(selectText, [options]): Поиск выпадающего списка (select) по выбранному тексту.
+
+14. cy.findBySelectValue(selectValue, [options]): Поиск выпадающего списка (select) по выбранному значению.
