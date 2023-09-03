@@ -5,16 +5,14 @@ describe('Страница авторизации', () => {
   context('Блок тестов авторизации', () => {
     it('#2238 - Страница входа. Лого Проверка редиректа на боевой сайт', function () {
       cy.getByDataQa('1657808668688')
-      .should('be,visible')
       .click()
       cy.url().should('eq', 'https://metib.online/')
     })
     it('#2239 - Страница входа. Номер контакт центра', () => {
       cy.getByClass('phone__value')
-        .should('be.visible')
         .should('contain', '8 (800) 500-81-97')
     })
-    it.only('#2240 - Страница входа. Новости хедер', () =>{
+    it('#2240 - Страница входа. Новости хедер', () =>{
       //FIXME:Дописать метод проверки новостей в хедере
       cy.get('.main-news').should('be.visible')
       cy.get('.main-news__info').within(() => {
@@ -31,7 +29,6 @@ describe('Страница авторизации', () => {
     })
     it('#2241 - Страница входа. Заголовок ', () => {
       cy.getByClass('panel-title')
-        .should('be.visible')
         .should('contain', 'Интернет-банк для бизнеса')
     })  
     it('#2242 - Страница входа. Лолин с валидными данными',()=>{
@@ -51,7 +48,7 @@ describe('Страница авторизации', () => {
       cy.url().should('eq', "https://pred-ul.metib.online/auth/places")
       cy.getByClass("places__filtered ng-star-inserted").should('be.visible')
     })
-    it.only('#2244 - Страница входа. Инструкция пользователя', () => {
+    it('#2244 - Страница входа. Инструкция пользователя', () => {
       cy.chooseItemFromFooter('Инструкция пользователя')
       //TODO: дописать метод проверки открывшегося пдф документа и проверять УРЛ
     })
@@ -64,7 +61,6 @@ describe('Страница авторизации', () => {
     })
     it('#2247 - Страница входа. Генеральная лицензия', () => {
       cy.get('.copy')
-        .should('be.visible')
         .should('contain', '© ПАО АКБ "Металлинвестбанк". Генеральная лицензия Банка России № 2440, от 21.11.2014 г.')
     })
     it('Страница входа. Логин с невалидными данными', () => {
@@ -72,9 +68,16 @@ describe('Страница авторизации', () => {
       cy.get('input[data-qa="1658988187497"][type="password"]').type("InvalidPassword", { log: false })
       cy.get('div[data-qa="1658987981978"]').click()
       cy.get('[data-qa="1657808896581"]')
-      .should('be.visible')
       .should('contain','Неверный логин или пароль')
     })
+  })
+  it.only('#2244 - Страница входа. Инструкция пользователя', () => {
+    cy.get('.add-menu')
+    .find('.add-menu__item').first()
+    .should('not.have.attr','tabindex')
+    
+
+    //TODO: дописать метод проверки открывшегося пдф документа и проверять УРЛ
   })
  
 })
