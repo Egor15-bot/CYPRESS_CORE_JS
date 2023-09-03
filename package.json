@@ -7,6 +7,7 @@
     "allure-commandline": "^2.21.0",
     "async": "^3.2.4",
     "cypress": "^12.17.4",
+    "cypress-real-events": "^1.10.1",
     "fs": "^0.0.1-security",
     "liquid-json": "^0.3.1",
     "lodash": "^4.17.21",
