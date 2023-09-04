@@ -1,6 +1,6 @@
 describe('Страница авторизации', () => {
   beforeEach('Переход на предпрод', () => {
-    cy.visit('https://test-ul.metib.online/')
+    cy.visit('/')
   })
   context('Хедер страницы входа', () => {
     // it('#2238 - Страница входа. Лого Проверка редиректа на боевой сайт', () => {
@@ -11,30 +11,35 @@ describe('Страница авторизации', () => {
     //   cy.get('.phone__value').should('contain', '8 (800) 500-81-97')
     // })  
     it.only('#2240 - Страница входа. Новости хедер', () => {
-        cy.get('.main-news__news').should('have.css', 'background-color', '#f2f1f1').within(() => {
+      cy.get('.main-news__news').should('have.css', 'background-color', 'rgb(241, 242, 242)').within(() => {
         cy.get('.main-news__date').should('contain', ' 07.11.2022 ')
         cy.get('.main-news__content_title').should('contain', 'Для клиентов ДО Новосибирский')
         cy.get('.main-news__content_text').should('be.visible')
         cy.get('.main-news__content_link').should('contain', 'Читать полностью').click()
       })
       cy.getByDataQa('1657809109305')
-      .should('have.css','width','1200')
-      .should('have.css','height','830')
+        .should('have.css', 'width', '1200px')
+        .and('have.css', 'height', '830px')
 
-      cy.getByDataQa('1657809117566').should('contain','Новости')
-      cy.get("[class='content-desc ng-tns-c310-0 ng-trigger ng-trigger-slideInOut ng-star-inserted']")
-      .find('p').eq(1)
-      .should('contain',' С 07 ноября 2022 года осуществлена реорганизация Новосибирского филиала в Дополнительный офис Новосибирск.')
-      cy.get('#item-0').should('have.css', 'border-left', '4px solid #2f54eb');
-      cy.get('#item-61').scrollIntoView().click().should('have.css', 'border-left', '4px solid #2f54eb')
-      cy.get("[class='content-desc ng-tns-c310-0 ng-trigger ng-trigger-slideInOut ng-star-inserted']")
-      .find('p').eq(1)
-      .should('contain','ПАО АКБ "Металлинвестбанк" уведомляет Вас о том, что в связи с празднованием Дня народного единства изменится режим работы отделений Банка. ')
-      cy.getByClass('items__up-arrow ng-tns-c310-1').click()
+      cy.getByDataQa('1657809117566').should('contain', 'Новости')
+      cy.get('.content-desc > :nth-child(2)').invoke('text').then((actualText) => {
+        const expectedText = ' С 07 ноября 2022 года осуществлена реорганизация Новосибирского филиала в Дополнительный офис Новосибирск.'
+        expect(actualText.trim(), expectedText.trim())
+      })
+        
+      cy.get('#item-0').should('have.css', 'border-left', '3.86667px solid rgb(47, 84, 235)');
+      cy.get('#item-61').scrollIntoView().click().should('have.css', 'border-left', '3.86667px solid rgb(47, 84, 235)')
+      cy.get('.content-desc > :nth-child(2)').invoke('text').then((actualText) => {
+        const expectedText = 'ПАО АКБ "Металлинвестбанк" уведомляет Вас о том, что в связи с празднованием Дня народного единства изменится режим работы отделений Банка. '
+        expect(actualText.trim(), expectedText)
+      } )
+      cy.get('.items__up-arrow').click()
+      cy.get('#item-0').should('be.visible')
       cy.get('#item-61').should('not.be.visible')
       cy.getByDataQa('1657809113674').should('exist')
       cy.get('.news__title_close').click()
       cy.getByClass("block-content ng-tns-c310-2").should('not.exist')
+      cy.getAllLocalStorage('newsread')
     })
   })
   context('Главный блок страницы входа', () => {
@@ -58,11 +63,10 @@ describe('Страница авторизации', () => {
       //TODO: Прописать логику чтобы сначала находить первый элемент проверять все внутри него а потом переключаться на второй элемент и продолжать внутри него
       cy.get('input[data-qa="1658988187497"][type="password"]').should('exist')
       cy.get('[data-qa="1658988194022"').first().click()
-      cy.get('div.tooltip__arrow').should('be.visible')  
+      cy.get('div.tooltip__arrow').should('be.visible')
       cy.get('[data-qa="1658988194022"').first().click()
-      cy.get('div.tooltip__arrow').should('not.be.visible')  
+      cy.get('div.tooltip__arrow').should('not.be.visible')
       cy.get('[data-qa="1658988194022"').last().click()
-
     })
   })
   context('Футер страницы входа', () => {
