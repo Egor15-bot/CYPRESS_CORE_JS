@@ -1,62 +1,72 @@
-import { should } from "chai"
-
 describe('Страница авторизации', () => {
-  beforeEach('Авторизация на стенде Препрод', () => {
-    cy.visit('/')
+  beforeEach('Переход на предпрод', () => {
+    cy.visit('https://test-ul.metib.online/')
   })
   context('Хедер страницы входа', () => {
     // it('#2238 - Страница входа. Лого Проверка редиректа на боевой сайт', () => {
     //   cy.getByDataQa('1657808668688').click()
     //   cy.url().should('eq', 'https://metib.online/')
-
     // })
     // it('#2239 - Страница входа. Номер контакт центра', () => {
-    //   cy.getByClass('phone__value')
-    //     .should('contain', '8 (800) 500-81-97')
+    //   cy.get('.phone__value').should('contain', '8 (800) 500-81-97')
     // })  
-    it('#2240 - Страница входа. Новости хедер', () => {
-      //FIXME:Дописать метод проверки новостей в хедере
-      cy.get('.main-news__news').should('have.css', 'background-color', '#f2f1f1').within(() => {
+    it.only('#2240 - Страница входа. Новости хедер', () => {
+        cy.get('.main-news__news').should('have.css', 'background-color', '#f2f1f1').within(() => {
         cy.get('.main-news__date').should('contain', ' 07.11.2022 ')
         cy.get('.main-news__content_title').should('contain', 'Для клиентов ДО Новосибирский')
         cy.get('.main-news__content_text').should('be.visible')
         cy.get('.main-news__content_link').should('contain', 'Читать полностью').click()
       })
+      cy.getByDataQa('1657809109305')
+      .should('have.css','width','1200')
+      .should('have.css','height','830')
+
+      cy.getByDataQa('1657809117566').should('contain','Новости')
+      cy.get("[class='content-desc ng-tns-c310-0 ng-trigger ng-trigger-slideInOut ng-star-inserted']")
+      .find('p').eq(1)
+      .should('contain',' С 07 ноября 2022 года осуществлена реорганизация Новосибирского филиала в Дополнительный офис Новосибирск.')
       cy.get('#item-0').should('have.css', 'border-left', '4px solid #2f54eb');
       cy.get('#item-61').scrollIntoView().click().should('have.css', 'border-left', '4px solid #2f54eb')
+      cy.get("[class='content-desc ng-tns-c310-0 ng-trigger ng-trigger-slideInOut ng-star-inserted']")
+      .find('p').eq(1)
+      .should('contain','ПАО АКБ "Металлинвестбанк" уведомляет Вас о том, что в связи с празднованием Дня народного единства изменится режим работы отделений Банка. ')
       cy.getByClass('items__up-arrow ng-tns-c310-1').click()
       cy.get('#item-61').should('not.be.visible')
       cy.getByDataQa('1657809113674').should('exist')
-      cy.getByDataQa('1657809117566').should('contain', 'Новости')
-      cy.getByDataQa("1657809113674").should('be.visible')
       cy.get('.news__title_close').click()
       cy.getByClass("block-content ng-tns-c310-2").should('not.exist')
     })
   })
   context('Главный блок страницы входа', () => {
-    it('#2241 - Страница входа. Заголовок ', () => {
-      cy.getByClass('panel-title')
-        .should('contain', 'Интернет-банк для бизнеса')
-    })
-    it('#4386 - Страница входа. Логин с невалидными данными', () => {
-      cy.get('input[data-qa="1658988187497"][type="text"]').type("ValidLogin", { log: false })
-      cy.get('input[data-qa="1658988187497"][type="password"]').type("InvalidPassword", { log: false })
-      cy.get('div[data-qa="1658987981978"]').click()
-      cy.get('[data-qa="1657808896581"]')
-        .should('contain', 'Неверный логин или пароль')
-    })
-    it('#2847 - Страница входа. Логин с валидными данными', () => {
-      cy.get('input[data-qa="1658988187497"][type="text"]').type("qa_eybondar_ul", { log: false })
-      cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345678", { log: false })
-      cy.get('div[data-qa="1658987981978"]').click()
-      cy.url().should('eq', `${Cypress.config('baseUrl')}desktop`)
-    })
-    it('', () => {
-      //TODO: Добавитьпровекру отобрадения полей и двух кнопок в конце поля
+    // it('#2241 - Страница входа. Заголовок ', () => {
+    //   cy.getByClass('panel-title').should('contain', 'Интернет-банк для бизнеса')
+    // })
+    // it('#4386 - Страница входа. Логин с невалидными данными', () => {
+    //   cy.get('input[data-qa="1658988187497"][type="text"]').type("ValidLogin", { log: false })
+    //   cy.get('input[data-qa="1658988187497"][type="password"]').type("InvalidPassword", { log: false })
+    //   cy.get('div[data-qa="1658987981978"]').click()
+    //   cy.get('[data-qa="1657808896581"]').should('contain', 'Неверный логин или пароль')
+    // })
+    // it('#2847 - Страница входа. Логин с валидными данными', () => {
+    //   cy.get('input[data-qa="1658988187497"][type="text"]').type("qa_eybondar_ul", { log: false })
+    //   cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345678", { log: false })
+    //   cy.get('div[data-qa="1658987981978"]').click()
+    //   cy.url().should('eq', `${Cypress.config('baseUrl')}desktop`)
+    // })
+    it('Отображение полей логин и пароль', () => {
+      cy.get('div[class="panel-form__input login"]').first().should('exist')
+      //TODO: Прописать логику чтобы сначала находить первый элемент проверять все внутри него а потом переключаться на второй элемент и продолжать внутри него
+      cy.get('input[data-qa="1658988187497"][type="password"]').should('exist')
+      cy.get('[data-qa="1658988194022"').first().click()
+      cy.get('div.tooltip__arrow').should('be.visible')  
+      cy.get('[data-qa="1658988194022"').first().click()
+      cy.get('div.tooltip__arrow').should('not.be.visible')  
+      cy.get('[data-qa="1658988194022"').last().click()
+
     })
   })
   context('Футер страницы входа', () => {
-    it.only('#2243 - Страница входа. Мобильное приложение', () => {
+    it('#2243 - Страница входа. Мобильное приложение', () => {
       cy.chooseItemFromFooter('Мобильное приложение')
       cy.getByClass("apps__close_header").should('contain', "Мобильное приложение")
       cy.getByClass("apps__content_text").should('contain', ' Отсканируйте QR-код и установите мобильное приложение на телефон или воспользуйтесь ссылкой ')
