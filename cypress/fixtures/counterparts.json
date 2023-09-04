@@ -27,8 +27,11 @@
             "image": "assets/sprite.svg#ul"
         }
     },
-    "toast": {
-        "green": "Контрагент успешно сохранён!",
-        "red": "Такой контрагент уже существует"
-    }
+    "toastGreen": "Контрагент успешно сохранён!",
+    "toastRedError": "Такой контрагент уже существует",
+    "toastRedSuccess": "Контрагент удален",
+    "svgCross": "assets/sprite.svg#cross",
+    "modalContainerCounterparts": "Удалить контрагента",
+    "modalContainerSummery": " Внимание! Вы точно хотите удалить контрагента? "
+
 }

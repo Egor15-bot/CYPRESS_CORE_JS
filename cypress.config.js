@@ -14,9 +14,9 @@ module.exports = defineConfig({
     baseUrl: "https://pred-ul.metib.online/",
     supportFile: 'cypress/support/e2e.{js,jsx,ts,tsx}',
     specPattern: 'cypress/e2e/**/**/*.{js,jsx,ts,tsx}',
-    retries: 1,
+    retries: 0,
     video: false,
-    defaultCommandTimeout: 10000, //Таймаут
+    defaultCommandTimeout: 15000, //Таймаут
     viewportWidth: 1920,
     viewportHeight: 1080,
     setupNodeEvents(on, config) {

@@ -48,6 +48,7 @@ Cypress.Commands.add('checkGreenToastInfo', (text) => {
         .should('eq', text);
     cy.get('.toast')
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(0, 168, 67) 0%, rgb(31, 208, 113) 100%)');
+    cy.get('.toast-svg').click()
 })
 //Метод для работы с красным тостом 
 Cypress.Commands.add('checkRedToastInfo', (text) => {
@@ -56,6 +57,7 @@ Cypress.Commands.add('checkRedToastInfo', (text) => {
         .should('eq', text);
     cy.get('.toast')
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(243, 144, 52) 0%, rgb(255, 39, 39) 100%)');
+    cy.get('.toast-svg').click()
 })
 //
 //РАБОТА С ФОРМАМИ
@@ -68,8 +70,8 @@ Cypress.Commands.add('typeForm', (fixture) => {
             .type(`${value}`)
     });
 })
-Cypress.Commands.add('tearUp',() => {
-    cy.session('session',() => {
+Cypress.Commands.add('tearUp', () => {
+    cy.session('session', () => {
         cy.visit('/')
     })
 })
@@ -111,7 +113,7 @@ Cypress.Commands.add('loaderNotExist', (endpoint) => {
     cy.get('.loader')
         .should('not.exist')
 })
-Cypress.Commands.add('chooseItemFromFooter',(footerItemName) =>{
+Cypress.Commands.add('chooseItemFromFooter', (footerItemName) => {
     cy.get('div[data-qa="1657808685688"')
         .find('.add-menu__item')
         .contains(footerItemName)
@@ -133,8 +135,8 @@ function modificationAccNumberSpace(accNumber) {
     })
     return newAccNumber
 }
-//Делаю номер счета accNumber в формате "00000.000.0.00000000000"
-function modificationAccNumberDot(accNumber) {
+// Делаю номер счета accNumber в формате "00000.000.0.00000000000"
+Cypress.Commands.add('modificationAccNumberDot', (accNumber) => {
     const str = accNumber;
     let newAccNumber = '';
     str.split('').forEach((letter, index) => {
@@ -144,7 +146,8 @@ function modificationAccNumberDot(accNumber) {
             newAccNumber += letter
         }
     })
-}
+    return newAccNumber
+})
 
 //Проработать метод который поможет открывать только что открытую вкладку
 // export function switchToClickePage(){
