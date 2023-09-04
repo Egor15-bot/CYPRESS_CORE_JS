@@ -1,5 +1,6 @@
 const { kMaxLength } = require("buffer")
 const exp = require("constants")
+const jsQR = require('jsqr');
 
 describe('Страница авторизации', () => {
   beforeEach('Переход на предпрод', () => {
@@ -89,7 +90,7 @@ describe('Страница авторизации', () => {
     //     .should('include','https://apps.rustore.ru/app/com.isimplelab.ionic.standard.ul')
         
     //   })
-      it.only('#2244 - Страница входа. Отделения и банкоматы', () => {
+      it('#2244 - Страница входа. Отделения и банкоматы', () => {
         cy.chooseItemFromFooter('Отделения и банкоматы')
         cy.url().should('eq', `${Cypress.config('baseUrl')}auth/places`)
         cy.get('[data-qa="1657809360854"]').as('inputField')
@@ -150,4 +151,29 @@ describe('Страница авторизации', () => {
       //     .should('contain', '© ПАО АКБ "Металлинвестбанк". Генеральная лицензия Банка России № 2440, от 21.11.2014 г.')
       // })
     })
+      it.only('Должен открываться правильный URL', () => {
+        cy.chooseItemFromFooter('Мобильное приложение') // Замените URL на URL вашей странице
+        // Убедитесь, что QR-код находится на странице
+        cy.get('img.apps__content_image').should('exist');
+    
+        // Считайте QR-код и извлеките URL
+        cy.get('img.apps__content_image').then((imgElement) => {
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.width = imgElement[0].width;
+          canvas.height = imgElement[0].height;
+          context.drawImage(imgElement[0], 0, 0, canvas.width, canvas.height);
+          const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+          const code = jsQR(imageData.data, imageData.width, imageData.height);
+          if (code) {
+            const url = code.data;
+            cy.log('Извлеченный URL из QR-кода:', url);
+            // Далее вы можете проверить, что извлеченный URL соответствует ожидаемому
+            expect(url).to.equal('https://apps.rustore.ru/app/com.isimplelab.ionic.standard.ul');
+          } else {
+            cy.log('QR-код не был найден или не удалось извлечь данные.');
+          }
+        });
+      });
   })
