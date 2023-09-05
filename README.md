@@ -255,3 +255,24 @@ cy.contains('Some element with text');
 14. `cy.findBySelectValue(selectValue, [options])` - Поиск выпадающего списка (select) по выбранному значению.
 
  </details>
+
+
+ ## Подключение библотеки @cypress/grep для запуска тестов по их названиям, тегам, алиасам и тид
+ 1. Необходимо установить библиотеку, используя npm i -D @cypress/grep
+ 2. Добавить в файл Commands.js(или другой supportFile) 
+ const registerCypressGrep = require('@cypress/grep')
+registerCypressGrep()
+3. В файле cypress.config.js Добавить 
+// cypress.config.js
+{
+  e2e: {
+    setupNodeEvents(on, config) {
+      require('@cypress/grep/src/plugin')(config);
+      return config;
+    },
+  }
+}
+4. После чего в консоли можно прописать команду и передать ей значение которое мы хотим найти в названии теста, контекста, описания(describe)
+npx cypress run --env grep="Ваше название" - где "Ваше название" это ключевые слова для поиска по тестам
+npx cypress run --env grep="2238;2241" - пример, показывающий, что будут запущены тесты имеющие 2238 и 2241 в своем названии и тд
+Подробнее можно прочитать https://github.com/cypress-io/cypress/tree/develop/npm/grep
