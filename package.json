@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@cypress/grep": "^4.0.0",
     "@shelex/cypress-allure-plugin": "^2.40.0",
     "@testing-library/cypress": "^9.0.0",
     "@types/fs-extra": "^11.0.1",
@@ -37,6 +38,7 @@
     "cypress-testing-library": "^4.0.0",
     "dayjs": "^1.11.7",
     "fs-extra": "^11.1.1",
+    "jsqr": "^1.4.0",
     "minimatch": "^9.0.3",
     "node": "^20.5.1",
     "number-format.js": "^2.0.9"

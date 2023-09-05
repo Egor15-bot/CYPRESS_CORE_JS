@@ -1,5 +1,7 @@
 import '@testing-library/cypress/add-commands'
 import 'cypress-real-events/support';
+const registerCypressGrep = require('@cypress/grep')
+registerCypressGrep()
 //Ошибки, которые сайпрес должен игнорировать при работе
 Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop limit exceeded'))
 Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop completed with undelivered notifications'))
