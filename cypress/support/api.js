@@ -31,7 +31,25 @@ Cypress.Commands.add('changeCompanyApi', (idCompany) => {
     cy.request("PUT", `${Cypress.config('baseUrl')}/rest/stateful/corp/company/change_active/${idCompany}`);
     cy.reload()
 })
-
+//
+//КОНТРАГЕНТЫ
+//
+//Создаю контрагента через API
+Cypress.Commands.add('createCounterpartsApi', (inn, kpp, accNumber, bankBik, corrType)=>{
+    cy.request('POST', `${Cypress.config('baseUrl')}rest/stateful/corp/dic/corr/v2`, {
+        "fullname": 'Контрагент для проверки валидации создания дубликата',
+        "inn": inn,
+        "kpp": kpp,
+        "accList": [
+            {
+                "accNumber": accNumber,
+                "bankBik": bankBik
+            }
+        ],
+        "corrType": corrType
+    })
+})
+//
 //Удаляю все контрагенты через API
 Cypress.Commands.add('deleteAllCounterparts', () => {
     function getArray(restResult) {
