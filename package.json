@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@cypress/grep": "^4.0.0",
     "@shelex/cypress-allure-plugin": "^2.40.0",
     "@testing-library/cypress": "^9.0.0",
     "@types/fs-extra": "^11.0.1",

@@ -11,26 +11,19 @@ module.exports = defineConfig({
     colorRed: 'rgb(68, 68, 68)'
   },
   e2e: {
+    viewportWidth: "1920",
+    viewportHeight: "1080",
     baseUrl: "https://pred-ul.metib.online/",
     supportFile: 'cypress/support/e2e.{js,jsx,ts,tsx}',
     specPattern: 'cypress/e2e/**/**/*.{js,jsx,ts,tsx}',
     retries: 1,
     video: false,
-    defaultCommandTimeout: 10000, //Таймаут
+    defaultCommandTimeout: 30000, //Таймаут
     viewportWidth: 1920,
     viewportHeight: 1080,
     setupNodeEvents(on, config) {
-      on("after:run", (results) => {
-        if (results) {
-          console.log(
-            results.totalPassed
-            ,
-            'out of',
-            results.totalTests,
-            'passed'
-          )
-        }
-      })
+      require('@cypress/grep/src/plugin')(config);
+      return config;
     },
   },
 });

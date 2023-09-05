@@ -15,15 +15,11 @@ jobs:
         containers: [1,2,3,4,5]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: npm install
       - name: Cypress run
-       
-        uses: cypress-io/github-action@v5
-        with:
-          start: npm run
-          wait-on: 'https://pred-ul.metib.online/auth/login'
-          record: true
-          parallel: true
+        run: npm run cypress:run
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
