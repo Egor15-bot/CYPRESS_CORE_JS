@@ -54,7 +54,8 @@ describe('Страница авторизации', () => {
       cy.getByClass('panel-title').should('contain', 'Интернет-банк для бизнеса')
     })
     it('#4386 - Страница входа. Логин с невалидными данными', () => {
-      cy.get('input[data-qa="1658988187497"][type="text"]').type("someText", { log: false })
+      //FIXME: написать дополнительный тест со значением .type("someText")
+      cy.get('input[data-qa="1658988187497"][type="text"]').type("sometext", { log: false })
       cy.get('input[data-qa="1658988187497"][type="password"]').type("InvalidPassword", { log: false })
       cy.get('div[data-qa="1658987981978"]').click()
       cy.get('[data-qa="1657808896581"]').should('contain', 'Неверный логин или пароль')
