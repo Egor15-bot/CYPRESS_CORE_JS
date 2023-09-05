@@ -26,7 +26,7 @@
     "test": "npx as-a spec npx cypress open ",
     "cy:parallel": "cypress-parallel -d cypress/e2e -t 5 -s cy:run",
     "cy:run": "cypress run",
-    "run": "npx cypress run --browser firefox",
+    "run": "npx cypress run",
     "record": "npx cypress run --record --key d43973ab-655d-4198-9f44-11126ff677d3",
     "cy:parallel-record": "cypress-parallel -d cypress/e2e -t 5 -s cy:run --record --key d43973ab-655d-4198-9f44-11126ff677d3"
   },
