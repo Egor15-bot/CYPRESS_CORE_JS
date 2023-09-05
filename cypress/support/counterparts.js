@@ -21,3 +21,35 @@ Cypress.Commands.add('checkModalContainer', (fixture) => {
         })
     })
 })
+//
+// Проверяю логотип и ранее введенную информацию на странице "Контрагенты"
+Cypress.Commands.add('checkCounterpartList', (fixture) => {
+    cy.contains('.counterpart-list__item', fixture.type["Наименование получателя или ИНН"])
+        .within(() => {
+            cy.get('.counterpart-list__item__type')
+                .find('use')
+                .should('have.attr', 'href', fixture.check.image)
+            cy.get('.counterpart-list__item__info')
+                .within(() => {
+                    cy.get('.title').should('contain', fixture.type["Наименование получателя или ИНН"])
+                    cy.get('.description').should('contain', fixture.type["ИНН получателя"])
+                    cy.get('.description').should('contain', fixture.type["КПП получателя"])
+                })
+        })
+})
+//
+//Проверяю логотип и ранее введенную информацию на странице "Контрагенты / Просмотр"
+Cypress.Commands.add('checkCounterpartDetails', (fixture) => {
+cy.contains('.counterpart-details__content', fixture.type["Наименование получателя или ИНН"])
+    .within(() => {
+        cy.get('.counterpart-details__content__icon')
+            .find('use')
+            .should('have.attr', 'href', fixture.check.image)
+        cy.get('.counterpart-details__content__info')
+            .within(() => {
+                cy.get('.counterpart-details__content__info__fullname').should('contain', fixture.type["Наименование получателя или ИНН"])
+                cy.get('.counterpart-details__content__info__requisites').should('contain', fixture.type["ИНН получателя"])
+                cy.get('.counterpart-details__content__info__requisites').should('contain', fixture.type["КПП получателя"])
+            })
+    })
+})

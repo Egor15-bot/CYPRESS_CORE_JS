@@ -65,52 +65,91 @@ Cypress.Commands.add('checkRedToastInfo', (text) => {
 //РАБОТА С ФОРМАМИ
 //Заполнение формы тестовыми данными
 Cypress.Commands.add('typeForm', (fixture) => {
-    Object.entries(fixture).forEach(([key, value]) => {
-        cy.contains('.dynamic-input', `${key}`)
-            .find('.dynamic-input__placeholder')
-            .click()
-            .type(`${value}`)
+    cy.url().then((url) => {
+        Object.entries(fixture).forEach(([key, value]) => {
+            //Эти условия менют key для страницы "Контрагенты"
+            if (key === 'Наименование получателя или ИНН') {
+                if (url.includes(`${Cypress.config('baseUrl')}counterparts/create`)) {
+                    key = 'Наименование'; // Здесь вы можете изменить ключ
+                }
+            }
+            if (key === 'ИНН получателя') {
+                if (url.includes(`${Cypress.config('baseUrl')}counterparts/create`)) {
+                    key = 'ИНН'; // Здесь вы можете изменить ключ
+                }
+            }
+            if (key === 'КПП получателя') {
+                if (url.includes(`${Cypress.config('baseUrl')}counterparts/create`)) {
+                    key = 'КПП'; // Здесь вы можете изменить ключ
+                }
+            }
+            if (key === 'Счет получателя') {
+                if (url.includes(`${Cypress.config('baseUrl')}counterparts/create`)) {
+                    key = 'Номер счета'; // Здесь вы можете изменить ключ
+                }
+            }
+            cy.contains('.dynamic-input', `${key}`)
+                .find('.dynamic-input__placeholder')
+                .click()
+                .type(`${value}`);
+        });
     });
-})
-Cypress.Commands.add('tearUp', () => {
-    cy.session('session', () => {
-        cy.visit('/')
-    })
-})
+});
+//
 //Проверка заполненых полей в форме в разделе "Контрагенты"
-Cypress.Commands.add('checkFormСounterparts', (fixture) => {
-    cy.contains('.dynamic-input', 'Название банка получателя')
-    Object.entries(fixture.type).forEach(([key, value]) => {
-        if (key === 'Номер счета') {
-            // Если ключ равен "Номер счета", примените функцию modificationAccNumberSpace
-            value = modificationAccNumberSpace(value); //Это функция, работает через импорт
-        }
-        cy.contains('.dynamic-input', `${key}`)
+Cypress.Commands.add('checkForm', (fixture) => {
+    cy.url().then((url) => {
+        Object.entries(fixture.type).forEach(([key, value]) => {
+            //Эти условия менют key для страницы "Контрагенты"
+            if (key === 'Наименование получателя или ИНН') {
+                if (url.includes(`${Cypress.config('baseUrl')}counterparts/create`)) {
+                    key = 'Наименование'; // Здесь вы можете изменить ключ
+                }
+            }
+            if (key === 'ИНН получателя') {
+                if (url.includes(`${Cypress.config('baseUrl')}counterparts/create`)) {
+                    key = 'ИНН'; // Здесь вы можете изменить ключ
+                }
+            }
+            if (key === 'КПП получателя') {
+                if (url.includes(`${Cypress.config('baseUrl')}counterparts/create`)) {
+                    key = 'КПП'; // Здесь вы можете изменить ключ
+                }
+            }
+            if (key === 'Счет получателя') {
+                if (url.includes(`${Cypress.config('baseUrl')}counterparts/create`)) {
+                    key = 'Номер счета'; // Здесь вы можете изменить ключ
+                    // Если ключ равен "Номер счета", примените функцию modificationAccNumberSpace
+                    value = modificationAccNumberSpace(value); //Это функция, работает через импорт
+                }
+            }
+            cy.contains('.dynamic-input', `${key}`)
+                .find('.dynamic-input__overlay.ng-star-inserted')
+                .children()
+                .invoke('val')
+                .should('not.be.empty')
+                .then(sometext => expect(sometext).to.equal(`${value}`));
+        });
+        //Проверка поля "Название банка получателя"
+        cy.contains('.dynamic-input', 'Название банка получателя')
             .find('.dynamic-input__overlay.ng-star-inserted')
             .children()
             .invoke('val')
-            .should('not.be.empty')
-            .then(sometext => expect(sometext).to.equal(`${value}`));
+            .then(sometext => expect(sometext).to.equal(fixture.check.bankName));
     });
-    //Проверка поля "Название банка получателя"
-    cy.contains('.dynamic-input', 'Название банка получателя')
-        .find('.dynamic-input__overlay.ng-star-inserted')
-        .children()
-        .invoke('val')
-        .then(sometext => expect(sometext).to.equal(fixture.check.bankName));
 })
 //
 //ЛОАДЕР
 //Лоадер not.be.visible
 Cypress.Commands.add('loaderNotBeVisible', (endpoint) => {
-    cy.wait(2500)
+    cy.wait(1000)
     cy.url().should('eq', `${Cypress.config('baseUrl')}${endpoint}`)
     cy.get('.loader')
         .should('not.be.visible')
 })
 //Лоадер not.exist (Используется в контрагентах)
 Cypress.Commands.add('loaderNotExist', (endpoint) => {
-    cy.wait(2500)
+    cy.wait(1000)
     cy.url().should('eq', `${Cypress.config('baseUrl')}${endpoint}`)
     cy.get('.loader')
         .should('not.exist')
