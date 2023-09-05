@@ -31,8 +31,8 @@ describe('Страница авторизации', () => {
         const expectedText = ' С 07 ноября 2022 года осуществлена реорганизация Новосибирского филиала в Дополнительный офис Новосибирск.'
         expect(actualText.trim(), expectedText)
       })
-      cy.get('#item-0').should('have.css', 'border-left', '3.97176px solid rgb(47, 84, 235)');
-      cy.get('#item-61').scrollIntoView().click().should('have.css', 'border-left', '3.97176px solid rgb(47, 84, 235)')
+      cy.get('#item-0').should('have.css', 'border-left', '4px solid rgb(47, 84, 235)');
+      cy.get('#item-61').scrollIntoView().click().should('have.css', 'border-left', '4px solid rgb(47, 84, 235)')
       cy.get('.content-desc > :nth-child(2)').invoke('text').then((actualText) => {
         const expectedText = 'ПАО АКБ "Металлинвестбанк" уведомляет Вас о том, что в связи с празднованием Дня народного единства изменится режим работы отделений Банка. '
         expect(actualText.trim(), expectedText)
