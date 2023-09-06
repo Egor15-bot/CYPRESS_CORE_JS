@@ -29,27 +29,32 @@ Cypress.Commands.add('checkCounterpartList', (fixture) => {
             cy.get('div.counterpart-list__item__type')
                 .find('use')
                 .should('have.attr', 'href', fixture.check.image)
-            cy.get('div.counterpart-list__item__info')
-                .within(() => {
-                    cy.get('div.title').should('contain', fixture.type["Наименование получателя или ИНН"])
-                    cy.get('div.description').should('contain', fixture.type["ИНН получателя"])
-                    cy.get('div.description').should('contain', fixture.type["КПП получателя"])
-                })
+            if (fixture.type["ИНН получателя"] && fixture.type["КПП получателя"]) {
+                cy.get('div.counterpart-list__item__info')
+                    .within(() => {
+                        cy.get('div.title').should('contain', fixture.type["Наименование получателя или ИНН"])
+                        cy.get('div.description').should('contain', fixture.type["ИНН получателя"])
+                        cy.get('div.description').should('contain', fixture.type["КПП получателя"])
+                    })
+            }
         })
 })
+
 //
 //Проверяю логотип и ранее введенную информацию на странице "Контрагенты / Просмотр"
 Cypress.Commands.add('checkCounterpartDetails', (fixture) => {
-cy.contains('div.counterpart-details__content', fixture.type["Наименование получателя или ИНН"])
-    .within(() => {
-        cy.get('app-svg-icon.counterpart-details__content__icon')
-            .find('use')
-            .should('have.attr', 'href', fixture.check.image)
-        cy.get('div.counterpart-details__content__info')
-            .within(() => {
-                cy.get('div.counterpart-details__content__info__fullname').should('contain', fixture.type["Наименование получателя или ИНН"])
-                cy.get('div.counterpart-details__content__info__requisites').should('contain', fixture.type["ИНН получателя"])
-                cy.get('div.counterpart-details__content__info__requisites').should('contain', fixture.type["КПП получателя"])
-            })
-    })
+    cy.contains('div.counterpart-details__content', fixture.type["Наименование получателя или ИНН"])
+        .within(() => {
+            cy.get('app-svg-icon.counterpart-details__content__icon')
+                .find('use')
+                .should('have.attr', 'href', fixture.check.image)
+            if (fixture.type["ИНН получателя"] && fixture.type["КПП получателя"]) {
+                cy.get('div.counterpart-details__content__info')
+                    .within(() => {
+                        cy.get('div.counterpart-details__content__info__fullname').should('contain', fixture.type["Наименование получателя или ИНН"])
+                        cy.get('div.counterpart-details__content__info__requisites').should('contain', fixture.type["ИНН получателя"])
+                        cy.get('div.counterpart-details__content__info__requisites').should('contain', fixture.type["КПП получателя"])
+                    })
+            }
+        })
 })

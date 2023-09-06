@@ -44,17 +44,12 @@ describe('Контрагенты', () => {
             })
         })
         context('Меню контрагенты', () => {
-            beforeEach('Перехожу в раздел "Контрагенты"', () => {
-                cy.visit('/counterparts')
+            beforeEach('Перехожу в раздел "Контрагенты" / "Добавить контрагента"', () => {
+                cy.visit('/counterparts/create')
                     .url()
-                    .should('contain', '/counterparts')
+                    .should('contain', '/counterparts/create')
             })
             it('#1497. Создание контрагента + удаление через кебаб-меню', function () {
-                //Нажимаю кнопку "Добавить контрагента"
-                cy.get('app-button[data-qa="1657885995577"] > div[data-qa="1658987981978"]')
-                    .click()
-                    .url()
-                    .should('contain', 'counterparts/create')
                 //Проверяю что выбрана вкладка "Юридическое лицо"
                 cy.get('div.counterpart__types__item.active')
                     .should('contain', ' Юридическое лицо ')
@@ -82,25 +77,13 @@ describe('Контрагенты', () => {
                     .should('contain', ' Контрагенты ')
                     .and('contain', ' Просмотр')
                 //Проверяю логотип и ранее введенную информацию на странице "Контрагенты / Просмотр"
-                cy.contains('div.counterpart-details__content', this.testData.type["Наименование получателя или ИНН"])
-                    .within(() => {
-                        cy.get('app-svg-icon.counterpart-details__content__icon')
-                            .find('use')
-                            .should('have.attr', 'href', this.testData.check.image)
-                        cy.get('div.counterpart-details__content__info')
-                            .within(() => {
-                                cy.get('div.counterpart-details__content__info__fullname').should('contain', this.testData.type["Наименование получателя или ИНН"])
-                                cy.get('div.counterpart-details__content__info__requisites')
-                                    .should('contain', this.testData.type["ИНН получателя"])
-                                    .and('contain', this.testData.type["КПП получателя"])
-                            })
-                    })
+                cy.checkCounterpartDetails(this.testData)
                 //Проверяю номер счета, город и кнопку "Заплатить"
                 cy.modificationAccNumberDot(this.testData.type["Счет получателя"])
                     .then((modifiedNumber) => {
                         cy.get('div.number').should('contain', modifiedNumber);
                     });
-                cy.get('div.bank-place').should('contain', 'г.Москва')
+                cy.get('div.bank-place').should('contain', this.testData.check.city)
                 cy.get('div.controls').should('contain', ' Заплатить ')
                 //Перехожу по хлебным крошка в меню "Контрагенты"
                 cy.get('div[data-qa="1657886747803"]')
@@ -132,11 +115,6 @@ describe('Контрагенты', () => {
                     this.testData.type["БИК банка получателя"],
                     this.testData.check["corrType"]
                 )
-                //Нажимаю кнопку "Добавить контрагента"
-                cy.get('app-button[data-qa="1657885995577"] > div[data-qa="1658987981978"]')
-                    .click()
-                    .url()
-                    .should('contain', 'counterparts/create')
                 //Проверяю что выбрана вкладка "Юридическое лицо"
                 cy.get('div.counterpart__types__item.active')
                     .should('contain', 'Юридическое лицо')
@@ -211,7 +189,7 @@ describe('Контрагенты', () => {
                     .then((modifiedNumber) => {
                         cy.get('div.number').should('contain', modifiedNumber);
                     });
-                cy.get('div.bank-place').should('contain', 'г.Москва')
+                cy.get('div.bank-place').should('contain', this.testData.check.city)
                 cy.get('div.controls').should('contain', ' Заплатить ')
                 //Нажимаю кебаб-меню / Удалить
                 cy.get('div.counterpart-details').within(() => {
@@ -310,7 +288,7 @@ describe('Контрагенты', () => {
                     .then((modifiedNumber) => {
                         cy.get('div.number').should('contain', modifiedNumber);
                     });
-                cy.get('div.bank-place').should('contain', 'г.Москва')
+                cy.get('div.bank-place').should('contain', this.testData.check.city)
                 cy.get('div.controls').should('contain', ' Заплатить ')
                 //Нажимаю кебаб-меню / Удалить
                 cy.get('div.counterpart-details').within(() => {
@@ -450,8 +428,74 @@ describe('Контрагенты', () => {
         })
     })
     context('Контрагенты ФЛ', () => {
+        beforeEach('Импортирую фикстуры для ЮЛ', () => {
+            cy.fixture('counterparts').then(function (testData) {
+                this.testData = testData.FL_With_INN
+            })
+        })
         context('Меню контрагенты', () => {
-            it('#_____. Создание контрагента + удаление через кебаб-меню', function () {
+            beforeEach('Перехожу в раздел "Контрагенты" / "Добавить контрагента"', () => {
+                cy.visit('/counterparts/create')
+                    .url()
+                    .should('contain', '/counterparts/create')
+            })
+            it('#1905. Создание контрагента + удаление через кебаб-меню', function () {
+                //Нажимаю на вкладку "Физическое лицо"
+                cy.contains('div.counterpart__types__item', 'Физическое лицо').click()
+                //Проверяю что выбрана вкладка "Физическое лицо"
+                cy.get('div.counterpart__types__item.active')
+                    .should('contain', ' Физическое лицо ')
+                    .and('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
+                //Заполняю форму тестовыми данными из фикстуры
+                cy.typeForm(this.testData.type)
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
+                cy.wait(1000)
+                //Проверяю тестовые данные из фикстуры
+                cy.checkForm(this.testData)
+                //Нажимаю "Сохранить"
+                cy.get('app-button[data-qa="1657886705496"] > div[data-qa="1658987981978"]').click()
+                //Зеленый тост "Контрагент успешно сохранён!"
+                cy.checkGreenToastInfo(this.fixtureCounterparts.toastGreen);
+                //Проверяю логотип и ранее введенную информацию на странице "Контрагенты"
+                //Перехожу на страницу "Контрагенты / Просмотр"
+                cy.checkCounterpartList(this.testData).click()
+                //Проверяю наличие хлебных крошек
+                cy.get('div.breadcrumbs')
+                    .should('contain', ' Контрагенты ')
+                    .and('contain', ' Просмотр')
+                //Проверяю логотип и ранее введенную информацию на странице "Контрагенты / Просмотр"
+                cy.checkCounterpartDetails(this.testData)
+                //Проверяю номер счета, город и кнопку "Заплатить"
+                cy.modificationAccNumberDot(this.testData.type["Счет получателя"])
+                    .then((modifiedNumber) => {
+                        cy.get('div.number').should('contain', modifiedNumber);
+                    });
+                cy.get('div.bank-place').should('contain', this.testData.check.city)
+                cy.get('div.controls').should('contain', ' Заплатить ')
+                //Перехожу по хлебным крошка в меню "Контрагенты"
+                cy.get('div[data-qa="1657886747803"]')
+                    .click()
+                    .url()
+                    .should('contain', '/counterparts')
+                //Удаляю контрагент через кебаб меню
+                cy.contains('div.counterpart-list__item', this.testData.type["Наименование получателя или ИНН"])
+                    .within(() => {
+                        cy.get('app-menu-select.actions').click()
+                        cy.contains('div.menu-select-item__title', 'Удалить').click()
+                    })
+                //Проверяю модальное окно
+                cy.checkModalContainer(this.fixtureCounterparts)
+                //Нажимаю "Удалить"
+                cy.get('app-button[data-qa="1658988097817"] > div[data-qa="1658987981978"]').click()
+                //Красный тост - "Контрагент удален"
+                cy.checkRedToastInfo(this.fixtureCounterparts.toastRedSuccess);
+                //Проверяю, что все контрагенты удалены
+                cy.get('div.counterparts-list__empty-text').should('contain', ' Контрагенты не найдены ')
             })
             it('#_____. Валидация на создание дубликата контрагента', function () {
             })
