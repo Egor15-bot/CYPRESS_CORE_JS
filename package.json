@@ -21,6 +21,12 @@
     "yargs": "^17.7.2"
   },
   "scripts": {
+    "as-a": "npx as-a --config as-a.ini spec npx cypress run",
+    "mocha:full": "npm run mocha:report && npm run mocha:merge && npm run mocha:html && npm run mocha:open:html",
+    "mocha:report": "npx cypress run --reporter mochawesome --reporter-options reportDir='cypress/results',overwrite=false,html=false,json=true",
+    "mocha:merge": "npx mochawesome-merge 'cypress/results/*.json' -o cypress/results/mochawesome.json'",
+    "mocha:html": "npx marge cypress/results/mochawesome.json",
+    "mocha:open:html": "start cypress/results/mochawesome-report/mochawesome.html",
     "runOnChrome": "cypress run --browser chrome --env allure=true && npx allure generate allure-results -o allure-report",
     "start": "npx cypress open",
     "test": "npx as-a spec npx cypress open ",

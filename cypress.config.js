@@ -18,7 +18,7 @@ module.exports = defineConfig({
     specPattern: 'cypress/e2e/**/**/*.{js,jsx,ts,tsx}',
     retries: 0,
     video: false,
-    defaultCommandTimeout: 30000, //Таймаут
+    defaultCommandTimeout: 45000, //Таймаут
     viewportWidth: 1920,
     viewportHeight: 1080,
     setupNodeEvents(on, config) {

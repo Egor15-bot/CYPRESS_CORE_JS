@@ -28,8 +28,8 @@ Cypress.Commands.add('getLocalStorageValue', (key) => {
 Cypress.Commands.add('loginStand', () => {
     cy.session('Создание сессии авторизации', () => {
         cy.visit("/")
-        cy.get('input[data-qa="1658988187497"][type="text"]').type("qa_eybondar_ul", { log: false })
-        cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345678", { log: false })
+        cy.get('input[data-qa="1658988187497"][type="text"]').type(Cypress.env('MY_USERNAME'), { log: false })
+        cy.get('input[data-qa="1658988187497"][type="password"]').type(Cypress.env('MY_PASSWORD'), { log: false })
         cy.get('div[data-qa="1658987981978"]').click()
         cy.url().should('contain', 'desktop')
     })
@@ -48,18 +48,18 @@ Cypress.Commands.add('checkGreenToastInfo', (text) => {
     cy.get('#toast-container')
         .invoke('text')
         .should('eq', text);
-    cy.get('.toast')
+    cy.get('div.toast')
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(0, 168, 67) 0%, rgb(31, 208, 113) 100%)');
-    cy.get('.toast-svg').click()
+    cy.get('app-svg-icon.toast-svg').click()
 })
 //Метод для работы с красным тостом 
 Cypress.Commands.add('checkRedToastInfo', (text) => {
     cy.get('#toast-container')
         .invoke('text')
         .should('eq', text);
-    cy.get('.toast')
+    cy.get('div.toast')
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(243, 144, 52) 0%, rgb(255, 39, 39) 100%)');
-    cy.get('.toast-svg').click()
+    cy.get('app-svg-icon.toast-svg').click()
 })
 //
 //РАБОТА С ФОРМАМИ
@@ -88,8 +88,8 @@ Cypress.Commands.add('typeForm', (fixture) => {
                     key = 'Номер счета'; // Здесь вы можете изменить ключ
                 }
             }
-            cy.contains('.dynamic-input', `${key}`)
-                .find('.dynamic-input__placeholder')
+            cy.contains('label.dynamic-input', `${key}`)
+                .find('div.dynamic-input__placeholder')
                 .click()
                 .type(`${value}`);
         });
@@ -123,16 +123,16 @@ Cypress.Commands.add('checkForm', (fixture) => {
                     value = modificationAccNumberSpace(value); //Это функция, работает через импорт
                 }
             }
-            cy.contains('.dynamic-input', `${key}`)
-                .find('.dynamic-input__overlay.ng-star-inserted')
+            cy.contains('label.dynamic-input', `${key}`)
+                .find('div.dynamic-input__overlay.ng-star-inserted')
                 .children()
                 .invoke('val')
                 .should('not.be.empty')
                 .then(sometext => expect(sometext).to.equal(`${value}`));
         });
         //Проверка поля "Название банка получателя"
-        cy.contains('.dynamic-input', 'Название банка получателя')
-            .find('.dynamic-input__overlay.ng-star-inserted')
+        cy.contains('label.dynamic-input', 'Название банка получателя')
+            .find('div.dynamic-input__overlay.ng-star-inserted')
             .children()
             .invoke('val')
             .then(sometext => expect(sometext).to.equal(fixture.check.bankName));
@@ -144,19 +144,19 @@ Cypress.Commands.add('checkForm', (fixture) => {
 Cypress.Commands.add('loaderNotBeVisible', (endpoint) => {
     cy.wait(1000)
     cy.url().should('eq', `${Cypress.config('baseUrl')}${endpoint}`)
-    cy.get('.loader')
+    cy.get('div.loader')
         .should('not.be.visible')
 })
 //Лоадер not.exist (Используется в контрагентах)
 Cypress.Commands.add('loaderNotExist', (endpoint) => {
     cy.wait(1000)
     cy.url().should('eq', `${Cypress.config('baseUrl')}${endpoint}`)
-    cy.get('.loader')
+    cy.get('div.loader')
         .should('not.exist')
 })
 Cypress.Commands.add('chooseItemFromFooter', (footerItemName) => {
     cy.get('div[data-qa="1657808685688"')
-        .find('.add-menu__item')
+        .find('div.add-menu__item')
         .contains(footerItemName)
         .click()
 })

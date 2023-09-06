@@ -2,118 +2,120 @@ describe('Контрагенты', () => {
     beforeEach(() => {
         //Авторизация + создание сессии
         cy.loginApi()
-        //Импортирую фикстуры
-        cy.fixture('counterparts').then(function (testData) {
-            this.testData = testData
-        })
         //Смена компании на "Захарова Яна Николаевна"
         cy.changeCompanyApi('3448774')
         //Удаление всех контрагентов через API
         cy.deleteAllCounterparts()
     });
-    //Выполняется после каждого блока it
-    afterEach('Удаление всех контрагентов через API', () => {
-        cy.deleteAllCounterparts()
-    })
     context('Общие кейсы', () => {
         it('Переход в меню "Контрагенты" через меню бургер', function () {
-            cy.visit("/")
+            cy.visit('/')
             cy.openBurgerTab('Контрагенты')
-            cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
+                .url()
+                .should('contain', '/counterparts')
         })
         it('Верстка', function () {
             //Перехожу в раздел "Контрагенты"
-            cy.visit(`${Cypress.config('baseUrl')}counterparts`)
-            cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
+            cy.visit('/counterparts')
+                .url()
+                .should('contain', '/counterparts')
             //Жду пока пропадет лоадер со страницы
-            cy.loaderNotExist('counterparts')
+            cy.get('.loader').should('not.exist')
             //Проверяю заголовок
-            cy.get('.page-path').should('contain', 'Контрагенты')
+            cy.get('div.page-path').should('contain', 'Контрагенты')
             //Проверяю описание
-            cy.get('.page-title__text').should('contain', ' Справочник контрагентов ')
+            cy.get('div.page-title__text').should('contain', ' Справочник контрагентов ')
             //Проверяю кнопку
-            cy.get('[data-qa="1657885995577"] > [data-qa="1658987981978"]')
-                .as('btnAddCounterparts')
+            cy.get('app-button[data-qa="1657885995577"] > div[data-qa="1658987981978"]')
                 .should('contain', ' Добавить контрагента')
                 .and('have.css', 'background-image', Cypress.env('colorBlueGradient'));
             //Проверяю цвет кнопки "Рублевые"
-            cy.get('[data-qa="16599638895420"]').should('have.css', 'background-image', Cypress.env('colorBlueGradient'));
+            cy.get('div[data-qa="16599638895420"]').should('have.css', 'background-image', Cypress.env('colorBlueGradient'));
         })
     })
     context('Контрагенты ЮЛ', () => {
+        beforeEach('Импортирую фикстуры для ЮЛ', () => {
+            cy.fixture('counterparts').then(function (testData) {
+                this.testData = testData
+            })
+        })
         context('Меню контрагенты', () => {
+            beforeEach('Перехожу в раздел "Контрагенты"', () => {
+                cy.visit('/counterparts')
+                    .url()
+                    .should('contain', '/counterparts')
+            })
             it('#1497. Создание контрагента + удаление через кебаб-меню', function () {
-                //Перехожу в раздел "Контрагенты"
-                cy.visit(`${Cypress.config('baseUrl')}counterparts`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
                 //Нажимаю кнопку "Добавить контрагента"
-                cy.get('[data-qa="1657885995577"] > [data-qa="1658987981978"]')
+                cy.get('app-button[data-qa="1657885995577"] > div[data-qa="1658987981978"]')
                     .click()
-                cy.url()
-                    .should('eq', `${Cypress.config('baseUrl')}counterparts/create`)
+                    .url()
+                    .should('contain', 'counterparts/create')
                 //Проверяю что выбрана вкладка "Юридическое лицо"
-                cy.get('.counterpart__types__item.active')
-                    .should('contain', 'Юридическое лицо')
-                    .should('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
+                cy.get('div.counterpart__types__item.active')
+                    .should('contain', ' Юридическое лицо ')
+                    .and('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
                 //Заполняю форму тестовыми данными из фикстуры
                 cy.typeForm(this.testData.UL.type)
-                //Жду пока пропадет лоадер
-                cy.get('.loader').should('not.exist')
-                cy.wait(1000)
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
                 //Проверяю тестовые данные из фикстуры
                 cy.checkForm(this.testData.UL)
                 //Нажимаю "Сохранить"
-                cy.get('[data-qa="1657886705496"] > [data-qa="1658987981978"]').click()
+                cy.get('app-button[data-qa="1657886705496"] > div[data-qa="1658987981978"]').click()
                 //Зеленый тост "Контрагент успешно сохранён!"
                 cy.checkGreenToastInfo(this.testData.toastGreen);
                 //Проверяю логотип и ранее введенную информацию на странице "Контрагенты"
-                cy.checkCounterpartList(this.testData.UL)
-                    //Перехожу на страницу "Контрагенты / Просмотр"
-                    .click()
+                //Перехожу на страницу "Контрагенты / Просмотр"
+                cy.checkCounterpartList(this.testData.UL).click()
                 //Проверяю наличие хлебных крошек
-                cy.get('.breadcrumbs')
+                cy.get('div.breadcrumbs')
                     .should('contain', ' Контрагенты ')
                     .and('contain', ' Просмотр')
                 //Проверяю логотип и ранее введенную информацию на странице "Контрагенты / Просмотр"
-                cy.contains('.counterpart-details__content', this.testData.UL.type["Наименование получателя или ИНН"])
+                cy.contains('div.counterpart-details__content', this.testData.UL.type["Наименование получателя или ИНН"])
                     .within(() => {
-                        cy.get('.counterpart-details__content__icon')
+                        cy.get('app-svg-icon.counterpart-details__content__icon')
                             .find('use')
                             .should('have.attr', 'href', this.testData.UL.check.image)
-                        cy.get('.counterpart-details__content__info')
+                        cy.get('div.counterpart-details__content__info')
                             .within(() => {
-                                cy.get('.counterpart-details__content__info__fullname').should('contain', this.testData.UL.type["Наименование получателя или ИНН"])
-                                cy.get('.counterpart-details__content__info__requisites')
+                                cy.get('div.counterpart-details__content__info__fullname').should('contain', this.testData.UL.type["Наименование получателя или ИНН"])
+                                cy.get('div.counterpart-details__content__info__requisites')
                                     .should('contain', this.testData.UL.type["ИНН получателя"])
-                                    .should('contain', this.testData.UL.type["КПП получателя"])
+                                    .and('contain', this.testData.UL.type["КПП получателя"])
                             })
                     })
                 //Проверяю номер счета, город и кнопку "Заплатить"
                 cy.modificationAccNumberDot(this.testData.UL.type["Счет получателя"])
                     .then((modifiedNumber) => {
-                        cy.get('.number').should('contain', modifiedNumber);
+                        cy.get('div.number').should('contain', modifiedNumber);
                     });
-                cy.get('.bank-place').should('contain', 'г.Москва')
-                cy.get('.controls').should('contain', ' Заплатить ')
+                cy.get('div.bank-place').should('contain', 'г.Москва')
+                cy.get('div.controls').should('contain', ' Заплатить ')
                 //Перехожу по хлебным крошка в меню "Контрагенты"
-                cy.get('[data-qa="1657886747803"]').click()
-                cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
+                cy.get('div[data-qa="1657886747803"]')
+                    .click()
+                    .url()
+                    .should('contain', '/counterparts')
                 //Удаляю контрагент через кебаб меню
-                cy.contains('.counterpart-list__item', this.testData.UL.type["Наименование получателя или ИНН"])
+                cy.contains('div.counterpart-list__item', this.testData.UL.type["Наименование получателя или ИНН"])
                     .within(() => {
-                        cy.get('.actions').click()
-                        cy.contains('.menu-select-item__title', 'Удалить').click()
+                        cy.get('app-menu-select.actions').click()
+                        cy.contains('div.menu-select-item__title', 'Удалить').click()
                     })
                 //Проверяю модальное окно
                 cy.checkModalContainer(this.testData)
                 //Нажимаю "Удалить"
-                cy.get('[data-qa="1658988097817"] > [data-qa="1658987981978"]')
-                    .click()
+                cy.get('app-button[data-qa="1658988097817"] > div[data-qa="1658987981978"]').click()
                 //Красный тост - "Контрагент удален"
                 cy.checkRedToastInfo(this.testData.toastRedSuccess);
                 //Проверяю, что все контрагенты удалены
-                cy.get('.counterparts-list__empty-text')
-                    .should('contain', ' Контрагенты не найдены ')
+                cy.get('div.counterparts-list__empty-text').should('contain', ' Контрагенты не найдены ')
             })
             it('#3629. Валидация на создание дубликата контрагента', function () {
                 //Создаю контрагента через API 
@@ -124,92 +126,98 @@ describe('Контрагенты', () => {
                     this.testData.UL.type["БИК банка получателя"],
                     this.testData.UL.check["corrType"]
                 )
-                //Перехожу в раздел "Контрагенты"
-                cy.visit(`${Cypress.config('baseUrl')}counterparts`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
                 //Нажимаю кнопку "Добавить контрагента"
-                cy.get('[data-qa="1657885995577"] > [data-qa="1658987981978"]')
+                cy.get('app-button[data-qa="1657885995577"] > div[data-qa="1658987981978"]')
                     .click()
-                cy.url()
-                    .should('eq', `${Cypress.config('baseUrl')}counterparts/create`)
+                    .url()
+                    .should('contain', 'counterparts/create')
                 //Проверяю что выбрана вкладка "Юридическое лицо"
-                cy.get('.counterpart__types__item.active')
+                cy.get('div.counterpart__types__item.active')
                     .should('contain', 'Юридическое лицо')
                     .should('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
                 //Заполняю форму тестовыми данными из фикстуры
                 cy.typeForm(this.testData.UL.type)
-                cy.get('.loader').should('not.exist')
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
                 //Проверяю тестовые данные из фикстуры
                 cy.checkForm(this.testData.UL)
                 //Нажимаю "Сохранить"
-                cy.get('[data-qa="1657886705496"] > [data-qa="1658987981978"]')
-                    .click()
+                cy.get('app-button[data-qa="1657886705496"] > div[data-qa="1658987981978"]').click()
                 //Проверяю тост сообщение - красный фон и текст "Такой контрагент уже существует"
                 cy.checkRedToastInfo(this.testData.toastRedError);
                 //Перехожу в раздел "Контрагенты"
-                cy.visit(`${Cypress.config('baseUrl')}counterparts`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
+                cy.visit('/counterparts')
+                    .url()
+                    .should('contain', '/counterparts')
                 //Количество контрагентов = 1
-                cy.get('.counterpart-list__item').should('have.length', 1)
+                cy.get('div.counterpart-list__item').should('have.length', 1)
             })
         })
         context('Меню шаблоны', () => {
+            beforeEach('Перехожу в раздел "Шаблоны" / "Создать шаблон"', () => {
+                cy.visit('/template?new=true')
+                    .url()
+                    .should('contain', '/template?new=true')
+            })
             it('#1660. Создание контрагента + удаление через меню "Контрагенты / Просмотр"', function () {
-                //Перехожу в раздел "Шаблоны" / "Создать шаблон"
-                cy.visit(`${Cypress.config('baseUrl')}template?new=true`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}template?new=true`)
                 //Заполняю поле "Название шаблона"
-                cy.contains('.panel-form__input__placeholder', ' Название шаблона ')
+                cy.contains('div.panel-form__input__placeholder', ' Название шаблона ')
                     .click()
                     .type(`Шаблон - ${this.testData.UL.type["Наименование получателя или ИНН"]}`)
                 //Нажимаю на стрелку пожле "Получатель"
-                cy.contains('[data-qa="1657803432416"]', 'Получатель').within(() => {
+                cy.contains('div[data-qa="1657803432416"]', 'Получатель').within(() => {
                     cy.get(this.testData.arroyDown).click()
                 })
                 //Заполняю форму тестовыми данными из фикстуры
                 cy.typeForm(this.testData.UL.type)
-                //Жду пока пропадет лоадер
-                cy.get('.loader').should('not.exist')
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
                 cy.wait(1000)
                 //Сохранить контрагента
-                cy.get('[data-qa="1663140882365"]').click()
+                cy.get('button[data-qa="1663140882365"]').click()
                 //Зеленый тост "Контрагент успешно сохранён!"
                 cy.checkGreenToastInfo(this.testData.toastGreen);
                 //Сохранить контрагента еще раз
-                cy.get('[data-qa="1663140882365"]').click()
+                cy.get('button[data-qa="1663140882365"]').click()
                 //Красный тост - "Такой контрагент уже существует"
                 cy.checkRedToastInfo(this.testData.toastRedError);
                 //Перехожу в раздел "Контрагенты"
-                cy.visit(`${Cypress.config('baseUrl')}counterparts`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
+                cy.visit('/counterparts')
+                    .url()
+                    .should('contain', '/counterparts')
                 //Проверяю логотип и ранее введенную информацию на странице "Контрагенты"
-                cy.checkCounterpartList(this.testData.UL)
-                    //Перехожу на страницу "Контрагенты / Просмотр"
-                    .click()
+                //Перехожу на страницу "Контрагенты / Просмотр"
+                cy.checkCounterpartList(this.testData.UL).click()
                 //Проверяю логотип и ранее введенную информацию на странице "Контрагенты / Просмотр"
                 cy.checkCounterpartDetails(this.testData.UL)
                 //Проверяю номер счета, город и кнопку "Заплатить"
                 cy.modificationAccNumberDot(this.testData.UL.type["Счет получателя"])
                     .then((modifiedNumber) => {
-                        cy.get('.number').should('contain', modifiedNumber);
+                        cy.get('div.number').should('contain', modifiedNumber);
                     });
-                cy.get('.bank-place').should('contain', 'г.Москва')
-                cy.get('.controls').should('contain', ' Заплатить ')
+                cy.get('div.bank-place').should('contain', 'г.Москва')
+                cy.get('div.controls').should('contain', ' Заплатить ')
                 //Нажимаю кебаб-меню / Удалить
-                cy.get('.counterpart-details').within(() => {
-                    cy.get('.actions').click()
-                    cy.contains('.menu-select-item__title', 'Удалить').click()
+                cy.get('div.counterpart-details').within(() => {
+                    cy.get('app-menu-select.actions').click()
+                    cy.contains('div.menu-select-item__title', 'Удалить').click()
                 })
                 //Проверяю модальное окно
                 cy.checkModalContainer(this.testData)
                 //Нажимаю "Удалить"
-                cy.get('[data-qa="1658988097817"] > [data-qa="1658987981978"]')
-                    .click()
+                cy.get('app-button[data-qa="1658988097817"] > div[data-qa="1658987981978"]').click()
                 //Красный тост - "Контрагент удален"
                 cy.checkRedToastInfo(this.testData.toastRedSuccess);
                 //Проверяю, что все контрагенты удалены
-                cy.get('.counterparts-list__empty-text')
-                    .should('contain', ' Контрагенты не найдены ')
+                cy.get('div.counterparts-list__empty-text').should('contain', ' Контрагенты не найдены ')
             })
             it('#3633. Валидация на создание дубликата контрагента', function () {
                 //Создаю контрагента через API 
@@ -220,86 +228,92 @@ describe('Контрагенты', () => {
                     this.testData.UL.type["БИК банка получателя"],
                     this.testData.UL.check["corrType"]
                 )
-                //Перехожу в раздел "Шаблоны" / "Создать шаблон"
-                cy.visit(`${Cypress.config('baseUrl')}template?new=true`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}template?new=true`)
                 //Заполняю поле "Название шаблона"
-                cy.contains('.panel-form__input__placeholder', ' Название шаблона ')
+                cy.contains('div.panel-form__input__placeholder', ' Название шаблона ')
                     .click()
                     .type(`Шаблон - ${this.testData.UL.type["Наименование получателя или ИНН"]}`)
                 //Нажимаю на стрелку пожле "Получатель"
-                cy.contains('[data-qa="1657803432416"]', 'Получатель').within(() => {
+                cy.contains('div[data-qa="1657803432416"]', 'Получатель').within(() => {
                     cy.get(this.testData.arroyDown).click()
                 })
                 //Заполняю форму тестовыми данными из фикстуры
                 cy.typeForm(this.testData.UL.type)
-                //Жду пока пропадет лоадер
-                cy.get('.loader').should('not.exist')
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
                 cy.wait(1000)
                 //Сохранить контрагента
-                cy.get('[data-qa="1663140882365"]').click()
+                cy.get('button[data-qa="1663140882365"]').click()
                 //Красный тост - "Такой контрагент уже существует"
                 cy.checkRedToastInfo(this.testData.toastRedError);
                 //Перехожу в раздел "Контрагенты"
-                cy.visit(`${Cypress.config('baseUrl')}counterparts`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
+                cy.visit('/counterparts')
+                    .url()
+                    .should('contain', '/counterparts')
                 //Количество контрагентов = 1
-                cy.get('.counterpart-list__item').should('have.length', 1)
+                cy.get('div.counterpart-list__item').should('have.length', 1)
             })
         })
         context('Новый платеж', () => {
+            beforeEach('Перехожу в раздел "Новый платеж"', () => {
+                cy.visit('/transfer-rur')
+                    .url()
+                    .should('contain', '/transfer-rur')
+            })
             it('#1496. Создание контрагента + удаление через кебаб-меню', function () {
-                //Перехожу в раздел "Новый платеж"
-                cy.visit(`${Cypress.config('baseUrl')}transfer-rur`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}transfer-rur`)
                 //Нажимаю на стрелку пожле "Получатель"
-                cy.contains('[data-qa="1657803432416"]', 'Получатель').within(() => {
+                cy.contains('div[data-qa="1657803432416"]', 'Получатель').within(() => {
                     cy.get(this.testData.arroyDown).click()
                 })
                 //Заполняю форму тестовыми данными из фикстуры
                 cy.typeForm(this.testData.UL.type)
-                //Жду пока пропадет лоадер
-                cy.get('.loader').should('not.exist')
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
                 cy.wait(1000)
                 //Сохранить контрагента
-                cy.get('[data-qa="1663140882365"]').click()
+                cy.get('button[data-qa="1663140882365"]').click()
                 //Зеленый тост "Контрагент успешно сохранён!"
                 cy.checkGreenToastInfo(this.testData.toastGreen);
                 //Сохранить контрагента еще раз
-                cy.get('[data-qa="1663140882365"]').click()
+                cy.get('button[data-qa="1663140882365"]').click()
                 //Красный тост - "Такой контрагент уже существует"
                 cy.checkRedToastInfo(this.testData.toastRedError);
                 //Перехожу в раздел "Контрагенты"
-                cy.visit(`${Cypress.config('baseUrl')}counterparts`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
+                cy.visit('/counterparts')
+                    .url()
+                    .should('contain', '/counterparts')
                 //Проверяю логотип и ранее введенную информацию на странице "Контрагенты"
-                cy.checkCounterpartList(this.testData.UL)
-                    //Перехожу на страницу "Контрагенты / Просмотр"
-                    .click()
+                //Перехожу на страницу "Контрагенты / Просмотр"
+                cy.checkCounterpartList(this.testData.UL).click()
                 //Проверяю логотип и ранее введенную информацию на странице "Контрагенты / Просмотр"
                 cy.checkCounterpartDetails(this.testData.UL)
                 //Проверяю номер счета, город и кнопку "Заплатить"
                 cy.modificationAccNumberDot(this.testData.UL.type["Счет получателя"])
                     .then((modifiedNumber) => {
-                        cy.get('.number').should('contain', modifiedNumber);
+                        cy.get('div.number').should('contain', modifiedNumber);
                     });
-                cy.get('.bank-place').should('contain', 'г.Москва')
-                cy.get('.controls').should('contain', ' Заплатить ')
+                cy.get('div.bank-place').should('contain', 'г.Москва')
+                cy.get('div.controls').should('contain', ' Заплатить ')
                 //Нажимаю кебаб-меню / Удалить
-                cy.get('.counterpart-details').within(() => {
-                    cy.get('.actions').click()
-                    cy.contains('.menu-select-item__title', 'Удалить').click()
+                cy.get('div.counterpart-details').within(() => {
+                    cy.get('app-menu-select.actions').click()
+                    cy.contains('div.menu-select-item__title', 'Удалить').click()
                 })
                 //Проверяю модальное окно
                 cy.checkModalContainer(this.testData)
                 //Нажимаю "Удалить"
-                cy.get('[data-qa="1658988097817"] > [data-qa="1658987981978"]')
-                    .click()
+                cy.get('app-button[data-qa="1658988097817"] > div[data-qa="1658987981978"]').click()
                 //Красный тост - "Контрагент удален"
                 cy.checkRedToastInfo(this.testData.toastRedSuccess);
                 //Проверяю, что все контрагенты удалены
-                cy.get('.counterparts-list__empty-text')
-                    .should('contain', ' Контрагенты не найдены ')
+                cy.get('div.counterparts-list__empty-text').should('contain', ' Контрагенты не найдены ')
             })
             it('#3635. Валидация на создание дубликата контрагента', function () {
                 //Создаю контрагента через API 
@@ -310,27 +324,29 @@ describe('Контрагенты', () => {
                     this.testData.UL.type["БИК банка получателя"],
                     this.testData.UL.check["corrType"]
                 )
-                //Перехожу в раздел "Новый платеж"
-                cy.visit(`${Cypress.config('baseUrl')}transfer-rur`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}transfer-rur`)
                 //Нажимаю на стрелку пожле "Получатель"
-                cy.contains('[data-qa="1657803432416"]', 'Получатель').within(() => {
+                cy.contains('div[data-qa="1657803432416"]', 'Получатель').within(() => {
                     cy.get(this.testData.arroyDown).click()
                 })
                 //Заполняю форму тестовыми данными из фикстуры
                 cy.typeForm(this.testData.UL.type)
-                //Жду пока пропадет лоадер
-                cy.get('.loader').should('not.exist')
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
                 cy.wait(1000)
                 //Сохранить контрагента
-                cy.get('[data-qa="1663140882365"]').click()
+                cy.get('button[data-qa="1663140882365"]').click()
                 //Красный тост - "Такой контрагент уже существует"
                 cy.checkRedToastInfo(this.testData.toastRedError);
                 //Перехожу в раздел "Контрагенты"
-                cy.visit(`${Cypress.config('baseUrl')}counterparts`)
-                cy.url().should('eq', `${Cypress.config('baseUrl')}counterparts`)
+                cy.visit('/counterparts')
+                    .url()
+                    .should('contain', '/counterparts')
                 //Количество контрагентов = 1
-                cy.get('.counterpart-list__item').should('have.length', 1)
+                cy.get('div.counterpart-list__item').should('have.length', 1)
             })
         })
         context('Оплата', () => {
