@@ -58,7 +58,7 @@ Cypress.Commands.add('checkRedToastInfo', (text) => {
         .should('eq', text);
     cy.get('.toast')
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(243, 144, 52) 0%, rgb(255, 39, 39) 100%)');
-})
+})                      
 //
 //РАБОТА С ФОРМАМИ
 //Заполнение формы тестовыми данными

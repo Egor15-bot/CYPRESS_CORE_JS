@@ -54,12 +54,12 @@ describe('Страница авторизации', () => {
       cy.getByClass('panel-title').should('contain', 'Интернет-банк для бизнеса')
     })
     it('#4386 - Страница входа. Логин с невалидными данными', () => {
-      cy.get('input[data-qa="1658988187497"][type="text"]').type("someText", { log: false })
+      cy.get('input[data-qa="1658988187497"][type="text"]').type("q a123", { log: false })
       cy.get('input[data-qa="1658988187497"][type="password"]').type("InvalidPassword", { log: false })
       cy.get('div[data-qa="1658987981978"]').click()
       cy.get('[data-qa="1657808896581"]').should('contain', 'Неверный логин или пароль')
     })
-    it('#2847 - Страница входа. Логин с валидными данными', () => {
+    it.only('#2847 - Страница входа. Логин с валидными данными', () => {
       cy.get('input[data-qa="1658988187497"][type="text"]').type("qa_eybondar_ul", { log: false })
       cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345678", { log: false })
       cy.get('div[data-qa="1658987981978"]').click()
