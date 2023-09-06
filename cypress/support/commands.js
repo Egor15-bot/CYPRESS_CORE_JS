@@ -123,6 +123,18 @@ Cypress.Commands.add('checkForm', (fixture) => {
                     value = modificationAccNumberSpace(value); //Это функция, работает через импорт
                 }
             }
+            if (key === 'Счет получателя') {
+                //Данное условие касается раздела "Новый платеж"
+                if (url.includes(`${Cypress.config('baseUrl')}transfer-rur`)) {
+                    // Если ключ равен "Номер счета", примените функцию modificationAccNumberSpace
+                    value = modificationAccNumberSpace(value); //Это функция, работает через импорт
+                }
+                //Данное условие касается раздела "Шаблоны"
+                if (url.includes(`${Cypress.config('baseUrl')}template?new=true`)) {
+                    // Если ключ равен "Номер счета", примените функцию modificationAccNumberSpace
+                    value = modificationAccNumberSpace(value); //Это функция, работает через импорт
+                }
+            }
             cy.contains('label.dynamic-input', `${key}`)
                 .find('div.dynamic-input__overlay.ng-star-inserted')
                 .children()

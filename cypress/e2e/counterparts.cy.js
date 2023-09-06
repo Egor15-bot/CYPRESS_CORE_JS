@@ -67,6 +67,7 @@ describe('Контрагенты', () => {
                     .children()
                     .invoke('val')
                     .should('not.be.empty')
+                cy.wait(1000)
                 //Проверяю тестовые данные из фикстуры
                 cy.checkForm(this.testData)
                 //Нажимаю "Сохранить"
@@ -124,6 +125,7 @@ describe('Контрагенты', () => {
             it('#3629. Валидация на создание дубликата контрагента', function () {
                 //Создаю контрагента через API 
                 cy.createCounterpartsApi(
+                    this.fixtureCounterparts["Контрагент для валидации"],
                     this.testData.type["ИНН получателя"],
                     this.testData.type["КПП получателя"],
                     this.testData.type["Счет получателя"],
@@ -185,6 +187,8 @@ describe('Контрагенты', () => {
                     .invoke('val')
                     .should('not.be.empty')
                 cy.wait(1000)
+                //Проверяю тестовые данные из фикстуры
+                cy.checkForm(this.testData)
                 //Сохранить контрагента
                 cy.get('button[data-qa="1663140882365"]').click()
                 //Зеленый тост "Контрагент успешно сохранён!"
@@ -226,6 +230,7 @@ describe('Контрагенты', () => {
             it('#3633. Валидация на создание дубликата контрагента', function () {
                 //Создаю контрагента через API 
                 cy.createCounterpartsApi(
+                    this.fixtureCounterparts["Контрагент для валидации"],
                     this.testData.type["ИНН получателя"],
                     this.testData.type["КПП получателя"],
                     this.testData.type["Счет получателя"],
@@ -281,6 +286,8 @@ describe('Контрагенты', () => {
                     .invoke('val')
                     .should('not.be.empty')
                 cy.wait(1000)
+                //Проверяю тестовые данные из фикстуры
+                cy.checkForm(this.testData)
                 //Сохранить контрагента
                 cy.get('button[data-qa="1663140882365"]').click()
                 //Зеленый тост "Контрагент успешно сохранён!"
@@ -322,6 +329,7 @@ describe('Контрагенты', () => {
             it('#3635. Валидация на создание дубликата контрагента', function () {
                 //Создаю контрагента через API 
                 cy.createCounterpartsApi(
+                    this.fixtureCounterparts["Контрагент для валидации"],
                     this.testData.type["ИНН получателя"],
                     this.testData.type["КПП получателя"],
                     this.testData.type["Счет получателя"],
@@ -354,14 +362,90 @@ describe('Контрагенты', () => {
             })
         })
         context('Оплата', () => {
-            it('#1650. Оплата через иконку карты', () => {
-
+            beforeEach('Создаю контрагента через API', function () {
+                cy.createCounterpartsApi(
+                    this.testData.type["Наименование получателя или ИНН"],
+                    this.testData.type["ИНН получателя"],
+                    this.testData.type["КПП получателя"],
+                    this.testData.type["Счет получателя"],
+                    this.testData.type["БИК банка получателя"],
+                    this.testData.check["corrType"]
+                )
             })
-            it('#2019. Оплата через окно просмотра', () => {
-
+            it('#1650. Оплата через иконку карты', function () {
+                //Перехожу в раздел "Контрагенты"
+                cy.visit('/counterparts')
+                    .url()
+                    .should('contain', '/counterparts')
+                //Нажимаю на иконку "Карта", выбираю счет
+                cy.contains('div.counterpart-list__item', this.testData.type["Наименование получателя или ИНН"])
+                    .within(() => {
+                        cy.get('svg.controls__item').click()
+                    })
+                //Проверяю выпадающий список, перехожу в новый платеж
+                cy.get('div[class="menu-select__overlay menu-select__overlay--open"]').within(() => {
+                    cy.get('div.menu-select-item__title.menu-select-item__title--default').should('contain', ' Выберите счет для оплаты ')
+                    cy.modificationAccNumberDot(this.testData.type["Счет получателя"])
+                        .then((modifiedNumber) => {
+                            cy.get('div[data-qa="1658988309509"]')
+                                .find('div.menu-select-item__title')
+                                .should('contain', modifiedNumber)
+                                .click()
+                                .url()
+                                .should('contain', '/transfer-rur')
+                        });
+                })
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
+                cy.wait(1000)
+                //Проверяю тестовые данные из фикстуры
+                cy.checkForm(this.testData)
             })
-            it('#2038. Оплата через "Новый платеж"', () => {
-
+            it('#2019. Оплата через окно просмотра', function () {
+                //Перехожу на страницу "Контрагенты"
+                cy.visit('/counterparts')
+                    .url()
+                    .should('contain', '/counterparts')
+                //Проверяю логотип и ранее введенную информацию на странице "Контрагенты"
+                //Перехожу на страницу "Контрагенты / Просмотр"
+                cy.checkCounterpartList(this.testData).click()
+                //Нажимаю "Заплатить"
+                cy.get('div.controls')
+                    .should('contain', ' Заплатить ')
+                    .click()
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
+                cy.wait(1000)
+                //Проверяю тестовые данные из фикстуры
+                cy.checkForm(this.testData)
+            })
+            it('#2038. Оплата через "Новый платеж"', function () {
+                //Перехожу в "Новый платеж"
+                cy.visit('/transfer-rur')
+                    .url()
+                    .should('contain', '/transfer-rur')
+                //Ввожу в страку поиска название ранее созданного контрагента
+                cy.get('[data-qa="1657971851284"] > .custom-select > [data-qa="1658989013306"] > .panel-form__input > .panel-form__input-wrap > [data-qa="1658988187497"]')
+                    .click()
+                    .type(this.testData.type["Наименование получателя или ИНН"])
+                cy.contains('.dadata-list__item', this.testData.type["Наименование получателя или ИНН"]).click()
+                //Жду пока заполниться поле "Название банка получателя"
+                cy.contains('label.dynamic-input', ' Название банка получателя ')
+                    .find('div.dynamic-input__overlay.ng-star-inserted')
+                    .children()
+                    .invoke('val')
+                    .should('not.be.empty')
+                cy.wait(1000)
+                //Проверяю тестовые данные из фикстуры
+                cy.checkForm(this.testData)
             })
         })
     })

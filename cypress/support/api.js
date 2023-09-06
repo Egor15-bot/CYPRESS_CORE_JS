@@ -37,9 +37,9 @@ Cypress.Commands.add('changeCompanyApi', (idCompany) => {
 //КОНТРАГЕНТЫ
 //
 //Создаю контрагента через API
-Cypress.Commands.add('createCounterpartsApi', (inn, kpp, accNumber, bankBik, corrType) => {
+Cypress.Commands.add('createCounterpartsApi', (fullname, inn, kpp, accNumber, bankBik, corrType) => {
     cy.request('POST', `${Cypress.config('baseUrl')}rest/stateful/corp/dic/corr/v2`, {
-        "fullname": 'Контрагент для проверки валидации создания дубликата',
+        "fullname": fullname,
         "inn": inn,
         "kpp": kpp,
         "accList": [
