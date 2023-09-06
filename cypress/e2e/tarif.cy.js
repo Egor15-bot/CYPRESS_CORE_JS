@@ -1,8 +1,6 @@
-const { beforeEach } = require("node:test")
-
 
 describe('Управление тарифами', () => {
-    beforeEach( () => {
+    beforeEach(() => {
         cy.loginApi()
         cy.changeCompanyApi('ООО ПСТ')
     })
