@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="9.440" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2023-09-06T09:38:06" tests="0" file="cypress\e2e\authorization.cy.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Страница авторизации" timestamp="2023-09-06T09:38:06" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Главный блок страницы входа" timestamp="2023-09-06T09:38:06" tests="1" time="9.422" failures="0">
+    <testcase name="Страница авторизации Главный блок страницы входа #2847 - Страница входа. Логин с валидными данными" time="9.332" classname="#2847 - Страница входа. Логин с валидными данными">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="10.575" tests="5" failures="0">
+  <testsuite name="Root Suite" timestamp="2023-09-06T11:34:21" tests="0" file="cypress\e2e\fifth.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="first" timestamp="2023-09-06T11:34:21" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Первый блок тестов" timestamp="2023-09-06T11:34:21" tests="5" time="10.552" failures="0">
+    <testcase name="first Первый блок тестов #2238 - Страница входа. Проверка редиректа на боевой сайт" time="10.102" classname="#2238 - Страница входа. Проверка редиректа на боевой сайт">
+    </testcase>
+    <testcase name="first Первый блок тестов #2238 - Страница входа. Проверка редиректа на боевой сайт" time="0.128" classname="#2238 - Страница входа. Проверка редиректа на боевой сайт">
+    </testcase>
+    <testcase name="first Первый блок тестов #2238 - Страница входа. Проверка редиректа на боевой сайт" time="0.096" classname="#2238 - Страница входа. Проверка редиректа на боевой сайт">
+    </testcase>
+    <testcase name="first Первый блок тестов #2238 - Страница входа. Проверка редиректа на боевой сайт" time="0.099" classname="#2238 - Страница входа. Проверка редиректа на боевой сайт">
+    </testcase>
+    <testcase name="first Первый блок тестов #2238 - Страница входа. Проверка редиректа на боевой сайт" time="0.093" classname="#2238 - Страница входа. Проверка редиректа на боевой сайт">
+    </testcase>
+  </testsuite>
+</testsuites>

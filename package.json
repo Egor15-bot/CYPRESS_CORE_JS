@@ -11,6 +11,7 @@
     "cypress-multi-reporters": "^1.6.3",
     "cypress-real-events": "^1.10.1",
     "fs": "^0.0.1-security",
+    "glob": "^10.3.4",
     "liquid-json": "^0.3.1",
     "lodash": "^4.17.21",
     "mocha-allure-reporter": "^1.4.0",
@@ -26,6 +27,7 @@
     "yargs": "^17.7.2"
   },
   "scripts": {
+    "as-a":"npx as-a spec npx cypress run",
     "mocha:full": "npm run mocha:report && npm run mocha:merge && npm run mocha:html && npm run mocha:open:html",
     "mocha:report": "npx cypress run --reporter mochawesome --reporter-options reportDir='cypress/results',overwrite=false,html=false,json=true",
     "mocha:merge": "npx mochawesome-merge 'cypress/results/*.json' -o cypress/results/mochawesome.json'",
@@ -42,16 +44,18 @@
   },
   "dependencies": {
     "as-a": "^2.2.2",
-    "axios": "^1.4.0",
+    "axios": "^1.5.0",
     "cypress-parallel": "^0.13.0",
     "cypress-plugin-api": "^2.11.0",
     "cypress-testing-library": "^4.0.0",
     "dayjs": "^1.11.7",
+    "form-data": "^4.0.0",
     "fs-extra": "^11.1.1",
     "jsqr": "^1.4.0",
     "minimatch": "^9.0.3",
     "node": "^20.5.1",
-    "number-format.js": "^2.0.9"
+    "number-format.js": "^2.0.9",
+    "testit-api-client": "^3.2.0"
   },
   "name": "cypress",
   "version": "1.0.0",

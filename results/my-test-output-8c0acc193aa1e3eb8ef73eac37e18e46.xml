@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="35.386" tests="3" failures="0">
+  <testsuite name="Root Suite" timestamp="2023-09-06T09:38:18" tests="0" file="cypress\e2e\counterparts.cy.js" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Контрагенты" timestamp="2023-09-06T09:38:18" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Общие кейсы" timestamp="2023-09-06T09:38:18" tests="2" time="31.730" failures="0">
+    <testcase name="Контрагенты Общие кейсы Переход в меню &quot;Контрагенты&quot; через меню бургер" time="16.928" classname="Переход в меню &quot;Контрагенты&quot; через меню бургер">
+    </testcase>
+    <testcase name="Контрагенты Общие кейсы Верстка" time="14.721" classname="Верстка">
+    </testcase>
+  </testsuite>
+  <testsuite name="Контрагенты ФЛ" timestamp="2023-09-06T09:38:49" tests="1" time="3.635" failures="0">
+    <testcase name="Контрагенты Контрагенты ФЛ Создаю контрагента ФЛ" time="3.633" classname="Создаю контрагента ФЛ">
+    </testcase>
+  </testsuite>
+</testsuites>
