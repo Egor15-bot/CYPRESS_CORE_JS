@@ -1,1 +1,26 @@
-{"cypress\\e2e\\counterparts.cy.js":{"time":66494,"weight":3},"cypress\\e2e\\fifth.js":{"time":293229,"weight":13},"cypress\\e2e\\first.js":{"time":203520,"weight":9},"cypress\\e2e\\fourth.js":{"time":274816,"weight":12},"cypress\\e2e\\second.js":{"time":251014,"weight":11},"cypress\\e2e\\third.js":{"time":184109,"weight":8}}
+{
+    "cypress\\e2e\\counterparts.cy.js": {
+        "time": 66494,
+        "weight": 3
+    },
+    "cypress\\e2e\\fifth.js": {
+        "time": 293229,
+        "weight": 13
+    },
+    "cypress\\e2e\\first.js": {
+        "time": 203520,
+        "weight": 9
+    },
+    "cypress\\e2e\\fourth.js": {
+        "time": 274816,
+        "weight": 12
+    },
+    "cypress\\e2e\\second.js": {
+        "time": 251014,
+        "weight": 11
+    },
+    "cypress\\e2e\\third.js": {
+        "time": 184109,
+        "weight": 8
+    }
+}

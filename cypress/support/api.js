@@ -2,16 +2,18 @@
 
 //Метод логина на Препрод
 Cypress.Commands.add('loginApi', () => {
-    cy.request({
-        method: 'POST',
-        url: `${Cypress.config('baseUrl')}/rest/stateful/corp/login`,
-        headers: {
-            'Authorization': 'Basic cWFfZHJ1ZG5pa19kY2I6MTIzNDU2Nzg=',
-        },
-        body: {}
-    }).then((response) => {
-        expect(response.status).to.equal(200);
-    });
+    cy.session('Создание сессии авторизации через API', () => {
+        cy.request({
+            method: 'POST',
+            url: `${Cypress.config('baseUrl')}/rest/stateful/corp/login`,
+            headers: {
+                'Authorization': 'Basic cWFfZHJ1ZG5pa19kY2I6MTIzNDU2Nzg=',
+            },
+            body: {}
+        }).then((response) => {
+            expect(response.status).to.equal(200);
+        });
+    })
 })
 //Метод логина на Тест
 Cypress.Commands.add('loginTestApi', () => {
@@ -35,7 +37,7 @@ Cypress.Commands.add('changeCompanyApi', (idCompany) => {
 //КОНТРАГЕНТЫ
 //
 //Создаю контрагента через API
-Cypress.Commands.add('createCounterpartsApi', (inn, kpp, accNumber, bankBik, corrType)=>{
+Cypress.Commands.add('createCounterpartsApi', (inn, kpp, accNumber, bankBik, corrType) => {
     cy.request('POST', `${Cypress.config('baseUrl')}rest/stateful/corp/dic/corr/v2`, {
         "fullname": 'Контрагент для проверки валидации создания дубликата',
         "inn": inn,

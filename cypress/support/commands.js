@@ -26,7 +26,7 @@ Cypress.Commands.add('getLocalStorageValue', (key) => {
 })
 //Авторизация с сохранением сессии
 Cypress.Commands.add('loginStand', () => {
-    cy.session([], () => {
+    cy.session('Создание сессии авторизации', () => {
         cy.visit("/")
         cy.get('input[data-qa="1658988187497"][type="text"]').type("qa_eybondar_ul", { log: false })
         cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345678", { log: false })
