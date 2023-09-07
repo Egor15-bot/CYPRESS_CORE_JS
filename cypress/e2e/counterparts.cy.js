@@ -13,7 +13,7 @@ describe('Контрагенты', () => {
         })
     });
     context('Общие кейсы', () => {
-        it.only('Переход в меню "Контрагенты" через меню бургер', function () {
+        it('Переход в меню "Контрагенты" через меню бургер', function () {
             cy.visit('/')
             cy.openBurgerTab('Контрагенты')
                 .url()
@@ -37,21 +37,24 @@ describe('Контрагенты', () => {
             //Проверяю цвет кнопки "Рублевые"
             cy.get('div[data-qa="16599638895420"]').should('have.css', 'background-image', Cypress.env('colorBlueGradient'));
         })
-        it.only('#1366. Фильтрация. Рублевые. Строка поиска', function () { 
-            cy.visit('/counterparts/create')
-                    .url()
-                    .should('contain', '/counterparts/create')
+        it.only('#1366. Фильтрация. Рублевые. Строка поиска', function () {
+            cy.visit('/')
+            cy.openBurgerTab('Контрагенты')
+                .url()
+                .should('contain', '/counterparts')
         })
-        it.only('#1873. Фильтрация. Рублевые. Фильтрация по типам', function () { 
-            cy.visit('/counterparts/create')
-                    .url()
-                    .should('contain', '/counterparts/create')
+        it.only('#1873. Фильтрация. Рублевые. Фильтрация по типам', function () {
+            cy.visit('/')
+            cy.openBurgerTab('Контрагенты')
+                .url()
+                .should('contain', '/counterparts')
         })
         it.only('#3602. Услуга "Светофор" включена - АО "ВМЗ"', function () {
-            cy.visit('/counterparts/create')
-                    .url()
-                    .should('contain', '/counterparts/create')
-         })
+            cy.visit('/')
+            cy.openBurgerTab('Контрагенты')
+                .url()
+                .should('contain', '/counterparts')
+        })
         it('#3796. Услуга "Светофор" выключена - ООО "БРАИР"', function () { })
         it('#1359. Проверка пагинации', function () { })
         it('#1372. Проверка скорости загрузки страницы "Контрагенты"', function () { })
