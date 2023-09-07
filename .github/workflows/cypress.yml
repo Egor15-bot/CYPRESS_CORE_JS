@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - dev
+      - test-counterparts
   pull_request:
     branches:
       - dev
@@ -16,10 +17,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - name: Install Dependencies
         run: npm install
-      - name: Cypress run
-        run: npx cypress run --browser firefox
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up environment variables
+        run: npx cypress run --env MY_USERNAME=${{ secrets.MY_USERNAME }},MY_PASSWORD=${{ secrets.MY_PASSWORD }}
