@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - dev
-      - test-counterparts
   pull_request:
     branches:
       - dev
