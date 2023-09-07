@@ -1,132 +1,96 @@
-
 describe('Управление тарифами', () => {
     beforeEach(() => {
-        cy.loginApi()
-        cy.changeCompanyApi('ООО ПСТ')
-        cy.openBurgerTab('Управление тарифами').url().should('contain','/tarif')
+        cy.loginStand()
+        cy.changeCompanyApi('3448774')
+        cy.visit('/')
+        cy.openBurgerTab('Управление тарифами').url().should('contain', '/tarif')
     })
     context('Общие кейсы', () => {
-        it('Верстка тарифы', () => {
-            it('Верстка тарифы', () => {
-                //СНачала проверяем заголовок
-                cy.get('div.page-title__text.title-new').should('contain',' Обслуживание по тарифу за сентябрь 2023 г. ')
-                cy.get('[data-qa="1657805226006"]').should('be.visible')
-                //После чего находим блок header и внутри него проверяем все отображаемые элементы, потом кликаем на стрелку,чтобы развернуть остальные и проверяем их
-                cy.get('section[data-qa="1657787211892"] header.ng-star-inserted').within( () => {
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')               
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get('button[data-qa="1663074395452"]')
-                    .should('contain','Сменить')
-                    .click()
-                    .url.should('contain','')
-                })
-                cy.get('section[data-qa="1657787211892"] main.ng-star-inserted').within(() => {
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')               
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                    cy.get().should('contain','')
-                })
-                //Особенно обратить внимание на открывающиеся ссылки, например описание тарифа и кнопка сменить(добавить проверку на переход в другую вкладку, так как Endpoint не меняется)
-                //Далее находим блок Main и проверяем все элементы внутри него, текст и еще цвет там где есть номера счетов 
-                // так же необходимо добавить отображение блоков при наведении на значки вопроса справа сбоку   
-                // click arrow
+        it.only('Верстка тарифы', () => {
+            //СНачала проверяем заголовок
+            cy.get('div.page-title__text.title-new').should('contain', ' Обслуживание по тарифу за')//FIXME:Добавить проверку по месяцу
+            cy.get('[data-qa="16577869259230"]').should('contain',' Основные параметры ').and('have.css','border-bottom','3px solid #2f54eb')
+           
+            cy.get('div.arrow-toggle__arrow.red').click()
+            
+            cy.get('[data-qa="1657785210535"]').should('have.css','background','rgba(222,222,222,0.5)')
+            cy.get('.tariff-details-header__title').should('contain', 'Тариф Расчетный')
+            cy.get('[data-qa="16577851384090"] > app-tariff-description-item > .card-content-item > .label').should('contain', 'Переводы в другие банки на счета ЮЛ, ИП и ФЛ ')
+            cy.get('[data-qa="16577851384090"] > app-tariff-description-item > .card-content-item > .value').should('contain', '25 ₽ за платеж. В адрес ФЛ + доп.комиссия ')
+            cy.get('[data-qa="16577851384091"] > app-tariff-description-item > .card-content-item > .label').should('contain', 'Переводы в адрес ФЛ')
+            cy.get('[data-qa="16577851384091"] > app-tariff-description-item > .card-content-item > .value').should('contain', 'от 0,2% до 6% от суммы платежа')
+            cy.get('[data-qa="16577851384092"] > app-tariff-description-item > .card-content-item > .label').should('contain', 'Снятие наличных с карты')
+            cy.get('[data-qa="16577851384092"] > app-tariff-description-item > .card-content-item > .value').should('contain', 'до 100 000 ₽ (включительно) - бесплатно. Далее - 1,5 % ')
+            cy.get('[data-qa="16577851384093"] > app-tariff-description-item > .card-content-item > .label').should('contain', 'Начисление % на остаток')
+            cy.get('[data-qa="16577851384093"] > app-tariff-description-item > .card-content-item > .value').should('contain', 'не начисляется')
+            cy.get('[data-qa="1657785266292"] > .card-content-item > .label').should('contain', 'Тариф действует с')
+            cy.get('[data-qa="1657785266292"] > .card-content-item > .value').should('contain', '09.10.2020')
+            cy.get('[data-qa="1657785189071"] > .card-content-item > .label').should('contain', 'Плата за ведение расчётного счета')
+            cy.get('[data-qa="1657785189071"] > .card-content-item > .value').should('contain', '2 месяца бесплатно, далее 1 900 ₽')
+            cy.get('[data-qa="1657787192111"]').should('contain', 'Описание тарифа').should('have.attr', 'href', 'https://metib.online/docs/Единый%20Сборник%20Тарифов%20с%2005.07.2023г.pdf')
+            cy.get('[data-qa="1663074395452"] > span').should('contain', 'Сменить').click().then(() => {
+                cy.get('.page-title__text').should('contain', 'Тарифы и пакеты')
+                cy.get('app-svg-icon[data-qa="1657805226006"]').click()
             })
+            cy.get('.tariff-details-container__header-title').should('contain', 'Переводы денежных средств')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > :nth-child(1) > .tariff-details-item__header').should('contain', 'Счет')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > :nth-child(1) > .tariff-details-item__header > span').should('have.text', '  Расчетный счет 40802810200990000023 ').and('have.css', 'background-image', 'linear-gradient(270deg, rgb(0, 58, 210) 0%, rgb(0, 58, 210) 100%)')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > .tariff-details-item__option-wrapper > .tariff-details-item__option-description').should('contain', ' Переводы в другие банки на счета юридических лиц, ИП и ФЛ ')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > :nth-child(3) > .tariff-details-item__header').should('contain', ' 25 ₽ за платеж ')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > app-metib-progress-bar > .metib-progress-bar__background').should('be.visible').and('have.css', 'background-color', 'rgb(196, 196, 196)')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > .tariff-details-item__info-wrapper > .tariff-details-item__info').should('be.visible')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > .tariff-details-item__progress-wrapper > span').should('contain', '0')
+
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > :nth-child(1) > .tariff-details-item__header').should('contain', 'Счет')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > :nth-child(1) > .tariff-details-item__header > span').should('contain', '  Расчетный счет 40802810200990000023 ').and('have.css', 'background-image', 'linear-gradient(270deg, rgb(0, 58, 210) 0%, rgb(0, 58, 210) 100%)')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > .tariff-details-item__option-wrapper > .tariff-details-item__option-description').should('contain', 'Переводы на счета физических лиц')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > :nth-child(3) > .tariff-details-item__header').should('contain', ' 0.2% ')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > app-metib-progress-bar > .metib-progress-bar__background').should('be.visible').and('have.css', 'background-color', 'rgb(196, 196, 196)')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > .tariff-details-item__info-wrapper > .tariff-details-item__info').should('be.visible')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > .tariff-details-item__progress-wrapper > span').should('contain', ' 0.00 из 99 999,99 ₽ ')
         })
-    })
-    context('Приветственный тариф', () => {
-        it('Основные параметры',  () => {
-            cy.get('article[data-qa="1657785210535"]').should('have.css','background','rgba(222,222,222,.5)').within(()=>{
-                cy.get('h3.tariff-details-header__title').should('contain','Тариф Расчетный')
-                cy.get('li:nth-child(1)  div > div.label').should('contain','Переводы в другие банки на счета ЮЛ, ИП и ФЛ ')
-                cy.get('li:nth-child(1)  div > div.value').should('contain','25 ₽ за платеж. В адрес ФЛ + доп.комиссия ')
-                cy.get().should('contain','Тариф действует с')
-                cy.get().should('contain','09.10.2020')
-                cy.get('div.tariff-details-header__content-visible > app-tariff-description-item div.label')
-                cy.get('div.arrow-toggle').click().then(() => {
-                    cy.get().should('contain','Переводы в адрес ФЛ')
-                    cy.get().should('contain','от 0,2% до 6% от суммы платежа')
-                    cy.get().should('contain','Снятие наличных с карты')
-                    cy.get().should('contain','до 100 000 ₽ (включительно) - бесплатно. Далее - 1,5 % ')
-                    cy.get().should('contain','Начисление % на остаток')
-                    cy.get().should('contain','не начисляется')
-                    cy.get().should('contain','Плата за ведение расчётного счета')
-                    cy.get().should('contain','2 месяца бесплатно, далее 1 900 ₽')
-                    cy.get().should('contain',' Описание тарифа ').click().url().should('eq','https://metib.online/docs/Единый%20Сборник%20Тарифов%20с%2005.07.2023г.pdf')
-                })
-                cy.get('section[data-qa="1657787211892"] main.ng-star-inserted').within(() =>{ 
-                    cy.get('h4').should('contain','Переводы денежных средств')
-                    cy.get('').should('contain',' Счет: ')
-                    cy.get('').should('contain','  Расчетный счет 40802810200990000023 ')
-                    cy.get('').should('contain',' 25 ₽ за платеж ')
-                    cy.get('').should('contain',' 0 шт ')
-                })
-                cy.get('article.tariff-details-item ').
+        it.only('Верстка тарифы', () => {
+            cy.get('div.page-title__text.title-new').should('contain', ' Обслуживание по тарифу за')//FIXME:Добавить проверку по месяцу
+            cy.get('[data-qa="16577869259230"]').should('contain',' Основные параметры ').and('have.css','border-bottom','3px solid #2f54eb')
+           
+            cy.get('div.arrow-toggle__arrow.red').click()
+            
+            cy.get('[data-qa="1657785210535"]').should('have.css','background','rgba(222,222,222,0.5)')
+            cy.get('.tariff-details-header__title').should('contain', 'Тариф Расчетный')
+            cy.get('[data-qa="16577851384090"] > app-tariff-description-item > .card-content-item > .label').should('contain', 'Переводы в другие банки на счета ЮЛ, ИП и ФЛ ')
+            cy.get('[data-qa="16577851384090"] > app-tariff-description-item > .card-content-item > .value').should('contain', '25 ₽ за платеж. В адрес ФЛ + доп.комиссия ')
+            cy.get('[data-qa="16577851384091"] > app-tariff-description-item > .card-content-item > .label').should('contain', 'Переводы в адрес ФЛ')
+            cy.get('[data-qa="16577851384091"] > app-tariff-description-item > .card-content-item > .value').should('contain', 'от 0,2% до 6% от суммы платежа')
+            cy.get('[data-qa="16577851384092"] > app-tariff-description-item > .card-content-item > .label').should('contain', 'Снятие наличных с карты')
+            cy.get('[data-qa="16577851384092"] > app-tariff-description-item > .card-content-item > .value').should('contain', 'до 100 000 ₽ (включительно) - бесплатно. Далее - 1,5 % ')
+            cy.get('[data-qa="16577851384093"] > app-tariff-description-item > .card-content-item > .label').should('contain', 'Начисление % на остаток')
+            cy.get('[data-qa="16577851384093"] > app-tariff-description-item > .card-content-item > .value').should('contain', 'не начисляется')
+            cy.get('[data-qa="1657785266292"] > .card-content-item > .label').should('contain', 'Тариф действует с')
+            cy.get('[data-qa="1657785266292"] > .card-content-item > .value').should('contain', '09.10.2020')
+            cy.get('[data-qa="1657785189071"] > .card-content-item > .label').should('contain', 'Плата за ведение расчётного счета')
+            cy.get('[data-qa="1657785189071"] > .card-content-item > .value').should('contain', '2 месяца бесплатно, далее 1 900 ₽')
+            cy.get('[data-qa="1657787192111"]').should('contain', 'Описание тарифа').should('have.attr', 'href', 'https://metib.online/docs/Единый%20Сборник%20Тарифов%20с%2005.07.2023г.pdf')
+            cy.get('[data-qa="1663074395452"] > span').should('contain', 'Сменить').click().then(() => {
+                cy.get('.page-title__text').should('contain', 'Тарифы и пакеты')
+                cy.get('app-svg-icon[data-qa="1657805226006"]').click()
             })
-        })
-        it('Градусники', () => {
+            cy.get('.tariff-details-container__header-title').should('contain', 'Переводы денежных средств')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > :nth-child(1) > .tariff-details-item__header').should('contain', 'Счет')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > :nth-child(1) > .tariff-details-item__header > span').should('have.text', '  Расчетный счет 40802810200990000023 ').and('have.css', 'background-image', 'linear-gradient(270deg, rgb(0, 58, 210) 0%, rgb(0, 58, 210) 100%)')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > .tariff-details-item__option-wrapper > .tariff-details-item__option-description').should('contain', ' Переводы в другие банки на счета юридических лиц, ИП и ФЛ ')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > :nth-child(3) > .tariff-details-item__header').should('contain', ' 25 ₽ за платеж ')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > app-metib-progress-bar > .metib-progress-bar__background').should('be.visible').and('have.css', 'background-color', 'rgb(196, 196, 196)')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > .tariff-details-item__info-wrapper > .tariff-details-item__info').should('be.visible')
+            cy.get('[data-qa="16577853554320"] > .tariff-details-item > .tariff-details-item__progress-wrapper > span').should('contain', '0')
 
-        })
-        it('Смена на тариф Корпоративный', () => {
-
-        })
-        it('Смена на тариф Оптимальный', () => {
-
-        })
-    })
-    context('Расчетный тариф', () => {
-        
-    })
-    context('Активный Вэд тариф', () => {
-        it('', () => {
-
-        })
-    })
-    context('Комплексный тариф', () => {
-        it('', () => {
-
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > :nth-child(1) > .tariff-details-item__header').should('contain', 'Счет')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > :nth-child(1) > .tariff-details-item__header > span').should('contain', '  Расчетный счет 40802810200990000023 ').and('have.css', 'background-image', 'linear-gradient(270deg, rgb(0, 58, 210) 0%, rgb(0, 58, 210) 100%)')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > .tariff-details-item__option-wrapper > .tariff-details-item__option-description').should('contain', 'Переводы на счета физических лиц')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > :nth-child(3) > .tariff-details-item__header').should('contain', ' 0.2% ')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > app-metib-progress-bar > .metib-progress-bar__background').should('be.visible').and('have.css', 'background-color', 'rgb(196, 196, 196)')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > .tariff-details-item__info-wrapper > .tariff-details-item__info').should('be.visible')
+            cy.get('[data-qa="16577853554321"] > .tariff-details-item > .tariff-details-item__progress-wrapper > span').should('contain', ' 0.00 из 99 999,99 ₽ ')
         })
     })
-    context('Специальный тариф', () => {
-        it('', () => {
-
-        })
-    })
-    context('Стартовый тариф', () => {
-        it('', () => {
-
-        })
-    })
-    context('Оптимальный тариф', () => {
-        it('', () => {
-
-        })
-    })
-    context('Корпоративный тариф', () => {
-        it('', () => {
-
-        })
-    })
-
 })
+

@@ -11,6 +11,7 @@ module.exports = defineConfig({
     colorRed: 'rgb(68, 68, 68)'
   },
   e2e: {
+    watchForFileChanges:false,
     viewportWidth: "1920",
     viewportHeight: "1080",
     baseUrl: "https://pred-ul.metib.online/",
