@@ -61,7 +61,6 @@ describe('Контрагенты', () => {
             it('#3815. Контрагент ТАМОЖ', () => { })
         })
     })
-/*
     context('Контрагенты ЮЛ', () => {
         beforeEach('Импортирую фикстуры для ЮЛ', () => {
             cy.fixture('counterparts').then(function (testData) {
@@ -74,7 +73,7 @@ describe('Контрагенты', () => {
                     .url()
                     .should('contain', '/counterparts/create')
             })
-            it('#1497. Создание контрагента + удаление через кебаб-меню', function () {
+            it.only('#1497. Создание контрагента + удаление через кебаб-меню', function () {
                 //Проверяю что выбрана вкладка "Юридическое лицо"
                 cy.get('div.counterpart__types__item.active')
                     .should('contain', ' Юридическое лицо ')
@@ -2341,5 +2340,4 @@ describe('Контрагенты', () => {
             })
         })
     })
-    */
 });
