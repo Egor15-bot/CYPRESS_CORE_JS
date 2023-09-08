@@ -25,11 +25,11 @@ Cypress.Commands.add('getLocalStorageValue', (key) => {
     });
 })
 //Авторизация с сохранением сессии
-Cypress.Commands.add('loginStand', () => {
+Cypress.Commands.add('loginStand', (login, password) => {
     cy.session('Создание сессии авторизации', () => {
         cy.visit("/")
-        cy.get('input[data-qa="1658988187497"][type="text"]').type(Cypress.env('MY_USERNAME'), { log: false })
-        cy.get('input[data-qa="1658988187497"][type="password"]').type(Cypress.env('MY_PASSWORD'), { log: false })
+        cy.get('input[data-qa="1658988187497"][type="text"]').type(Cypress.env(login), { log: false })
+        cy.get('input[data-qa="1658988187497"][type="password"]').type(Cypress.env(password), { log: false })
         cy.get('div[data-qa="1658987981978"]').click()
         cy.url().should('contain', 'desktop')
     })

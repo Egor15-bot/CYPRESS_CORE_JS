@@ -11,8 +11,9 @@
             "corrType": "UL",
             "bankName": "ФИЛИАЛ ЦЕНТРАЛЬНЫЙ ПАО БАНКА \"ФК ОТКРЫТИЕ\"",
             "city": "г.Москва",
-            "image": "assets/sprite.svg#ul"
-            
+            "image": "assets/sprite.svg#ul",
+            "nameTransferRur": "Контрагенту",
+            "nameCounterpart": "Юридическое лицо"
         }
     },
     "FL_With_INN": {
@@ -26,8 +27,9 @@
             "corrType": "FL",
             "bankName": "БЕЛГОРОДСКОЕ ОТДЕЛЕНИЕ N8592 ПАО СБЕРБАНК",
             "city": "г.Белгород",
-            "image": "assets/sprite.svg#fl"
-            
+            "image": "assets/sprite.svg#fl",
+            "nameTransferRur": "Контрагенту",
+            "nameCounterpart": "Физическое лицо"
         }
     },
     "FL_Without_INN": {
@@ -40,8 +42,9 @@
             "corrType": "FL",
             "bankName": "ПАО СБЕРБАНК",
             "city": "г.Москва",
-            "image": "assets/sprite.svg#fl"
-            
+            "image": "assets/sprite.svg#fl",
+            "nameTransferRur": "Контрагенту",
+            "nameCounterpart": "Физическое лицо"
         }
     },
     "IP": {
@@ -55,8 +58,9 @@
             "corrType": "IP",
             "bankName": "БЕЛГОРОДСКОЕ ОТДЕЛЕНИЕ N8592 ПАО СБЕРБАНК",
             "city": "г.Белгород",
-            "image": "assets/sprite.svg#ip"
-            
+            "image": "assets/sprite.svg#ip",
+            "nameTransferRur": "Контрагенту",
+            "nameCounterpart": "ИП"
         }
     },
     "NALOG": {
@@ -71,8 +75,9 @@
             "corrType": "NALOG",
             "bankName": "УФК ПО МОСКОВСКОЙ ОБЛАСТИ",
             "city": "г.Москва",
-            "image": "assets/sprite.svg#nalog"
-            
+            "image": "assets/sprite.svg#nalog",
+            "nameTransferRur": "Налоговый/бюджетный",
+            "nameCounterpart": "Налоговый/Бюджетный"
         }
     },
     "TAMOZH": {
@@ -87,8 +92,9 @@
             "corrType": "TAMOZH",
             "bankName": "УФК ПО МОСКОВСКОЙ ОБЛАСТИ",
             "city": "г.Москва",
-            "image": "assets/sprite.svg#tamozh"
-            
+            "image": "assets/sprite.svg#tamozh",
+            "nameTransferRur": "Таможенный",
+            "nameCounterpart": "Таможенный"
         }
     },
     "toastGreen": "Контрагент успешно сохранён!",

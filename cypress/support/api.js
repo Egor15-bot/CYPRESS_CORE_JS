@@ -1,32 +1,32 @@
 //ТУТ ХРАНЯТЬСЯ ВСЕ API МЕТОДЫ
 
+//Метод логина на Тест
+Cypress.Commands.add('loginTestApi', (token) => {
+    cy.request({
+        method: 'POST',
+        url: `${Cypress.config('baseUrl')}rest/stateful/corp/login`,
+        headers: {
+            "Authorization": Cypress.env(token),
+        },
+        body: {}
+    }).then((response) => {
+        expect(response.status).to.equal(200);
+    });
+})
 //Метод логина на Препрод
-Cypress.Commands.add('loginApi', () => {
+Cypress.Commands.add('loginApi', (token) => {
     cy.session('Создание сессии авторизации через API', () => {
         cy.request({
             method: 'POST',
-            url: `${Cypress.config('baseUrl')}/rest/stateful/corp/login`,
+            url: `${Cypress.config('baseUrl')}rest/stateful/corp/login`,
             headers: {
-                'Authorization': 'Basic cWFfZHJ1ZG5pa19kY2I6MTIzNDU2Nzg=',
+                'Authorization': Cypress.env(token),
             },
             body: {}
         }).then((response) => {
             expect(response.status).to.equal(200);
         });
     })
-})
-//Метод логина на Тест
-Cypress.Commands.add('loginTestApi', () => {
-    cy.request({
-        method: 'POST',
-        url: 'https://test-ul.metib.online/rest/stateful/corp/login',
-        headers: {
-            "Authorization": "Basic cWFfZXlib25kYXJfdWw6UXExMjM0NTY3OA=="
-        },
-        body: {}
-    }).then((response) => {
-        expect(response.status).to.equal(200);
-    });
 })
 //Смена компании через API
 Cypress.Commands.add('changeCompanyApi', (idCompany) => {
@@ -51,7 +51,6 @@ Cypress.Commands.add('createCounterpartsApi', (fullname, inn, kpp, accNumber, ba
         "corrType": corrType
     })
 })
-//
 //Удаляю все контрагенты через API
 Cypress.Commands.add('deleteAllCounterparts', () => {
     function getArray(restResult) {

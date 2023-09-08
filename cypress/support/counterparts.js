@@ -39,7 +39,6 @@ Cypress.Commands.add('checkCounterpartList', (fixture) => {
             }
         })
 })
-
 //
 //Проверяю логотип и ранее введенную информацию на странице "Контрагенты / Просмотр"
 Cypress.Commands.add('checkCounterpartDetails', (fixture) => {

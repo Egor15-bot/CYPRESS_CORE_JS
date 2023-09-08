@@ -23,4 +23,4 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Set up environment variables
-        run: npx cypress run --env MY_USERNAME=${{ secrets.MY_USERNAME }},MY_PASSWORD=${{ secrets.MY_PASSWORD }}
+        run: npx cypress run --env LOGIN=${{ secrets.TEST_LOGIN }},PASSWORD=${{ secrets.TEST_PASSWORD }},TOKEN=${{ secrets.TEST_TOKEN }}
