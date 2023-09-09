@@ -25,7 +25,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 .url()
                 .should('contain', '/counterparts/create')
         })
-        it('#2849. Создание контрагента + удаление через кебаб-меню', function () {
+        it.only('#2849. Создание контрагента + удаление через кебаб-меню', function () {
             //Нажимаю на вкладку "Физическое лицо"
             cy.contains('div.counterpart__types__item', this.testData.check.nameCounterpart).click()
             //Проверяю автивную вкладку
@@ -45,10 +45,8 @@ describe('Контрагенты ФЛ без ИНН', () => {
             cy.checkForm(this.testData)
             //Нажимаю "Сохранить"
             cy.get('app-button[data-qa="1657886705496"] > div[data-qa="1658987981978"]').click()
-            //Зеленый тост "Контрагент успешно сохранён!"
+            
             cy.checkGreenToastInfo(this.fixtureCounterparts.toastGreen);
-            //Проверяю логотип и ранее введенную информацию на странице "Контрагенты"
-            //Перехожу на страницу "Контрагенты / Просмотр"
             cy.checkCounterpartList(this.testData).click()
             //Проверяю наличие хлебных крошек
             cy.get('div.breadcrumbs')

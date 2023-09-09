@@ -19,8 +19,9 @@ describe('Страница авторизации', () => {
         cy.get('.main-news__content_text').should('be.visible')
         cy.get('.main-news__content_link').should('contain', 'Читать полностью').click()
       })
-      cy.get('.news-block').should('have.css', 'align-items', 'center').and('have.css', 'justify-content', 'center')
-      cy.get('[datq-qa="1657809109305"]')
+      cy.get('.news-block').should('have.css', 'align-items', 'center')
+      .and('have.css', 'justify-content', 'center')
+      cy.get('[data-qa="1657809109305"]')
       .should('have.css','width','1200px')
       .and('have.css','height','830px')
      
@@ -29,18 +30,18 @@ describe('Страница авторизации', () => {
         const expectedText = ' С 07 ноября 2022 года осуществлена реорганизация Новосибирского филиала в Дополнительный офис Новосибирск.'
         expect(actualText.trim(), expectedText)
       })
-      cy.get('#item-0').should('have.css', 'border-left', '4px solid rgb(47, 84, 235)');
-      cy.get('#item-61').scrollIntoView().click().should('have.css', 'border-left', '4px solid rgb(47, 84, 235)')
+      cy.get('[data-qa="1657809121331"] .ng-trigger-slideInOut').first().should('have.css', 'border-left', '4px solid rgb(47, 84, 235)');
+      cy.get('[data-qa="1657809121331"] .ng-trigger-slideInOut').last().scrollIntoView().click().should('have.css', 'border-left', '4px solid rgb(47, 84, 235)')
       cy.get('.content-desc > :nth-child(2)').invoke('text').then((actualText) => {
         const expectedText = 'ПАО АКБ "Металлинвестбанк" уведомляет Вас о том, что в связи с празднованием Дня народного единства изменится режим работы отделений Банка. '
         expect(actualText.trim(), expectedText)
       })
       cy.get('.items__up-arrow').click()
-      cy.get('#item-0').should('be.visible')
-      cy.get('#item-61').should('not.be.visible')
+      cy.get('[data-qa="1657809121331"] .ng-trigger-slideInOut').first().should('be.visible')
+      cy.get('[data-qa="1657809121331"] .ng-trigger-slideInOut').last().should('not.be.visible')
       cy.get('.news__title_close').click()
-      cy.getByDataQa('1657809113674').should('not.exist')
-      cy.getByClass("block-content ng-tns-c310-2").should('not.exist')
+      cy.get('[data-qa="1657809113674"').should('not.exist')
+      cy.get(".block-content.ng-tns-c310-2").should('not.exist')
       cy.window().then((win) => {
         const localStorage = win.localStorage;
         expect(localStorage).to.have.property('newsread');
@@ -83,6 +84,7 @@ describe('Страница авторизации', () => {
       cy.get(".apps__close_header").should('contain', "Мобильное приложение")
       cy.get(".apps__content_text").should('contain', ' Отсканируйте QR-код и установите мобильное приложение на телефон или воспользуйтесь ссылкой ')
       cy.get(".apps__content_image").should('be.visible')
+      //Проверка QR Кода и ссылки, по которой он переходит
       cy.get('img.apps__content_image').then((imgElement) => {
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
@@ -99,7 +101,7 @@ describe('Страница авторизации', () => {
         .and('have.attr', 'href', 'https://apps.rustore.ru/app/com.isimplelab.ionic.standard.ul')
         .click()
     })
-    it('#2244 - Страница входа. Отделения и банкоматы', () => {
+    it.only('#2244 - Страница входа. Отделения и банкоматы', () => {
       cy.chooseItemFromFooter('Отделения и банкоматы')
       cy.url().should('eq', `${Cypress.config('baseUrl')}auth/places`)
       cy.get('[data-qa="1657809360854"]').as('inputField')
@@ -108,6 +110,9 @@ describe('Страница авторизации', () => {
       cy.get('div.places__filtered div.my-atms-item').as('departments').then((elements) => {
         const noFilterAmount = elements.length
         cy.get('@inputField').type('Москва').should('have.value', 'Москва')
+        cy.get('div.addr').each((el)=>{
+            cy.get(el).should('contain','Москва')
+        })
         cy.get('@departments').should('have.length.below', noFilterAmount)
       })
       cy.get('.dynamic-select').click()

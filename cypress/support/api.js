@@ -7,6 +7,7 @@ Cypress.Commands.add('loginTestApi', (token) => {
         url: `${Cypress.config('baseUrl')}rest/stateful/corp/login`,
         headers: {
             "Authorization": Cypress.env(token),
+            
         },
         body: {}
     }).then((response) => {

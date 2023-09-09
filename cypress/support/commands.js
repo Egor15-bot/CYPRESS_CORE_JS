@@ -95,6 +95,26 @@ Cypress.Commands.add('typeForm', (fixture) => {
         });
     });
 });
+// Cypress.Commands.add('typeForm', (fixture) => {
+//     const keyMappings = {
+//         'Наименование получателя или ИНН': 'Наименование',
+//         'ИНН получателя': 'ИНН',
+//         'КПП получателя': 'КПП',
+//         'Счет получателя': 'Номер счета',
+//     };
+
+//     cy.url().then((url) => {
+//         Object.entries(fixture).forEach(([key, value]) => {
+//             // Проверяем, есть ли соответствующая замена ключа
+//             const updatedKey = keyMappings[key] || key;
+            
+//             cy.contains('label.dynamic-input', updatedKey)
+//                 .find('div.dynamic-input__placeholder')
+//                 .click()
+//                 .type(`${value}`);
+//         });
+//     });
+// });
 //
 //Проверка заполненых полей в форме в разделе "Контрагенты"
 Cypress.Commands.add('checkForm', (fixture) => {
