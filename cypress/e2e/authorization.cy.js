@@ -20,12 +20,10 @@ describe('Страница авторизации', () => {
         cy.get('.main-news__content_link').should('contain', 'Читать полностью').click()
       })
       cy.get('.news-block').should('have.css', 'align-items', 'center').and('have.css', 'justify-content', 'center')
-      cy.getByDataQa('1657809109305').then((element) => {
-        const width = parseFloat(element.css('width'))
-        const height = parseFloat(element.css('height'))
-        expect(width).to.be.greaterThan(1199)
-        expect(height).to.be.greaterThan(829)
-      })
+      cy.get('[datq-qa="1657809109305"]')
+      .should('have.css','width','1200px')
+      .and('have.css','height','830px')
+     
       cy.get('[data-qa="1657809117566"]').should('contain', 'Новости')
       cy.get('.content-desc > :nth-child(2)').invoke('text').then((actualText) => {
         const expectedText = ' С 07 ноября 2022 года осуществлена реорганизация Новосибирского филиала в Дополнительный офис Новосибирск.'
@@ -51,7 +49,7 @@ describe('Страница авторизации', () => {
   })
   context('Главный блок страницы входа', () => {
     it('#2241 - Страница входа. Заголовок ', () => {
-      cy.getByClass('panel-title').should('contain', 'Интернет-банк для бизнеса')
+      cy.get('.panel-title').should('contain', 'Интернет-банк для бизнеса')
     })
     it('#4386 - Страница входа. Логин с невалидными данными', () => {
       //FIXME: написать дополнительный тест со значением .type("someText")
@@ -82,9 +80,9 @@ describe('Страница авторизации', () => {
   context('Футер страницы входа', () => {
     it('#2243 - Страница входа. Мобильное приложение', () => {
       cy.chooseItemFromFooter('Мобильное приложение')
-      cy.getByClass("apps__close_header").should('contain', "Мобильное приложение")
-      cy.getByClass("apps__content_text").should('contain', ' Отсканируйте QR-код и установите мобильное приложение на телефон или воспользуйтесь ссылкой ')
-      cy.getByClass("apps__content_image").should('be.visible')
+      cy.get(".apps__close_header").should('contain', "Мобильное приложение")
+      cy.get(".apps__content_text").should('contain', ' Отсканируйте QR-код и установите мобильное приложение на телефон или воспользуйтесь ссылкой ')
+      cy.get(".apps__content_image").should('be.visible')
       cy.get('img.apps__content_image').then((imgElement) => {
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
@@ -146,10 +144,10 @@ describe('Страница авторизации', () => {
     })
     it('#2246 - Страница входа. Новости', () => {
       cy.chooseItemFromFooter('Новости')
-      cy.getByDataQa('1657809117566').should('contain', 'Новости')
-      cy.getByDataQa("1657809113674").should('be.visible')
+      cy.get('[data-qa="1657809117566"').should('contain', 'Новости')
+      cy.get('[data-qa="1657809113674"').should('be.visible')
       cy.get('.news__title_close').click()
-      cy.getByClass("block-content ng-tns-c310-2").should('not.exist')
+      cy.get(".block-content.ng-tns-c310-2").should('not.exist')
     })
     it('#2247 - Страница входа. Генеральная лицензия', () => {
       cy.get('.copy')
