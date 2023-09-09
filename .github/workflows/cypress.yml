@@ -2,11 +2,10 @@ name: Cypress Tests
 on:
   push:
     branches:
-      - dev
-      - test-counterparts
+      - master
   pull_request:
     branches:
-      - dev
+      
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
