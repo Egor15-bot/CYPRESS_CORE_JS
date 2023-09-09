@@ -867,9 +867,10 @@ describe('Контрагенты', () => {
                                 .should('contain', '/transfer-rur')
                         });
                 })
-                //Проверяю автивную вкладку
-                cy.get('div.counterpart__types__item.active')
+                //Проверяю автивную вкладку в разделе "Новый платеж"
+                cy.get('div.transfer-rur__types__item.active')
                     .should('contain', this.testData.check.nameTransferRur)
+                    .and('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
                 //Жду пока заполниться поле "Название банка получателя"
                 cy.contains('label.dynamic-input', ' Название банка получателя ')
                     .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -941,11 +942,10 @@ describe('Контрагенты', () => {
                     .should('contain', '/counterparts/create')
             })
             it('#2849. Создание контрагента + удаление через кебаб-меню', function () {
-                //Нажимаю на вкладку "Физическое лицо"
+                //Проверяю автивную вкладку в разделе "Контрагенты"
                 cy.contains('div.counterpart__types__item', this.testData.check.nameCounterpart).click()
-                //Проверяю автивную вкладку в разделе "Новый платеж"
-                cy.get('div.transfer-rur__types__item.active')
-                    .should('contain', this.testData.check.nameTransferRur)
+                cy.get('div.counterpart__types__item.active')
+                    .should('contain', this.testData.check.nameCounterpart)
                     .and('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
                 //Заполняю форму тестовыми данными из фикстуры
                 cy.fillForm(this.testData.type)
