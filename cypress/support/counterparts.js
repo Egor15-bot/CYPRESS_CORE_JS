@@ -14,7 +14,7 @@ Cypress.Commands.add('checkModalContainer', (fixture) => {
         cy.get('div.delete-modal__controls').within(() => {
             cy.get('div.panel-form__button.undefined')
                 .should('contain', ' Удалить')
-                .and('have.css', 'background', `${Cypress.env('colorBlueGradient')}`)
+                .and('have.css', 'background-image', `${Cypress.env('colorBlueGradient')}`)
             cy.get('div.panel-form__button.small-bordered')
                 .should('contain', ' Отменить')
                 .and('have.css', 'border', `1px solid ${Cypress.env('colorBlueSolid')}`)

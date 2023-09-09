@@ -82,7 +82,7 @@ Cypress.Commands.add('fillForm', (fixture) => {
             }
             cy.contains('label.dynamic-input', `${key}`)
                 .find('div.dynamic-input__placeholder')
-                .click()
+                // .click()
                 .type(`${value}`);
         });
     });
