@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - dev
+      - test-counterparts
   pull_request:
     branches:
       - dev
@@ -19,4 +20,4 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Set up environment variables
-        run: npx cypress run --env LOGIN=${{ secrets.PREDPROD_LOGIN }},PASSWORD=${{ secrets.PREDPROD_PASSWORD }},TOKEN=${{ secrets.PREDPROD_TOKEN }}
+        run: npm run cy:parallel && npm run cy:ci
