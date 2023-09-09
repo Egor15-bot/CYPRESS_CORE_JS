@@ -33,7 +33,7 @@ describe('Контрагенты ТАМОЖ', () => {
                 .should('contain', this.testData.check.nameCounterpart)
                 .and('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
             //Заполняю форму тестовыми данными из фикстуры
-            cy.typeForm(this.testData.type)
+            cy.fillForm(this.testData.type)
             //Жду пока заполниться поле "Название банка получателя"
             cy.contains('label.dynamic-input', ' Название банка получателя ')
                 .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -42,7 +42,7 @@ describe('Контрагенты ТАМОЖ', () => {
                 .should('not.be.empty')
             cy.wait(1000)
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
             //Нажимаю "Сохранить"
             cy.get('app-button[data-qa="1657886705496"] > div[data-qa="1658987981978"]').click()
             //Зеленый тост "Контрагент успешно сохранён!"
@@ -100,7 +100,7 @@ describe('Контрагенты ТАМОЖ', () => {
                 .should('contain', this.testData.check.nameCounterpart)
                 .and('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
             //Заполняю форму тестовыми данными из фикстуры
-            cy.typeForm(this.testData.type)
+            cy.fillForm(this.testData.type)
             //Жду пока заполниться поле "Название банка получателя"
             cy.contains('label.dynamic-input', ' Название банка получателя ')
                 .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -108,7 +108,7 @@ describe('Контрагенты ТАМОЖ', () => {
                 .invoke('val')
                 .should('not.be.empty')
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
             //Нажимаю "Сохранить"
             cy.get('app-button[data-qa="1657886705496"] > div[data-qa="1658987981978"]').click()
             //Проверяю тост сообщение - красный фон и текст "Такой контрагент уже существует"
@@ -141,7 +141,7 @@ describe('Контрагенты ТАМОЖ', () => {
                     cy.get(this.fixtureCounterparts.arroyDown).click()
                 })
                 //Заполняю форму тестовыми данными из фикстуры
-                cy.typeForm(this.testData.type)
+                cy.fillForm(this.testData.type)
                 //Жду пока заполниться поле "Название банка получателя"
                 cy.contains('label.dynamic-input', ' Название банка получателя ')
                     .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -150,7 +150,7 @@ describe('Контрагенты ТАМОЖ', () => {
                     .should('not.be.empty')
                 cy.wait(1000)
                 //Проверяю тестовые данные из фикстуры
-                cy.checkForm(this.testData)
+                cy.checkFormInput(this.testData)
                 //Сохранить контрагента
                 cy.get('button[data-qa="1663140882365"]').click()
                 //Зеленый тост "Контрагент успешно сохранён!"
@@ -208,7 +208,7 @@ describe('Контрагенты ТАМОЖ', () => {
                     cy.get(this.fixtureCounterparts.arroyDown).click()
                 })
                 //Заполняю форму тестовыми данными из фикстуры
-                cy.typeForm(this.testData.type)
+                cy.fillForm(this.testData.type)
                 //Жду пока заполниться поле "Название банка получателя"
                 cy.contains('label.dynamic-input', ' Название банка получателя ')
                     .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -245,7 +245,7 @@ describe('Контрагенты ТАМОЖ', () => {
                     cy.get(this.fixtureCounterparts.arroyDown).click()
                 })
                 //Заполняю форму тестовыми данными из фикстуры
-                cy.typeForm(this.testData.type)
+                cy.fillForm(this.testData.type)
                 //Жду пока заполниться поле "Название банка получателя"
                 cy.contains('label.dynamic-input', ' Название банка получателя ')
                     .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -254,7 +254,7 @@ describe('Контрагенты ТАМОЖ', () => {
                     .should('not.be.empty')
                 cy.wait(1000)
                 //Проверяю тестовые данные из фикстуры
-                cy.checkForm(this.testData)
+                cy.checkFormInput(this.testData)
                 //Сохранить контрагента
                 cy.get('button[data-qa="1663140882365"]').click()
                 //Зеленый тост "Контрагент успешно сохранён!"
@@ -308,7 +308,7 @@ describe('Контрагенты ТАМОЖ', () => {
                     cy.get(this.fixtureCounterparts.arroyDown).click()
                 })
                 //Заполняю форму тестовыми данными из фикстуры
-                cy.typeForm(this.testData.type)
+                cy.fillForm(this.testData.type)
                 //Жду пока заполниться поле "Название банка получателя"
                 cy.contains('label.dynamic-input', ' Название банка получателя ')
                     .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -379,7 +379,7 @@ describe('Контрагенты ТАМОЖ', () => {
                 .should('not.be.empty')
             cy.wait(1000)
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
         })
         it('#3779. Оплата через окно просмотра', function () {
             //Перехожу на страницу "Контрагенты"
@@ -405,7 +405,7 @@ describe('Контрагенты ТАМОЖ', () => {
                 .should('not.be.empty')
             cy.wait(1000)
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
         })
         it('#3780. Оплата через "Новый платеж"', function () {
             //Перехожу в "Новый платеж"
@@ -429,7 +429,7 @@ describe('Контрагенты ТАМОЖ', () => {
                 .should('not.be.empty')
             cy.wait(1000)
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
         })
     })
 

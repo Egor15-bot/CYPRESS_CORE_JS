@@ -197,7 +197,7 @@ it('#2239 - Страница входа. Проверка отображения
 |     ✅      | commands.js    | `checkGreenToastInfo`        | Метод для работы с зеленым тостом                             |
 |     ✅      | commands.js    | `checkToastInfo`             | Метод для работы с красным тостом                             |
 |     ✅      | commands.js    | `checkRedToastInfo`          | Заполнение формы тестовыми данными                            |
-|     ✅      | commands.js    | `checkForm`                  | Проверка заполненых полей в форме                             |
+|     ✅      | commands.js    | `checkFormInput`                  | Проверка заполненых полей в форме                             |
 |     ✅      | api.js         | `deleteAllCounterpart`       | Удаление всех созданных контрагентов через API                |
 |     ✅      | commands.js    | `modificationAccNumberSpace` | Метод приводит номер счета в формат "00000 000 0 00000000000" |
 |     ✅      | commands.js    | `modificationAccNumberDot`   | Метод приводит номер счета в формат "00000.000.0.00000000000" |

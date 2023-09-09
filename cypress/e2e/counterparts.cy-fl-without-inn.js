@@ -3,19 +3,14 @@ describe('Контрагенты ФЛ без ИНН', () => {
         cy.loginTestApi('TOKEN')
         cy.changeCompanyApi('3448774')
         cy.deleteAllCounterparts()
-        
+
         cy.fixture('counterparts').then(function (fixtureCounterparts) {
             this.fixtureCounterparts = fixtureCounterparts
         })
         cy.fixture('counterparts').then(function (testData) {
-            this.testData = testData.UL
-        })
-    });
-    beforeEach('Импортирую фикстуры для ФЛ без ИНН', () => {
-        cy.fixture('counterparts').then(function (testData) {
             this.testData = testData.FL_Without_INN
         })
-    })
+    });
     context('Меню контрагенты', () => {
         beforeEach('Перехожу в раздел "Контрагенты" / "Добавить контрагента"', () => {
             cy.visit('/counterparts/create')
@@ -30,7 +25,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 .should('contain', this.testData.check.nameTransferRur)
                 .and('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
             //Заполняю форму тестовыми данными из фикстуры
-            cy.typeForm(this.testData.type)
+            cy.fillForm(this.testData.type)
             //Жду пока заполниться поле "Название банка получателя"
             cy.contains('label.dynamic-input', ' Название банка получателя ')
                 .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -39,7 +34,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 .should('not.be.empty')
             cy.wait(1000)
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
             //Нажимаю "Сохранить"
             cy.get('app-button[data-qa="1657886705496"] > div[data-qa="1658987981978"]').click()
             cy.checkGreenToastInfo(this.fixtureCounterparts.toastGreen);
@@ -94,7 +89,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 cy.get(this.fixtureCounterparts.arroyDown).click()
             })
             //Заполняю форму тестовыми данными из фикстуры
-            cy.typeForm(this.testData.type)
+            cy.fillForm(this.testData.type)
             //Жду пока заполниться поле "Название банка получателя"
             cy.contains('label.dynamic-input', ' Название банка получателя ')
                 .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -103,7 +98,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 .should('not.be.empty')
             cy.wait(1000)
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
             //Сохранить контрагента
             cy.get('button[data-qa="1663140882365"]').click()
             //Зеленый тост "Контрагент успешно сохранён!"
@@ -151,7 +146,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 cy.get(this.fixtureCounterparts.arroyDown).click()
             })
             //Заполняю форму тестовыми данными из фикстуры
-            cy.typeForm(this.testData.type)
+            cy.fillForm(this.testData.type)
             //Жду пока заполниться поле "Название банка получателя"
             cy.contains('label.dynamic-input', ' Название банка получателя ')
                 .find('div.dynamic-input__overlay.ng-star-inserted')
@@ -160,7 +155,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 .should('not.be.empty')
             cy.wait(1000)
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
             //Сохранить контрагента
             cy.get('button[data-qa="1663140882365"]').click()
             //Зеленый тост "Контрагент успешно сохранён!"
@@ -169,10 +164,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
             cy.visit('/counterparts')
                 .url()
                 .should('contain', '/counterparts')
-            //Проверяю логотип и ранее введенную информацию на странице "Контрагенты"
-            //Перехожу на страницу "Контрагенты / Просмотр"
             cy.checkCounterpartList(this.testData).click()
-            //Проверяю логотип и ранее введенную информацию на странице "Контрагенты / Просмотр"
             cy.checkCounterpartDetails(this.testData)
             //Проверяю номер счета, город и кнопку "Заплатить"
             cy.modificationAccNumberDot(this.testData.type["Счет получателя"])
@@ -242,7 +234,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 .should('not.be.empty')
             cy.wait(1000)
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
         })
         it('#3730. Оплата через окно просмотра', function () {
             //Перехожу на страницу "Контрагенты"
@@ -268,7 +260,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 .should('not.be.empty')
             cy.wait(1000)
             //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+            cy.checkFormInput(this.testData)
         })
         it('#3731. Оплата через "Новый платеж"', function () {
             //Перехожу в "Новый платеж"
@@ -284,15 +276,14 @@ describe('Контрагенты ФЛ без ИНН', () => {
                 .click()
                 .type(this.testData.type["Наименование получателя или ИНН"])
             cy.contains('.dadata-list__item', this.testData.type["Наименование получателя или ИНН"]).click()
-            //Жду пока заполниться поле "Название банка получателя"
             cy.contains('label.dynamic-input', ' Название банка получателя ')
                 .find('div.dynamic-input__overlay.ng-star-inserted')
                 .children()
                 .invoke('val')
                 .should('not.be.empty')
             cy.wait(1000)
-            //Проверяю тестовые данные из фикстуры
-            cy.checkForm(this.testData)
+
+            cy.checkFormInput(this.testData)
         })
     })
 });

@@ -56,7 +56,7 @@ Cypress.Commands.add('checkRedToastInfo', (text) => {
     cy.get('app-svg-icon.toast-svg').click()
 })
 //Заполнение формы тестовыми данными
-Cypress.Commands.add('typeForm', (fixture) => {
+Cypress.Commands.add('fillForm', (fixture) => {
     cy.url().then((url) => {
         Object.entries(fixture).forEach(([key, value]) => {
             //Эти условия менют key для страницы "Контрагенты"
@@ -88,7 +88,7 @@ Cypress.Commands.add('typeForm', (fixture) => {
     });
 });
 //Проверка заполненых полей в форме в разделе "Контрагенты"
-Cypress.Commands.add('checkForm', (fixture) => {
+Cypress.Commands.add('checkFormInput', (fixture) => {
     cy.url().then((url) => {
         Object.entries(fixture.type).forEach(([key, value]) => {
             //Эти условия менют key для страницы "Контрагенты"
