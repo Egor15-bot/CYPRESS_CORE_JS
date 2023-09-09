@@ -5,3 +5,4 @@ cypress/screenshots/
 image
 runner-results
 multi-reporter-config.json
+cypress/downloads
