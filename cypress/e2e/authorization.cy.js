@@ -101,7 +101,7 @@ describe('Страница авторизации', () => {
         .and('have.attr', 'href', 'https://apps.rustore.ru/app/com.isimplelab.ionic.standard.ul')
         .click()
     })
-    it.only('#2244 - Страница входа. Отделения и банкоматы', () => {
+    it('#2244 - Страница входа. Отделения и банкоматы', () => {
       cy.chooseItemFromFooter('Отделения и банкоматы')
       cy.url().should('eq', `${Cypress.config('baseUrl')}auth/places`)
       cy.get('[data-qa="1657809360854"]').as('inputField')
