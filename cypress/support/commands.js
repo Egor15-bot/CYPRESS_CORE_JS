@@ -6,24 +6,6 @@ registerCypressGrep()
 Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop limit exceeded'))
 Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop completed with undelivered notifications'))
 
-//Метод поиска по data-qa
-Cypress.Commands.add('getByDataQa', (selector) => {
-    cy.get(`[data-qa="${selector}"]`)
-})
-//Метод поиска по классу 
-Cypress.Commands.add('getByClass', (className) => {
-    cy.get(`[class="${className}"]`)
-})
-Cypress.Commands.add('waitUntil', (element) => {
-    cy.get(element).should('be.visible')
-})
-//Метод поиска ключа в localStorage
-Cypress.Commands.add('getLocalStorageValue', (key) => {
-    cy.window().then((win) => {
-        const value = win.localStorage.getItem(key);
-        return value.should('exist')
-    });
-})
 //Авторизация с сохранением сессии
 Cypress.Commands.add('loginStand', (login, password) => {
     cy.session('Создание сессии авторизации', () => {
@@ -33,6 +15,18 @@ Cypress.Commands.add('loginStand', (login, password) => {
         cy.get('div[data-qa="1658987981978"]').click()
         cy.url().should('contain', 'desktop')
     })
+})
+//Ожидание появления элемента на странице 
+Cypress.Commands.add('waitUntil', (element) => {
+    cy.get(element).should('be.visible')
+})
+
+//Метод поиска ключа в localStorage
+Cypress.Commands.add('getLocalStorageValue', (key) => {
+    cy.window().then((win) => {
+        const value = win.localStorage.getItem(key);
+        return value.should('exist')
+    });
 })
 //Метод для выбора любого элемента из хедера на главном меню
 Cypress.Commands.add('openHeaderTab', () => {
@@ -61,8 +55,6 @@ Cypress.Commands.add('checkRedToastInfo', (text) => {
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(243, 144, 52) 0%, rgb(255, 39, 39) 100%)');
     cy.get('app-svg-icon.toast-svg').click()
 })
-//
-//РАБОТА С ФОРМАМИ
 //Заполнение формы тестовыми данными
 Cypress.Commands.add('typeForm', (fixture) => {
     cy.url().then((url) => {
@@ -95,27 +87,6 @@ Cypress.Commands.add('typeForm', (fixture) => {
         });
     });
 });
-// Cypress.Commands.add('typeForm', (fixture) => {
-//     const keyMappings = {
-//         'Наименование получателя или ИНН': 'Наименование',
-//         'ИНН получателя': 'ИНН',
-//         'КПП получателя': 'КПП',
-//         'Счет получателя': 'Номер счета',
-//     };
-
-//     cy.url().then((url) => {
-//         Object.entries(fixture).forEach(([key, value]) => {
-//             // Проверяем, есть ли соответствующая замена ключа
-//             const updatedKey = keyMappings[key] || key;
-            
-//             cy.contains('label.dynamic-input', updatedKey)
-//                 .find('div.dynamic-input__placeholder')
-//                 .click()
-//                 .type(`${value}`);
-//         });
-//     });
-// });
-//
 //Проверка заполненых полей в форме в разделе "Контрагенты"
 Cypress.Commands.add('checkForm', (fixture) => {
     cy.url().then((url) => {
@@ -192,9 +163,6 @@ Cypress.Commands.add('chooseItemFromFooter', (footerItemName) => {
         .contains(footerItemName)
         .click()
 })
-
-//
-//ИЗМЕНЕНИЕ ФОРМАТА СЧЕТА - это функции!!!
 //Делаю номер счета accNumber в формате "00000 000 0 00000000000"
 function modificationAccNumberSpace(accNumber) {
     const str = accNumber;
@@ -221,10 +189,3 @@ Cypress.Commands.add('modificationAccNumberDot', (accNumber) => {
     })
     return newAccNumber
 })
-
-//Проработать метод который поможет открывать только что открытую вкладку
-// export function switchToClickePage(){
-//     cy.contains(".add-menu__item","Отделения и банкоматы").click({multiple: true}).then(() => {
-//         cy.window().its('open').invoke('call', 'target', '_blank');
-//       });
-// }

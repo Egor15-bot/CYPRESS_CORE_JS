@@ -34,9 +34,7 @@ Cypress.Commands.add('changeCompanyApi', (idCompany) => {
     cy.request("PUT", `${Cypress.config('baseUrl')}/rest/stateful/corp/company/change_active/${idCompany}`);
     cy.reload()
 })
-//
 //КОНТРАГЕНТЫ
-//
 //Создаю контрагента через API
 Cypress.Commands.add('createCounterpartsApi', (fullname, inn, kpp, accNumber, bankBik, corrType) => {
     cy.request('POST', `${Cypress.config('baseUrl')}rest/stateful/corp/dic/corr/v2`, {

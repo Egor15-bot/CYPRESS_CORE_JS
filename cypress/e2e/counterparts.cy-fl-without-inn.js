@@ -1,12 +1,9 @@
 describe('Контрагенты ФЛ без ИНН', () => {
     beforeEach(() => {
-        //Авторизация + создание сессии
         cy.loginTestApi('TOKEN')
-        //Смена компании на "Захарова Яна Николаевна"
         cy.changeCompanyApi('3448774')
-        //Удаление всех контрагентов через API
         cy.deleteAllCounterparts()
-        //Импортирую фикстур
+        
         cy.fixture('counterparts').then(function (fixtureCounterparts) {
             this.fixtureCounterparts = fixtureCounterparts
         })
@@ -28,7 +25,7 @@ describe('Контрагенты ФЛ без ИНН', () => {
         it.only('#2849. Создание контрагента + удаление через кебаб-меню', function () {
             //Нажимаю на вкладку "Физическое лицо"
             cy.contains('div.counterpart__types__item', this.testData.check.nameCounterpart).click()
-            //Проверяю автивную вкладку
+            //Проверяю активную вкладку
             cy.get('div.counterpart__types__item.active')
                 .should('contain', this.testData.check.nameTransferRur)
                 .and('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
@@ -45,7 +42,6 @@ describe('Контрагенты ФЛ без ИНН', () => {
             cy.checkForm(this.testData)
             //Нажимаю "Сохранить"
             cy.get('app-button[data-qa="1657886705496"] > div[data-qa="1658987981978"]').click()
-            
             cy.checkGreenToastInfo(this.fixtureCounterparts.toastGreen);
             cy.checkCounterpartList(this.testData).click()
             //Проверяю наличие хлебных крошек
