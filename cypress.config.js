@@ -1,7 +1,9 @@
 const { defineConfig } = require("cypress");
+const cypressSplit = require('cypress-split')
 
 module.exports = defineConfig({
   projectId: 'qc56ne',
+  watchForFileChanges:false,
   env: {
     //enviroment variables
     //
@@ -11,7 +13,7 @@ module.exports = defineConfig({
     colorRed: 'rgb(68, 68, 68)'
   },
   e2e: {
-    watchForFileChanges:false,
+
     viewportWidth: "1920",
     viewportHeight: "1080",
     baseUrl: "https://pred-ul.metib.online/",
@@ -24,7 +26,8 @@ module.exports = defineConfig({
     viewportHeight: 1080,
     setupNodeEvents(on, config) {
       require('@cypress/grep/src/plugin')(config);
-      return config;
+      cypressSplit(on, config)
+      return config
     },
   },
 });
