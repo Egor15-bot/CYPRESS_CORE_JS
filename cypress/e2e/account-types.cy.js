@@ -1,91 +1,200 @@
+//Импорт файла с фикстурой
+import testData from '../fixtures/account-types.json'
+const clipboardy = require('clipboardy');
+
+
 describe('Проверяю доступные экшны', () => {
-    beforeEach('', () => {
-        // Авторизация + создание сессии
-        cy.loginTestApi('TOKEN')
-        // Смена компании на АО "Калина"
-        cy.changeCompanyApi('1302137');
-        cy.visit('/');
-        // Импорт фикстуры
-        cy.fixture('account-types').then(function (testData111) {
-            this.testData111 = testData111;
-        });
-    });
+    context('Для роли "Client"', () => {
+        beforeEach(() => {
+            // Авторизация + создание сессии
+            cy.loginApi('TOKEN_ALL_COMPANY')
+            //Смена комнапии на ООО "ЛИДЕР" - нужно для того, чтобы не попасть на контору с блокировкой
+            cy.changeCompanyApi('9386093')
+            cy.visit('/');
+        })
 
-    const testData = {
-        "data": {
-            "Новый платеж": "add",
-            "Выписка": "format_list_bulleted",
-            "Документы картотеки": "",
-            "Копировать реквизиты": "content_copy"
-        },
-        "type": {
-            "1": {
-                "name": "Расчетный счет **0261",
-                "data": {
-                    "Новый платеж": true,
-                    "Выписка": true,
-                    "Документы картотеки": true,
-                    "Копировать реквизиты": true
-                }
-            },
-            "2": {
-                "name": "Карточный счет **1269",
-                "data": {
-                    "Новый платеж": true,
-                    "Выписка": false,
-                }
-            }
-        },
-    };
+        it('#4418. Проверяю текст, иконкe, порядок отображения и количество пунктов меню', function () {
+            Object.keys(testData.type).forEach((type) => {
+                //Определяю длинну массива "data" из фикстуры, учивыются только значения = true
+                let lengthtestData = Object.values(testData.type[type].data).filter(value => value === true).length
 
-    Object.keys(testData.type).forEach((type) => {
-        const typeData = testData.type[type].data;
+                // //Нахожу все элементы в сайдбаре
+                // cy.get('.product-item')
+                //     //Фильтрую элементы по названию
+                //     .filter(`:contains(${testData.type[type].name.trim()})`)
+                //     //Фильтрую элементы по валюте
+                //     .filter(`:contains(${testData.type[type].currency.trim()})`)
 
-        context(`Тип счета ${type}`, () => {
-            beforeEach('Поиск нужного счета и открытие кебаб меню', function () {
-                cy.get('div.accordion__content')
-                    .contains('div.product-item', testData.type[type].name)
-                    .find('div.menu-select__content-wrapper')
-                    .find('div.product-item__sign')
-                    .click();
-            });
 
-            it('Проверяю что присутствует текст, иконка и пункт меню отображается в правильном порядке', function () {
-                cy.contains('div.product-item', testData.type[type].name)
-                    .find('div.menu-select__content')
+
+                cy.getElementFromSidebar(testData.type[type])
                     .within(() => {
-                        const expectedOrder = Object.entries(testData.data)
-                            .filter(([key]) => typeData[key] === true)
-                            .map(([key]) => key);
+                        cy.get('div.menu-select__content-wrapper')
+                            .find('div.product-item__sign')
+                            .click({ force: true })
+                        cy.get('[data-qa="1658842254864"]')
+                            .scrollIntoView()
+                            .should('be.visible')
+                        //Проверяю количество экшнов в списке
+                        cy.get('div.menu-select__content')
+                            .children()
+                            .should('have.length', lengthtestData)
+                        //Проверяю наличие иконок и текст экшнов
+                        cy.get('div.menu-select__content')
+                            .within(() => {
+                                const expectedOrder = Object.entries(testData.data)
+                                    .filter(([key]) => testData.type[type].data[key] === true)
+                                    .map(([key]) => key);
 
-                        expectedOrder.forEach((key, index) => {
-                            cy.get('.menu-select-item__title')
-                                .eq(index)
-                                .should('contain', key);
+                                expectedOrder.forEach((key, index) => {
+                                    cy.get('.menu-select-item__title')
+                                        .eq(index)
+                                        .should('contain', key)
 
-                            cy.get('.mat-icon')
-                                .eq(index)
-                                .should('contain', testData.data[key]);
-                        });
-                    });
-            });
+                                    cy.get('.mat-icon')
+                                        .eq(index)
+                                        .should('contain', testData.data[key])
+                                })
+                            })
+                    })
+            })
+        })
+    })
+    context('Для роли "Bank"', () => {
+        beforeEach('Создание сессии авторизации для роли "Bank"', () => {
+            // Авторизация + создание сессии
+            cy.loginApi('TOKEN_UZ_TEST3')
+            //Смена комнапии на АО "МОСКОМБАНК"
+            cy.changeCompanyApi(8017217)
+            cy.visit("/")
+        })
+        it('#4432. Проверяю текст, иконкe, порядок отображения и количество пунктов меню', () => {
+            Object.keys(testData.bank).forEach((type) => {
+                //Определяю длинну массива "data" из фикстуры, учивыются только значения = true
+                let lengthtestData = Object.values(testData.bank[type].data).filter(value => value === true).length
 
-            if (typeData['Новый платеж']) {
-                it('Переход в "Новый платеж"', function () {
-                    cy.contains('.menu-select-item__title', 'Новый платеж')
+                //Нахожу все элементы в сайдбаре
+                cy.getElementFromSidebar(testData.bank[type])
+                    .within(() => {
+                        cy.get('div.menu-select__content-wrapper')
+                            .find('div.product-item__sign')
+                            .click({ force: true })
+                        cy.get('[data-qa="1658842254864"]')
+                            .scrollIntoView()
+                            .should('be.visible')
+                        //Проверяю количество экшнов в списке
+                        cy.get('div.menu-select__content')
+                            .children()
+                            .should('have.length', lengthtestData)
+                        //Проверяю наличие иконок и текст экшнов
+                        cy.get('div.menu-select__content')
+                            .within(() => {
+                                const expectedOrder = Object.entries(testData.data)
+                                    .filter(([key]) => testData.bank[type].data[key] === true)
+                                    .map(([key]) => key);
+
+                                expectedOrder.forEach((key, index) => {
+                                    cy.get('.menu-select-item__title')
+                                        .eq(index)
+                                        .should('contain', key)
+
+                                    cy.get('.mat-icon')
+                                        .eq(index)
+                                        .should('contain', testData.data[key])
+                                })
+                            })
+                    })
+            })
+        })
+
+    })
+    context('Проверка действия при нажатии на экшн', () => {
+
+        beforeEach('Создание сессии авторизации для роли "Bank"', () => {
+            // Авторизация + создание сессии
+            // cy.loginApi('TOKEN_ALL_COMPANY')
+            cy.loginApi('TOKEN')
+
+            //Смена комнапии на ООО "ЛИДЕР" - нужно для того, чтобы не попасть на контору с блокировкой
+            cy.changeCompanyApi('9386093')
+            cy.visit('/');
+        })
+        it('Переход в "Новый платеж" (Счет тип != 4)', function () {
+            //Нахожу все элементы в сайдбаре
+            cy.getElementFromSidebar(testData.type[1])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.get('div.menu-select-item__title')
+                        .contains('Новый платеж')
                         .click({ force: true })
-                        .url()
-                        .should('contain', '/transfer-rur');
-                });
-            }
-
-            if (typeData['Выписка']) {
-                it('Переход в "Выписка"', function () {
-                    cy.contains('.menu-select-item__title', 'Выписка')
-                        .click({ force: true });
-                    cy.get('#modal-container').should('be.visible');
-                });
-            }
+                        .url().should('contain', '/transfer-rur?accountId=')
+                })
         });
-    });
-});
+        it('Переход в "Валютный платеж" (Счет тип 4)', function () {
+            //Нахожу все элементы в сайдбаре
+            cy.getElementFromSidebar(testData.type[4])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.get('div.menu-select-item__title')
+                        .contains('Новый платеж')
+                        .click({ force: true })
+                        .url().should('contain', '/ved/transfer-curr?accountId=')
+                })
+        })
+        it('Переход в "Выписка"', function () {
+            //Нахожу все элементы в сайдбаре
+            cy.getElementFromSidebar(testData.type[1])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.contains('.menu-select-item__title', 'Выписка')
+                        .click({ force: true })
+                })
+            cy.get('#modal-container').should('be.visible')
+            cy.get('.dynamic-form')
+                .should('contain', testData.type[1].name)
+        })
+
+
+
+
+
+
+        it.only('Переход в "Копировать реквизиты"', function () {
+
+
+
+
+            //Нахожу все элементы в сайдбаре
+            cy.getElementFromSidebar(testData.type[1])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.contains('.menu-select-item__title', 'Копировать реквизиты')
+                        .click({ force: true })
+                })
+
+
+            cy.task('getClipboard1')
+                .should('eq', "textToCopy")
+
+
+
+            // cy.get('[data-qa="1658988187497"]')
+            //     .click()
+            // .type('{ctrl}v')
+
+            //     .invoke('val', "Helllllllll")
+
+            // .should('contain', 'Банк получателя ПАО АКБ "МЕТАЛЛИНВЕСТБАНК" г.МоскваБИК 044525176Корр. счет банка 30101810300000000176Получатель ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "ЛИДЕР"ИНН 7804684931КПП 780401001Счёт получателя 40702810900990004267')
+
+        })
+
+    })
+})

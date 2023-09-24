@@ -17,6 +17,7 @@
 import './commands'
 import './api'
 import './counterparts'
+import './account-types'
 
 
 // Alternatively you can use CommonJS syntax:

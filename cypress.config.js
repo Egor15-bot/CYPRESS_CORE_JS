@@ -1,4 +1,8 @@
 const { defineConfig } = require("cypress");
+const clipboardy = import('clipboardy')
+// import clipboardy from 'clipboardy'; // Use import to import clipboardy
+
+
 
 module.exports = defineConfig({
   projectId: 'qc56ne',
@@ -11,7 +15,8 @@ module.exports = defineConfig({
   e2e: {
     viewportWidth: "1920",
     viewportHeight: "1080",
-    baseUrl: "https://pred-ul.metib.online/",
+    // baseUrl: "https://pred-ul.metib.online/",
+    baseUrl: "https://test-ul.metib.online//",
     supportFile: 'cypress/support/e2e.{js,jsx,ts,tsx}',
     specPattern: 'cypress/e2e/**/**/*.{js,jsx,ts,tsx}',
     retries: 0,
@@ -20,8 +25,18 @@ module.exports = defineConfig({
     viewportWidth: 1920,
     viewportHeight: 1080,
     setupNodeEvents(on, config) {
+      
       require('@cypress/grep/src/plugin')(config);
+      on('task', {
+        // Clipboard test plugin
+        getClipboard: () => {
+          // const clipboard = clipboardy.readSync();
+          // return clipboard;
+          return clipboardy.readSync()
+        },
+      });
       return config;
     },
   },
 });
+
