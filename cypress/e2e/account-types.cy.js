@@ -1,33 +1,24 @@
-//Импорт файла с фикстурой
-import testData from '../fixtures/account-types.json'
-const clipboardy = require('clipboardy');
-
-
 describe('Проверяю доступные экшны', () => {
+    beforeEach(()=>{
+        cy.fixture('account-types').then(function (data) {
+            this.testData = data;
+        })
+    })
     context('Для роли "Client"', () => {
-        beforeEach(() => {
-            // Авторизация + создание сессии
+        beforeEach('Авторизация и смена компании на ООО "ЛИДЕР"', () => {
+            // Авторизация
             cy.loginApi('TOKEN_ALL_COMPANY')
             //Смена комнапии на ООО "ЛИДЕР" - нужно для того, чтобы не попасть на контору с блокировкой
             cy.changeCompanyApi('9386093')
             cy.visit('/');
         })
-
         it('#4418. Проверяю текст, иконкe, порядок отображения и количество пунктов меню', function () {
-            Object.keys(testData.type).forEach((type) => {
+            Object.keys(this.testData.type).forEach((type) => {
                 //Определяю длинну массива "data" из фикстуры, учивыются только значения = true
-                let lengthtestData = Object.values(testData.type[type].data).filter(value => value === true).length
+                let lengthtestData = Object.values(this.testData.type[type].data).filter(value => value === true).length
 
-                // //Нахожу все элементы в сайдбаре
-                // cy.get('.product-item')
-                //     //Фильтрую элементы по названию
-                //     .filter(`:contains(${testData.type[type].name.trim()})`)
-                //     //Фильтрую элементы по валюте
-                //     .filter(`:contains(${testData.type[type].currency.trim()})`)
-
-
-
-                cy.getElementFromSidebar(testData.type[type])
+                //Проверяю количество экшнов в списке
+                cy.getElementFromSidebar(this.testData.type[type])
                     .within(() => {
                         cy.get('div.menu-select__content-wrapper')
                             .find('div.product-item__sign')
@@ -35,25 +26,25 @@ describe('Проверяю доступные экшны', () => {
                         cy.get('[data-qa="1658842254864"]')
                             .scrollIntoView()
                             .should('be.visible')
-                        //Проверяю количество экшнов в списке
                         cy.get('div.menu-select__content')
                             .children()
                             .should('have.length', lengthtestData)
-                        //Проверяю наличие иконок и текст экшнов
+                    })
+                //Проверяю наличие иконок и текст экшнов
+                cy.getElementFromSidebar(this.testData.type[type])
+                    .within(() => {
                         cy.get('div.menu-select__content')
                             .within(() => {
-                                const expectedOrder = Object.entries(testData.data)
-                                    .filter(([key]) => testData.type[type].data[key] === true)
+                                const expectedOrder = Object.entries(this.testData.icon)
+                                    .filter(([key]) => this.testData.type[type].data[key] === true)
                                     .map(([key]) => key);
-
                                 expectedOrder.forEach((key, index) => {
                                     cy.get('.menu-select-item__title')
                                         .eq(index)
                                         .should('contain', key)
-
                                     cy.get('.mat-icon')
                                         .eq(index)
-                                        .should('contain', testData.data[key])
+                                        .should('contain', this.testData.icon[key])
                                 })
                             })
                     })
@@ -61,20 +52,20 @@ describe('Проверяю доступные экшны', () => {
         })
     })
     context('Для роли "Bank"', () => {
-        beforeEach('Создание сессии авторизации для роли "Bank"', () => {
-            // Авторизация + создание сессии
+        beforeEach('Авторизация и смена компании на АО "МОСКОМБАНК"', () => {
+            // Авторизация
             cy.loginApi('TOKEN_UZ_TEST3')
             //Смена комнапии на АО "МОСКОМБАНК"
             cy.changeCompanyApi(8017217)
             cy.visit("/")
         })
         it('#4432. Проверяю текст, иконкe, порядок отображения и количество пунктов меню', () => {
-            Object.keys(testData.bank).forEach((type) => {
+            Object.keys(this.testData.bank).forEach((type) => {
                 //Определяю длинну массива "data" из фикстуры, учивыются только значения = true
-                let lengthtestData = Object.values(testData.bank[type].data).filter(value => value === true).length
+                let lengthtestData = Object.values(this.testData.bank[type].data).filter(value => value === true).length
 
-                //Нахожу все элементы в сайдбаре
-                cy.getElementFromSidebar(testData.bank[type])
+                //Проверяю количество экшнов в списке
+                cy.getElementFromSidebar(this.testData.bank[type])
                     .within(() => {
                         cy.get('div.menu-select__content-wrapper')
                             .find('div.product-item__sign')
@@ -86,11 +77,14 @@ describe('Проверяю доступные экшны', () => {
                         cy.get('div.menu-select__content')
                             .children()
                             .should('have.length', lengthtestData)
-                        //Проверяю наличие иконок и текст экшнов
+                    })
+                //Проверяю наличие иконок и текст экшнов
+                cy.getElementFromSidebar(this.testData.bank[type])
+                    .within(() => {
                         cy.get('div.menu-select__content')
                             .within(() => {
-                                const expectedOrder = Object.entries(testData.data)
-                                    .filter(([key]) => testData.bank[type].data[key] === true)
+                                const expectedOrder = Object.entries(this.testData.icon)
+                                    .filter(([key]) => this.testData.bank[type].data[key] === true)
                                     .map(([key]) => key);
 
                                 expectedOrder.forEach((key, index) => {
@@ -100,28 +94,23 @@ describe('Проверяю доступные экшны', () => {
 
                                     cy.get('.mat-icon')
                                         .eq(index)
-                                        .should('contain', testData.data[key])
+                                        .should('contain', this.testData.icon[key])
                                 })
                             })
                     })
             })
         })
-
     })
-    context('Проверка действия при нажатии на экшн', () => {
-
-        beforeEach('Создание сессии авторизации для роли "Bank"', () => {
-            // Авторизация + создание сессии
-            // cy.loginApi('TOKEN_ALL_COMPANY')
+    context('#4431. Проверка действия в кебаб меню', () => {
+        beforeEach('Авторизация и смена компании на ООО "ЛИДЕР"', () => {
+            // Авторизация
             cy.loginApi('TOKEN')
-
             //Смена комнапии на ООО "ЛИДЕР" - нужно для того, чтобы не попасть на контору с блокировкой
             cy.changeCompanyApi('9386093')
             cy.visit('/');
         })
         it('Переход в "Новый платеж" (Счет тип != 4)', function () {
-            //Нахожу все элементы в сайдбаре
-            cy.getElementFromSidebar(testData.type[1])
+            cy.getElementFromSidebar(this.testData.type[1])
                 .within(() => {
                     cy.get('div.menu-select__content-wrapper')
                         .find('div.product-item__sign')
@@ -133,8 +122,7 @@ describe('Проверяю доступные экшны', () => {
                 })
         });
         it('Переход в "Валютный платеж" (Счет тип 4)', function () {
-            //Нахожу все элементы в сайдбаре
-            cy.getElementFromSidebar(testData.type[4])
+            cy.getElementFromSidebar(this.testData.type[4])
                 .within(() => {
                     cy.get('div.menu-select__content-wrapper')
                         .find('div.product-item__sign')
@@ -146,8 +134,7 @@ describe('Проверяю доступные экшны', () => {
                 })
         })
         it('Переход в "Выписка"', function () {
-            //Нахожу все элементы в сайдбаре
-            cy.getElementFromSidebar(testData.type[1])
+            cy.getElementFromSidebar(this.testData.type[1])
                 .within(() => {
                     cy.get('div.menu-select__content-wrapper')
                         .find('div.product-item__sign')
@@ -157,21 +144,10 @@ describe('Проверяю доступные экшны', () => {
                 })
             cy.get('#modal-container').should('be.visible')
             cy.get('.dynamic-form')
-                .should('contain', testData.type[1].name)
+                .should('contain', this.testData.type[1].name)
         })
-
-
-
-
-
-
-        it.only('Переход в "Копировать реквизиты"', function () {
-
-
-
-
-            //Нахожу все элементы в сайдбаре
-            cy.getElementFromSidebar(testData.type[1])
+        it('Проверяю действие "Копировать реквизиты"', function () {
+            cy.getElementFromSidebar(this.testData.type[1])
                 .within(() => {
                     cy.get('div.menu-select__content-wrapper')
                         .find('div.product-item__sign')
@@ -179,22 +155,85 @@ describe('Проверяю доступные экшны', () => {
                     cy.contains('.menu-select-item__title', 'Копировать реквизиты')
                         .click({ force: true })
                 })
-
-
-            cy.task('getClipboard1')
-                .should('eq', "textToCopy")
-
-
-
-            // cy.get('[data-qa="1658988187497"]')
-            //     .click()
-            // .type('{ctrl}v')
-
-            //     .invoke('val', "Helllllllll")
-
-            // .should('contain', 'Банк получателя ПАО АКБ "МЕТАЛЛИНВЕСТБАНК" г.МоскваБИК 044525176Корр. счет банка 30101810300000000176Получатель ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ "ЛИДЕР"ИНН 7804684931КПП 780401001Счёт получателя 40702810900990004267')
-
+            //Проверяю буфер обмена
+            cy.checkClipboard(this.testData.type[1].requisites)
         })
-
+        it('Проверяю действие "Экспорт реквизитов в PDF"', function () {
+            //Перехватываю запрос
+            cy.intercept('GET', `${Cypress.config('baseUrl')}/rest/stateful/corp/metinv/print/requisites_pdf?acc_id=${this.testData.type[1].acc_id}`).as('exportRequest');
+            //Нажимаю "Экспорт реквизитов в PDF" в кебаб-меню
+            cy.getElementFromSidebar(this.testData.type[1])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.contains('.menu-select-item__title', 'Экспорт реквизитов в PDF')
+                        .click({ force: true })
+                })
+            //Проверяю статус rest запроса
+            cy.wait('@exportRequest').then((interception) => {
+                expect(interception.response.statusCode).to.eq(200);
+            });
+        })
+        it('Проверяю действие "Получить справку"', function () {
+            //Нажимаю "Получить справку" в кебаб-меню
+            cy.getElementFromSidebar(this.testData.type[1])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.contains('.menu-select-item__title', 'Получить справку')
+                        .click({ force: true })
+                        .url().should('contain', '/references/1/10')
+                })
+        })
+        it('Проверяю действие "Переименовать"', function () {
+            //Нажимаю "Переименовать" в кебаб-меню
+            cy.getElementFromSidebar(this.testData.type[1])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.contains('.menu-select-item__title', 'Переименовать')
+                        .click({ force: true })
+                        .url().should('contain', `/product/${this.testData.type[1].acc_id}`)
+                })
+        })
+        it('Проверяю действие "Перейти к тарифу"', function () {
+            //Нажимаю "Перейти к тарифу" в кебаб-меню
+            cy.getElementFromSidebar(this.testData.type[1])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.contains('.menu-select-item__title', 'Перейти к тарифу')
+                        .click({ force: true })
+                        .url().should('contain', '/tarif')
+                })
+        })
+        it('Проверяю действие "SMS - информирование"', function () {
+            //Нажимаю "SMS - информирование" в кебаб-меню
+            cy.getElementFromSidebar(this.testData.type[1])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.contains('.menu-select-item__title', 'SMS - информирование')
+                        .click({ force: true })
+                        .url().should('contain', '/settings')
+                })
+        })
+        it('Проверяю действие "Документы картотеки"', function () {
+            //Нажимаю "Документы картотеки" в кебаб-меню
+            cy.getElementFromSidebar(this.testData.type[1])
+                .within(() => {
+                    cy.get('div.menu-select__content-wrapper')
+                        .find('div.product-item__sign')
+                        .click()
+                    cy.contains('.menu-select-item__title', 'Документы картотеки')
+                        .click({ force: true })
+                        .url().should('contain', `/product/${this.testData.type[1].acc_id}`)
+                })
+        })
     })
 })
