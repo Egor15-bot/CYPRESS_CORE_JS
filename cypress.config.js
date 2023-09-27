@@ -1,5 +1,4 @@
 const { defineConfig } = require("cypress");
-const cypressSplit = require('cypress-split')
 
 module.exports = defineConfig({
   projectId: 'qc56ne',
@@ -26,7 +25,6 @@ module.exports = defineConfig({
     viewportHeight: 1080,
     setupNodeEvents(on, config) {
       require('@cypress/grep/src/plugin')(config);
-      cypressSplit(on, config)
       return config
     },
   },
