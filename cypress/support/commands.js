@@ -159,9 +159,9 @@ Cypress.Commands.add('changeTarifByName',(tarifSwitchName, action, signType) =>{
         .find('.right-block')
         .contains(action).click();
     cy.get('div.dynamic-select__fake[title="Cпособ подтверждения документа"]').click()
-    cy.get('div.selection-options__item').contains(signType).click()
+    cy.get('[data-qa="16589841894442"]').should('contain',signType).click()
     cy.get('input.dynamic-input__input').type('00')
-    cy.get('button[data-qa="1663074395452"]').should('contain',action).click()
+    cy.get('button[data-qa="1663074395452"]').should('contain','Подписать').click()
 
 })
 
