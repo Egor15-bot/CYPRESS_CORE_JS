@@ -6,7 +6,7 @@ describe('', () => {
         cy.openBurgerTab('Управление тарифами').url().should('contain', '/tarif')
     })
     it.only('Смена на ', () => {
-    cy.changeTarifByName('Тариф Комплексный','Подключить')
+    cy.changeTarifByName('Тариф Комплексный','Белоусова_Подпись','Подключить')
     // cy.signToChangeTarif('Подписать',' Белоусова_Подпись ')//TODO:ПЕРЕДАЛТЬ МЕТОДЫ И ЛОГИКУ
     // cy.signToChangeTarif('Отменить',' Белоусова_Подпись ')
     //   cy.get('div.sign-result')

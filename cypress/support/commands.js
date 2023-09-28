@@ -152,19 +152,19 @@ Cypress.Commands.add('modificationAccNumberDot', (accNumber) => {
     return newAccNumber
 })
 
-Cypress.Commands.add('changeTarifByName',(tarifSwitchName, action) =>{
+Cypress.Commands.add('changeTarifByName',(tarifSwitchName, action, signType) =>{
     cy.get('div[data-qa="1657787078062"] div').contains('Тарифы и пакеты').click()
     cy.get('.left-block .caption').contains(tarifSwitchName)
         .closest('.tariff-card')
         .find('.right-block')
         .contains(action).click();
-})
-Cypress.Commands.add('signToChangeTarif',(action, signType) =>{
     cy.get('div.dynamic-select__fake[title="Cпособ подтверждения документа"]').click()
     cy.get('div.selection-options__item').contains(signType).click()
     cy.get('input.dynamic-input__input').type('00')
     cy.get('button[data-qa="1663074395452"]').should('contain',action).click()
+
 })
+
 //Проработать метод который поможет открывать только что открытую вкладку
 // export function switchToClickePage(){
 //     cy.contains(".add-menu__item","Отделения и банкоматы").click({multiple: true}).then(() => {
