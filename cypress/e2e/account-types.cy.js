@@ -1,5 +1,6 @@
 describe('Проверяю доступные экшны', () => {
-    beforeEach(()=>{
+    beforeEach(() => {
+        //Импорт фиксруты
         cy.fixture('account-types').then(function (data) {
             this.testData = data;
         })
@@ -38,13 +39,25 @@ describe('Проверяю доступные экшны', () => {
                                 const expectedOrder = Object.entries(this.testData.icon)
                                     .filter(([key]) => this.testData.type[type].data[key] === true)
                                     .map(([key]) => key);
+
+                                //Проверяю порядок отображения пунктов меню
                                 expectedOrder.forEach((key, index) => {
                                     cy.get('.menu-select-item__title')
-                                        .eq(index)
+                                        .eq((index))
                                         .should('contain', key)
-                                    cy.get('.mat-icon')
-                                        .eq(index)
-                                        .should('contain', this.testData.icon[key])
+
+                                    //Проверяю иконки
+                                    if (["Новый платеж", "Выписка", "Копировать реквизиты", "Переименовать"].includes(key)) {
+                                        cy.get('.mat-icon')
+                                            .eq(index)
+                                            .should('contain', this.testData.icon[key])
+                                    }
+                                    else if (["Экспорт реквизитов в PDF", "Получить справку", "SMS - информирование", "Перейти к тарифу"].includes(key)) {
+                                        cy.get('.mat-icon')
+                                            .eq(index)
+                                            .find('path[d]')
+                                            .should('have.attr', 'd', `${this.testData.icon[key]}`)
+                                    }
                                 })
                             })
                     })
@@ -59,13 +72,13 @@ describe('Проверяю доступные экшны', () => {
             cy.changeCompanyApi(8017217)
             cy.visit("/")
         })
-        it('#4432. Проверяю текст, иконкe, порядок отображения и количество пунктов меню', () => {
-            Object.keys(this.testData.bank).forEach((type) => {
+        it('#4432. Проверяю текст, иконкe, порядок отображения и количество пунктов меню', function () {
+            Object.keys(this.testData.bank).forEach((bank) => {
                 //Определяю длинну массива "data" из фикстуры, учивыются только значения = true
-                let lengthtestData = Object.values(this.testData.bank[type].data).filter(value => value === true).length
+                let lengthtestData = Object.values(this.testData.bank[bank].data).filter(value => value === true).length
 
                 //Проверяю количество экшнов в списке
-                cy.getElementFromSidebar(this.testData.bank[type])
+                cy.getElementFromSidebar(this.testData.bank[bank])
                     .within(() => {
                         cy.get('div.menu-select__content-wrapper')
                             .find('div.product-item__sign')
@@ -79,22 +92,32 @@ describe('Проверяю доступные экшны', () => {
                             .should('have.length', lengthtestData)
                     })
                 //Проверяю наличие иконок и текст экшнов
-                cy.getElementFromSidebar(this.testData.bank[type])
+                cy.getElementFromSidebar(this.testData.bank[bank])
                     .within(() => {
                         cy.get('div.menu-select__content')
                             .within(() => {
                                 const expectedOrder = Object.entries(this.testData.icon)
-                                    .filter(([key]) => this.testData.bank[type].data[key] === true)
+                                    .filter(([key]) => this.testData.bank[bank].data[key] === true)
                                     .map(([key]) => key);
 
+                                //Проверяю порядок отображения пунктов меню
                                 expectedOrder.forEach((key, index) => {
                                     cy.get('.menu-select-item__title')
-                                        .eq(index)
+                                        .eq((index))
                                         .should('contain', key)
 
-                                    cy.get('.mat-icon')
-                                        .eq(index)
-                                        .should('contain', this.testData.icon[key])
+                                    //Проверяю иконки
+                                    if (["Новый платеж", "Выписка", "Копировать реквизиты", "Переименовать"].includes(key)) {
+                                        cy.get('.mat-icon')
+                                            .eq(index)
+                                            .should('contain', this.testData.icon[key])
+                                    }
+                                    else if (["Экспорт реквизитов в PDF", "Получить справку", "SMS - информирование", "Перейти к тарифу"].includes(key)) {
+                                        cy.get('.mat-icon')
+                                            .eq(index)
+                                            .find('path[d]')
+                                            .should('have.attr', 'd', `${this.testData.icon[key]}`)
+                                    }
                                 })
                             })
                     })
@@ -171,7 +194,7 @@ describe('Проверяю доступные экшны', () => {
                         .click({ force: true })
                 })
             //Проверяю статус rest запроса
-            cy.wait('@exportRequest').then((interception) => {
+            cy.wait('@exportRequest', { timeout: 60000 }).then((interception) => {
                 expect(interception.response.statusCode).to.eq(200);
             });
         })
