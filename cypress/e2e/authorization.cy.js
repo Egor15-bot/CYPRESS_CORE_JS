@@ -62,7 +62,7 @@ describe('Страница авторизации', () => {
     })
     it('#2847 - Страница входа. Логин с валидными данными', () => {
       cy.get('input[data-qa="1658988187497"][type="text"]').type("qa_eybondar_ul", { log: false })
-      cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345678", { log: false })
+      cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345", { log: false })
       cy.get('div[data-qa="1658987981978"]').click()
       cy.url().should('eq', `${Cypress.config('baseUrl')}desktop`)
     })

@@ -2,8 +2,7 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   projectId: 'qc56ne',
-  watchForFileChanges:false,
-  env: {
+    env: {
     //enviroment variables
     //
     //Синий цвет для кнопок в ДБО и девайдеров, красный цвет для валидации полей
