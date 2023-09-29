@@ -17,7 +17,7 @@ Cypress.Commands.add('loginApi', () => {
 Cypress.Commands.add('loginTestApi', () => {
     cy.request({
         method: 'POST',
-        url: 'https://test-ul.metib.online/rest/stateful/corp/login',
+        url: 'https://pred-ul.metib.online/rest/stateful/corp/login',
         headers: {
             "Authorization": "Basic cWFfZXlib25kYXJfdWw6UXExMjM0NTY3OA=="
         },

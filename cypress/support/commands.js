@@ -152,38 +152,3 @@ Cypress.Commands.add('modificationAccNumberDot', (accNumber) => {
     return newAccNumber
 })
 
-Cypress.Commands.add('changeTarifByName',(tarifSwitchName, action, signType) =>{
-    cy.get('.left-block .caption').contains(tarifSwitchName)
-        .closest('.tariff-card')
-        .find('.right-block')
-        .contains(action).click();
-    cy.get('div.dynamic-select__fake[title="Cпособ подтверждения документа"]').click()
-    cy.get('[data-qa="16589841894442"]').should('contain',signType).click()
-    cy.get('input.dynamic-input__input').type('00')
-    cy.get('.document-sign__wrapper [data-qa="1663074395452"]').should('contain','Подписать').click()
-})
-
-Cypress.Commands.add('checkTarifStatus',(status) =>{
-    cy.visit('/tarif')
-    cy.get('div[data-qa="1657787078062"] div').contains('Заявления').click()
-    cy.get('div.tariff-requests__list-item:first-of-type')
-        .find('.tariff-requests__list-right-col')
-        .find('span:last-child').should('contain',status)
-})
-Cypress.Commands.add('openTarifTab',(tabName) =>{
-    cy.get('div[data-qa="1657787078062"] div').contains(tabName).click()
-
-})
-
-Cypress.Commands.add('checkTarifCaption',(expectedCaption) => {
-    cy.get('.right-block div.caption').should('contain',expectedCaption)
-})
-Cypress.Commands.add('checkTarifSuccessSignText',() => {
-    cy.get('.right-block div.text').should('contain','Тариф начнет действовать с ')
-})
-//Проработать метод который поможет открывать только что открытую вкладку
-// export function switchToClickePage(){
-//     cy.contains(".add-menu__item","Отделения и банкоматы").click({multiple: true}).then(() => {
-//         cy.window().its('open').invoke('call', 'target', '_blank');
-//       });
-// }
