@@ -7,14 +7,7 @@ describe('Управление тарифами', () => {
     })
     context('Общие кейсы', () => {
         it('Верстка Основные параметры', () => {
-            //СНачала проверяем заголовок
-            cy.intercept('GET', 'getCurrentTariff', {
-                statusCode: 200,
-                body: {
-                    'caption': "Тариф Расчетный"
-                }
-            })
-            cy.get('div.page-title__text.title-new').should('contain', ' Обслуживание по тарифу за')//FIXME:Добавить проверку по месяцу
+            cy.get('div.page-title__text.title-new').should('contain', ' Обслуживание по тарифу за')
             cy.get('[data-qa="16577869259230"]')
                 .should('contain', ' Основные параметры ')
                 .and('have.css', 'border-bottom', '3px solid #2f54eb')
@@ -86,7 +79,6 @@ describe('Управление тарифами', () => {
             cy.get('[data-qa="16577869259231"]').should('contain', 'Дополнительные пакеты').click()
             cy.get('.tariff-packages-tab__title').should('have.text', ' Подключить пакет можно в рабочий день Банка. Действие пакета начинается со следующего рабочего дня. Пакеты "30/60/90 платежей" и "платежи безлимитно" не могут действовать одновременно. ')
             cy.get('.select-account').within(() => {
-                // cy.get('.select-account > span').should('contain', 'Выбранный счет: ')
                 cy.contains('Расчетный счет **0023').click()
 
                 cy.get('.custom-select__container div').should('contain', 'Расчетный счет').first().click()

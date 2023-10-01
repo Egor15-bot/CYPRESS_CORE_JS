@@ -46,21 +46,19 @@ Cypress.Commands.add('openBurgerTab', (tabName) => {
 })
 //Метод для работы с зеленым тостом 
 Cypress.Commands.add('checkGreenToastInfo', (text) => {
-    cy.get('#toast-container')
-        .invoke('text')
-        .should('eq', text);
+    cy.get('div.toast-wrapper-text')
+        .should('have.text', text);
     cy.get('.toast')
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(0, 168, 67) 0%, rgb(31, 208, 113) 100%)');
-    cy.get('.toast-svg').click()
+    cy.get('.toast-svg > svg > use').click()
 })
 //Метод для работы с красным тостом 
 Cypress.Commands.add('checkRedToastInfo', (text) => {
-    cy.get('#toast-container')
-        .invoke('text')
-        .should('eq', text);
+    cy.get('div.toast-wrapper-text')
+        .should('have.text', text);
     cy.get('.toast')
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(243, 144, 52) 0%, rgb(255, 39, 39) 100%)');
-    cy.get('.toast-svg').click()
+    cy.get('.toast-svg > svg > use').click()
 })
 //
 //РАБОТА С ФОРМАМИ

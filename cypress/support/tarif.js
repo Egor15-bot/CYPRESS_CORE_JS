@@ -48,3 +48,108 @@ Cypress.Commands.add('chooseAccType',(accType) =>{
     cy.get('.arrow-down > use').click()
     cy.get('div.custom-select__container__item').contains(accType).click()
 })
+
+
+Cypress.Commands.add('cancelTariff',() => {
+// Выполнить первый запрос и сохранить переменные
+cy.request({
+    method: 'POST',
+    url: 'https://pred-ul.metib.online/rest/stateful/corp/document/list',
+    body: {
+      docModule: 'ibankul',
+      docType: 'change_tariff_ul_req',
+      filter: "(status='send' or status='for_send')"
+    }
+  }).then((response) => {
+    const getCurrentId = response.id;
+      cy.wrap(getCurrentId).as('getCurrentId');
+  });
+  
+  // Выполнить второй запрос с использованием переменной
+  cy.get('@getCurrentId').then((getCurrentId) => {
+    cy.request({
+        headers:{
+            'Content-Type':'application/json'
+          },
+      method: 'POST',
+      url: 'https://pred-ul.metib.online/rest/stateful/corp/request/process/ul_request_cancel',
+      body: {
+        docDate: '2023-10-01',
+        cancelDocId: getCurrentId,
+        cause: 'Отзыв по инициативе клиента'
+      },
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      const jsonData = response.body;
+      const cancelId = jsonData.id;
+  
+      cy.wrap(cancelId).as('cancelId');
+    });
+  });
+  
+  // Выполнить третий запрос
+  cy.get('@cancelId').then((cancelId) => {
+    cy.request({
+      method: 'POST',
+      url: 'https://pred-ul.metib.online/rest/stateful/corp/document/sign/v2',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body: {
+        certId: '317104',
+        docModule: 'ibankul',
+        docType: 'request_cancel',
+        docIds: [cancelId]
+      }
+    }).then((response) => {
+    });
+  });
+  
+  // Выполнить четвертый запрос
+  cy.get('@cancelId').then((cancelId) => {
+    cy.request({
+      method: 'POST',
+      url: 'https://pred-ul.metib.online/rest/stateful/corp/document/sign/v2',
+      headers:{
+        'Content-Type':'application/json'
+      },
+    
+      body: {
+        certId: '317104',
+        libId: '90342',
+        inputCode: '00',
+        docModule: 'ibankul',
+        docType: 'request_cancel',
+        docIds: [cancelId]
+      }
+    }).then((response) => {
+    });
+  });
+  
+  // Выполнить пятый запрос
+  cy.get('@cancelId').then((cancelId) => {
+    cy.request({
+      method: 'GET',
+      url: `https://pred-ul.metib.online/rest/stateful/corp/document/visual/byid?doc_module=ibankul&doc_type=request_cancel&doc_ids=${cancelId}`,
+      headers:{
+        'Content-Type':'application/json'
+      },
+    }).then((response) => {
+    });
+  });
+  
+  // Выполнить шестой запрос
+  cy.get('@cancelId').then((cancelId) => {
+    cy.request({
+      method: 'GET',
+      url: `https://pred-ul.metib.online/rest/stateful/corp/document/send?doc_module=ibankul&doc_type=request_cancel&doc_ids=${cancelId}`,
+      headers:{
+        'Content-Type':'application/json'
+      },
+    }).then((response) => {
+    });
+  });
+  
+})
+
+  

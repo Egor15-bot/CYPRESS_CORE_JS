@@ -1,13 +1,9 @@
-// 24 кейса
-// Прописать и пройтись по каждому кейсу отдельно и 74 кейса будут готовы
-//  Решить проблему со статусами и их обновлением
-// Решить проблему с удалением всех тарифов перед тестированием(статус Cancel)
-
 describe('', () => {
     beforeEach(() => {
         cy.loginStand()
         cy.changeCompanyApi('298642')
         cy.visit('/tarif')
+        cy.cancelTariff()
     })
 it('#3201 - Основные положения',()=>{})
 it('#3238 - Тариф подпись',()=>{
@@ -70,27 +66,50 @@ it('#3128 - Смена тарифа, кнопка "Сменить',()=>{
 })
 it.skip('#3205 - Подпись. Токен',()=>{})
 it.skip('#3503 - Подпись частичная Токен',()=>{})
-it.only('#3522 Смена тарифа при активной заявке ',()=>{
+it.only('#3522 Смена тарифа при активной заявке',()=>{
     cy.openTarifTab('Тарифы и пакеты')
-    cy.changeTarifByName('Тариф Комплексный','Подключить')
+    cy.changeTarifByName('Тариф Расчетный','Подключить')
     cy.signTarifAndPackage(' Белоусова_Подпись ')
     cy.checkTarifCaption('Заявка отправлена в банк')
     cy.checkTarifText(' Тариф начнет действовать ')
     cy.changeTarifByName('Тариф ‎Активный ВЭД‎','Подключить')
-    cy.checkRedToastInfo('У вас уже есть заявка на подключение тарифа "Тариф Комплексный". Для перехода на другой тариф, отмените текущую заявку')
+    cy.checkRedToastInfo('У вас уже есть заявка на подключение тарифа "Тариф Расчетный". Для перехода на другой тариф, отмените текущую заявку')
 })
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-it('',()=>{})
-
+it.skip('#3523 Смена тарифа при активной частичной заявке',()=>{})
+it('#3135 Пакеты подпись',()=>{
+    cy.openTarifTab('Тарифы и пакеты')
+    cy.openPackageTab()
+    cy.chooseAccType('Расчетный')
+    cy.addPackageByName('Пакет услуг "30 платежей"')
+    cy.signTarifAndPackage(' Белоусова_Подпись ')
+    cy.get('div.package-content-body__text')
+        .should('have.text',' Заявка на подключение отправлена \nв банк ')
+    cy.checkTarifStatus('В обработке')
+    cy.get('[data-qa="1657805226006"]').click()
+    cy.get('.page-title > .page-title__text').should('contain','Обслуживание по тарифу')
+    cy.get('div.tab').should('have.length','3')
+})
+it('#3525 Пакеты подпись частичная',()=>{})
+it.skip('#3526 Пакеты подпись токен',()=>{})
+it.skip('#3527 Пакеты подпись токен частичная',()=>{})
+it('#3124 - Пакеты Отсутствует подключение',()=>{})
+it('#3132 Выбор счета',()=>{})
+it('#3204 Заявления Сортировка по дате',()=>{
+    cy.openTarifTab('Заявления')
+    cy.get('div.tariff-requests__list-item ')
+        .find('div.tariff-requests__list-left-col .tariff-requests__list-text-dark')
+        .filter(':contains("Заявление на смену тарифного плана")')
+        .closest('div.tariff-requests__list-item')
+        .find('div.tariff-requests__list-right-col span.tariff-requests__list-text-dark').then((elements) => {
+            const dates = elements.map((element) => Cypress.$(element).text());
+            let prevDate = new Date(dates[0].replace('Дата подключения c ', '').split('.').reverse().join('-'));
+            for (let i = 1; i < dates.length; i++) {
+            const currentDate = new Date(dates[i].replace('Дата подключения c ', '').split('.').reverse().join('-'));
+            expect(prevDate).to.be.at.most(currentDate);
+            prevDate = currentDate;
+            }
+    })
+})
+it('#3121 Статусы тариф',()=>{})
+it('#3529 Статусы пакет',()=>{})
 })
