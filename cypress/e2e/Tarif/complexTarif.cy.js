@@ -1,10 +1,10 @@
 describe('', () => {
     beforeEach(() => {
         cy.loginStand()
-        cy.changeCompanyApi('7978104')
+        cy.changeCompanyApi('7978102')
         cy.visit('/tarif')
     })
-    it('#3285 - Активный > Комплексный ', () => {
+    it('#3285 - Комплексный > Активный ВЭД ', () => {
         cy.openTarifTab('Тарифы и пакеты')
         cy.changeTarifByName('Тариф Комплексный','Подключить')
         cy.signTarifAndPackage(' Белоусова_Подпись ')
@@ -18,7 +18,7 @@ describe('', () => {
         cy.checkTarifStatus('Отозван')
     })
 
-    it('#3284 - Активный > Расчетный', () => {
+    it('#3284 - Комплексный > Расчетный', () => {
         cy.openTarifTab('Тарифы и пакеты')
         cy.changeTarifByName('Тариф Расчетный','Подключить')
         cy.signTarifAndPackage(' Белоусова_Подпись ')
@@ -61,6 +61,26 @@ describe('', () => {
             .should('have.text',' Заявка на подключение отправлена \nв банк ')
         cy.checkTarifStatus('В обработке')
     })
+    it('#3292 - Пакет услуг "ВЭД"',() =>{
+        cy.openTarifTab('Тарифы и пакеты')
+        cy.openPackageTab()
+        cy.chooseAccType('Расчетный')
+        cy.addPackageByName('Пакет услуг "платежи безлимитно"')
+        cy.signTarifAndPackage(' Белоусова_Подпись ')
+        cy.get('div.package-content-body__text')
+            .should('have.text',' Заявка на подключение отправлена \nв банк ')
+        cy.checkTarifStatus('В обработке')
+    })
+    it('#3292 - Пакет услуг "переводы на ФЛ"',() =>{
+        cy.openTarifTab('Тарифы и пакеты')
+        cy.openPackageTab()
+        cy.chooseAccType('Расчетный')
+        cy.addPackageByName('Пакет услуг "платежи безлимитно"')
+        cy.signTarifAndPackage(' Белоусова_Подпись ')
+        cy.get('div.package-content-body__text')
+            .should('have.text',' Заявка на подключение отправлена \nв банк ')
+        cy.checkTarifStatus('В обработке')
+    })
     it('#3292 - Пакет услуг "платежи безлимитно"',() =>{
         cy.openTarifTab('Тарифы и пакеты')
         cy.openPackageTab()
@@ -71,8 +91,18 @@ describe('', () => {
             .should('have.text',' Заявка на подключение отправлена \nв банк ')
         cy.checkTarifStatus('В обработке')
     })
+    it('#3292 - Валютный - Пакет услуг "ВЭД"',() =>{
+        cy.openTarifTab('Тарифы и пакеты')
+        cy.openPackageTab()
+        cy.chooseAccType('Валютный')
+        cy.addPackageByName('Пакет услуг "ВЭД"')
+        cy.signTarifAndPackage(' Белоусова_Подпись ')
+        cy.get('div.package-content-body__text')
+            .should('have.text',' Заявка на подключение отправлена \nв банк ')
+        cy.checkTarifStatus('В обработке')
+    })
 
-    it('#3335 - Основные положения Расчетный',() =>{
+    it('#3335 - Основные положения Комплексный',() =>{
         cy.get('.tariff-details-header__title-wrapper > app-arrow-toggle > .arrow-toggle-wrap > .arrow-toggle > .arrow-toggle__arrow').click()
         cy.get('article.tariff-details-header').within(()=>{
             cy.get('.tariff-details-header__title').should('contain','Тариф ‎Активный ВЭД‎')
@@ -94,8 +124,9 @@ describe('', () => {
             cy.get('[data-qa="1663074395452"] > span i').should('contain','Сменить ')
         })
     })
+    
 
-    it('#3507 - Градусники расчетный',() =>{
+    it('#3507 - Градусники Комплексный',() =>{
         cy.get('section.tariff-details-container').within(() =>{
             cy.get('.tariff-details-container__header-title').should('contain','Переводы денежных средств')
             cy.get(':nth-child(2) > .tariff-details-item__header').should('contain',' Счет: ')

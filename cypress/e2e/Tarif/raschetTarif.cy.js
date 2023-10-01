@@ -1,10 +1,10 @@
 describe('', () => {
     beforeEach(() => {
         cy.loginStand()
-        cy.changeCompanyApi('7978104')
+        cy.changeCompanyApi('3448774')
         cy.visit('/tarif')
     })
-    it('#3285 - Активный > Комплексный ', () => {
+    it('#3285 - Расчетный > Комплексный ', () => {
         cy.openTarifTab('Тарифы и пакеты')
         cy.changeTarifByName('Тариф Комплексный','Подключить')
         cy.signTarifAndPackage(' Белоусова_Подпись ')
@@ -18,9 +18,9 @@ describe('', () => {
         cy.checkTarifStatus('Отозван')
     })
 
-    it('#3284 - Активный > Расчетный', () => {
+    it('#3284 - Расчетный > Активный ВЭД', () => {
         cy.openTarifTab('Тарифы и пакеты')
-        cy.changeTarifByName('Тариф Расчетный','Подключить')
+        cy.changeTarifByName('Тариф ‎Активный ВЭД‎','Подключить')
         cy.signTarifAndPackage(' Белоусова_Подпись ')
         cy.checkTarifCaption('Заявка отправлена в банк')
         cy.checkTarifText(' Тариф начнет действовать ')
@@ -75,21 +75,21 @@ describe('', () => {
     it('#3335 - Основные положения Расчетный',() =>{
         cy.get('.tariff-details-header__title-wrapper > app-arrow-toggle > .arrow-toggle-wrap > .arrow-toggle > .arrow-toggle__arrow').click()
         cy.get('article.tariff-details-header').within(()=>{
-            cy.get('.tariff-details-header__title').should('contain','Тариф ‎Активный ВЭД‎')
+            cy.get('.tariff-details-header__title').should('contain','Тариф Расчетный')
             
             cy.get('[data-qa="16577851384090"] > app-tariff-description-item > .card-content-item > .label').should('contain','Переводы в другие банки на счета ЮЛ, ИП и ФЛ')
             cy.get('[data-qa="16577851384090"] > app-tariff-description-item > .card-content-item > .value').should('contain','25 ₽ за платеж. В адрес ФЛ + доп.комиссия')
             cy.get('[data-qa="16577851384091"] > app-tariff-description-item > .card-content-item > .label').should('contain','Переводы в адрес ФЛ')
-            cy.get('[data-qa="16577851384091"] > app-tariff-description-item > .card-content-item > .value').should('contain','от 0,2% до 6% от суммы платежа ')
+            cy.get('[data-qa="16577851384091"] > app-tariff-description-item > .card-content-item > .value').should('contain','от 0,2% до 6% от суммы платежа')
             cy.get('[data-qa="16577851384092"] > app-tariff-description-item > .card-content-item > .label').should('contain','Снятие наличных с карты')
-            cy.get('[data-qa="16577851384092"] > app-tariff-description-item > .card-content-item > .value').should('contain','до 100 000 ₽ (включительно) - бесплатно. Далее - 1,5 % ')
-            cy.get('[data-qa="16577851384093"] > app-tariff-description-item > .card-content-item > .label').should('contain','Платежи в валюте')
-            cy.get('[data-qa="16577851384093"] > app-tariff-description-item > .card-content-item > .value').should('contain','min 25 USD, max 70 USD и min 30 EUR, max 70 EUR')
+            cy.get('[data-qa="16577851384092"] > app-tariff-description-item > .card-content-item > .value').should('contain','до 100 000 ₽ (включительно) - бесплатно. Далее - 1,5 %')
+            cy.get('[data-qa="16577851384093"] > app-tariff-description-item > .card-content-item > .label').should('contain','Начисление % на остаток')
+            cy.get('[data-qa="16577851384093"] > app-tariff-description-item > .card-content-item > .value').should('contain','не начисляется')
 
             cy.get('[data-qa="1657785266292"] > .card-content-item > .label').should('contain','Тариф действует с')
-            cy.get('[data-qa="1657785266292"] > .card-content-item > .value').should('contain','12.07.2022')
+            cy.get('[data-qa="1657785266292"] > .card-content-item > .value').should('contain','09.10.2020')
             cy.get('[data-qa="1657785189071"] > .card-content-item > .label').should('contain','Плата за ведение расчётного счета')
-            cy.get('[data-qa="1657785189071"] > .card-content-item > .value').should('contain','2 месяца бесплатно, далее 2 900 ₽')
+            cy.get('[data-qa="1657785189071"] > .card-content-item > .value').should('contain','2 месяца бесплатно, далее 1 900 ₽')
             cy.get('[data-qa="1657787192111"]').should('contain',' Описание тарифа ').and('have.attr','href','https://metib.online/docs/Единый%20Сборник%20Тарифов%20с%2005.07.2023г.pdf')
             cy.get('[data-qa="1663074395452"] > span i').should('contain','Сменить ')
         })

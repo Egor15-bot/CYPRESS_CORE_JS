@@ -12,7 +12,7 @@ Cypress.Commands.add('signTarifAndPackage',(signType)=>{
     cy.contains('div.selection-options__item',signType)
 })
 Cypress.Commands.add('checkTarifStatus',(status) =>{
-    cy.get('[data-qa="1657805226006"] > svg > use').click()
+    cy.visit('/tarif')
     cy.get('div[data-qa="1657787078062"] div').contains('Заявления').click()
     cy.get('div.tariff-requests__list-item:first-of-type')
         .find('span.tariff-requests__list-text-dark')
@@ -44,6 +44,7 @@ cy.get('div.package-card .caption').contains(packageName)
 })
 
 Cypress.Commands.add('chooseAccType',(accType) =>{
+    cy.wait(2000)
     cy.get('.arrow-down > use').click()
     cy.get('div.custom-select__container__item').contains(accType).click()
 })
