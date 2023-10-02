@@ -16,7 +16,7 @@ Cypress.Commands.add('loginTestApi', (token) => {
 })
 //Метод логина на Препрод
 Cypress.Commands.add('loginApi', (token) => {
-    cy.session('Создание сессии авторизации через API', () => {
+    // cy.session('Создание сессии авторизации через API', () => {
         cy.request({
             method: 'POST',
             url: `${Cypress.config('baseUrl')}rest/stateful/corp/login`,
@@ -27,7 +27,7 @@ Cypress.Commands.add('loginApi', (token) => {
         }).then((response) => {
             expect(response.status).to.equal(200);
         });
-    })
+    // })
 })
 //Смена компании через API
 Cypress.Commands.add('changeCompanyApi', (idCompany) => {
