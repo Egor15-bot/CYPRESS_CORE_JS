@@ -2,3 +2,4 @@ node_modules/
 .as-a.ini
 multi-reporter-config
 cypress/screenshots/
+Companies.md

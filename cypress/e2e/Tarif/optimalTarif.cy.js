@@ -11,11 +11,7 @@ describe('', () => {
         cy.checkTarifCaption('Заявка отправлена в банк')
         cy.checkTarifText(' Тариф начнет действовать ')
         cy.checkTarifStatus('В обработке')
-        cy.openTarifTab('Тарифы')
-        cy.changeTarifByName('Корпоративный','Отменить')
-        cy.signTarifAndPackage(' Белоусова_Подпись ')
-        cy.checkTarifText('Заявка на отзыв отправлена в банк')
-        cy.checkTarifStatus('Отозван')
+        cy.cancelTariff()
     })
 
     it('#3304 - Оптимальный > Стартовый', () => {
@@ -25,12 +21,8 @@ describe('', () => {
         cy.checkTarifCaption('Заявка отправлена в банк')
         cy.checkTarifText(' Тариф начнет действовать ')
         cy.checkTarifStatus('В обработке')
-        cy.openTarifTab('Тарифы')
-        cy.changeTarifByName('Стартовый','Отменить')
-        cy.signTarifAndPackage(' Белоусова_Подпись ')
-        cy.checkTarifText('Заявка на отзыв отправлена в банк')
-        cy.checkTarifStatus('Отозван')
-        })
+        cy.cancelTariff()
+    })
 
     it('#3332 - Основные положения Оптимальный',() =>{
         cy.get('.tariff-details-header__title-wrapper > app-arrow-toggle > .arrow-toggle-wrap > .arrow-toggle > .arrow-toggle__arrow').click()

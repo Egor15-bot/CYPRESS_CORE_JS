@@ -11,11 +11,7 @@ describe('', () => {
         cy.checkTarifCaption('Заявка отправлена в банк')
         cy.checkTarifText(' Тариф начнет действовать ')
         cy.checkTarifStatus('В обработке')
-        cy.openTarifTab('Тарифы')
-        cy.changeTarifByName('Корпоративный','Отменить')
-        cy.signTarifAndPackage(' Белоусова_Подпись ')
-        cy.checkTarifText('Заявка на отзыв отправлена в банк')
-        cy.checkTarifStatus('Отозван')
+        cy.cancelTariff()
     })
 
     it('#3294 - Cтартовый > Оптимальный', () => {
@@ -25,11 +21,7 @@ describe('', () => {
         cy.checkTarifCaption('Заявка отправлена в банк')
         cy.checkTarifText(' Тариф начнет действовать ')
         cy.checkTarifStatus('В обработке')
-        cy.openTarifTab('Тарифы')
-        cy.changeTarifByName('Оптимальный','Отменить')
-        cy.signTarifAndPackage(' Белоусова_Подпись ')
-        cy.checkTarifText('Заявка на отзыв отправлена в банк')
-        cy.checkTarifStatus('Отозван')
+        cy.cancelTariff()
         })
 
     it('#3114 - Основные положения Расчетный',() =>{

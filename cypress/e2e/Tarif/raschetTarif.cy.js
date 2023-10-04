@@ -11,11 +11,7 @@ describe('', () => {
         cy.checkTarifCaption('Заявка отправлена в банк')
         cy.checkTarifText(' Тариф начнет действовать ')
         cy.checkTarifStatus('В обработке')
-        cy.openTarifTab('Тарифы и пакеты')
-        cy.changeTarifByName('Тариф Комплексный','Отменить')
-        cy.signTarifAndPackage(' Белоусова_Подпись ')
-        cy.checkTarifText('Заявка на отзыв отправлена в банк')
-        cy.checkTarifStatus('Отозван')
+        cy.cancelTariff()
     })
 
     it('#3284 - Расчетный > Активный ВЭД', () => {
@@ -25,13 +21,9 @@ describe('', () => {
         cy.checkTarifCaption('Заявка отправлена в банк')
         cy.checkTarifText(' Тариф начнет действовать ')
         cy.checkTarifStatus('В обработке')
-        cy.openTarifTab('Тарифы и пакеты')
-        cy.changeTarifByName('Тариф Расчетный','Отменить')
-        cy.signTarifAndPackage(' Белоусова_Подпись ')
-        cy.checkTarifText('Заявка на отзыв отправлена в банк')
-        cy.checkTarifStatus('Отозван')
+        cy.cancelTariff()
         })
-    it.skip('#3288 - Пакет услуг "30 платежей"',() =>{
+    it('#3288 - Пакет услуг "30 платежей"',() =>{
         cy.openTarifTab('Тарифы и пакеты')
         cy.openPackageTab()
         cy.chooseAccType('Расчетный')
