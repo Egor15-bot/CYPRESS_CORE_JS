@@ -19,8 +19,15 @@ Cypress.Commands.add("signTarifAndPackage", (signType) => {
     .should("contain", "Подписать")
     .click();
   cy.contains("div.selection-options__item", signType);
-  cy.wait(3000)
 });
+Cypress.Commands.add('checkPackageStatus',(status) =>{
+  cy.get('div[data-qa="1657787078062"] div').contains("Заявления").click();
+  cy.get("div.tariff-requests__list-item:first-of-type")
+    .find("span.tariff-requests__list-text-dark")
+    .closest("div.tariff-requests__list-right-col")
+    .find("span:last-child")
+    .should("have.text", status);
+})
 Cypress.Commands.add("checkTarifStatus", (status) => {
   cy.visit("/tarif");
   cy.get('div[data-qa="1657787078062"] div').contains("Заявления").click();
@@ -117,7 +124,7 @@ Cypress.Commands.add("cancelTariff", () => {
         "Content-Type": "application/json",
       },
       body: {
-        certId: "317104",
+        certId: "3621127  ",
         docModule: "ibankul",
         docType: "request_cancel",
         docIds: [cancelId],
@@ -133,7 +140,7 @@ Cypress.Commands.add("cancelTariff", () => {
         "Content-Type": "application/json",
       },
       body: {
-        certId: "317104",
+        certId: "3621127",
         libId: "90342",
         inputCode: "00",
         docModule: "ibankul",
@@ -142,23 +149,23 @@ Cypress.Commands.add("cancelTariff", () => {
       },
     });
   });
-  // Запрос для получения докумнета по текущему статусу
+  // Запрос для получения документа по текущему статусу
   cy.get("@cancelId").then((cancelId) => {
     cy.request({
       method: "GET",
       url: `https://pred-ul.metib.online/rest/stateful/corp/document/visual/byid?doc_module=ibankul&doc_type=request_cancel&doc_ids=${cancelId}`,
       headers: {
-        "Content-Type": "application/json",
+        "Accept": "application/json, text/plain, */*",
       },
     });
   });
-  // Выполнить шестой запрос
+  // Обновление статуса документа 
   cy.get("@cancelId").then((cancelId) => {
     cy.request({
       method: "PUT",
       url: `https://pred-ul.metib.online/rest/stateful/corp/document/send?doc_module=ibankul&doc_type=request_cancel&doc_ids=${cancelId}`,
       headers: {
-        "Content-Type": "application/json",
+        "Accept": "application/json, text/plain, */*",
       },
     });
   });

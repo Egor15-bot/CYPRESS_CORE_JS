@@ -6,7 +6,7 @@ Cypress.Commands.add('loginApi', () => {
         method: 'POST',
         url: `${Cypress.config('baseUrl')}/rest/stateful/corp/login`,
         headers: {
-            'Authorization': 'Basic cWFfZHJ1ZG5pa19kY2I6MTIzNDU2Nzg=',
+            'Authorization': 'Basic cWFfYXV0bzpRcTEyMzQ1Njc4',
         },
         body: {}
     }).then((response) => {
