@@ -62,7 +62,7 @@ Cypress.Commands.add('createSomeCounterpartsApi', (i, fixture) => {
     while (i) {
         cy.request('POST', `${Cypress.config('baseUrl')}rest/stateful/corp/dic/corr/v2`, {
             "fullname": fixture.type["Наименование получателя или ИНН"],
-            "inn": fixture.type["ИНН получателя"] + i,
+            "inn": Number(fixture.type["ИНН получателя"]) + i,
             "kpp": fixture.type["КПП получателя"],
             "accList": [
                 {
@@ -121,7 +121,10 @@ Cypress.Commands.add('deleteAllCounterparts', () => {
         counterpartsList = getArray(response.body?.corrDicElementUl)
         //Удаляю контрагенты
         counterpartsList.forEach(item => {
-            cy.request({ method: 'DELETE', url: `/rest/stateful/corp/delete/document/${item.id}` })
+            cy.request({
+                method: 'DELETE',
+                url: `/rest/stateful/corp/delete/document/${item.id}`
+            })
         })
     })
 })

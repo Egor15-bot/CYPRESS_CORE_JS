@@ -12,13 +12,13 @@ describe('Общие кейсы', () => {
             //Смена компании на "Захарова Яна Николаевна"
             cy.changeCompanyApi('3448774')
         })
-        it('Переход в меню "Контрагенты" через меню бургер', function () {
+        it('#Переход в меню "Контрагенты" через меню бургер', function () {
             cy.visit('/')
             cy.openBurgerTab('Контрагенты')
                 .url()
                 .should('contain', '/counterparts')
         })
-        it('Верстка', function () {
+        it('#Верстка', function () {
             //Перехожу в раздел "Контрагенты"
             cy.visit('/counterparts')
                 .url()
@@ -298,9 +298,10 @@ describe('Общие кейсы', () => {
                 cy.get('[data-qa="1658988187497"]')
                     .clear()
                     .type(this.testData.FL_With_INN.type["Наименование получателя или ИНН"])
+                //Перехожу "Контрагенты/Просмотр"
+                cy.get('[data-qa="16578861119580"]').click()
                 //Нажимаю кебаб-меню / Изменить
-                cy.clickKebabMenuСounterpart("Изменить")
-
+                cy.clickKebabMenuDetails("Изменить")
                 //Проверяю, что выбрана нужная вкладка
                 cy.get('[data-qa="1657886538322"]')
                     .should('have.class', 'active')
@@ -915,24 +916,771 @@ describe('Общие кейсы', () => {
             })
         })
         context('Меню действий "Изменить" - раздел "Контрагенты / Просмотр"', function () {
-            it('#3810. Контрагент ЮЛ', function () { })
-            it('#3811. Контрагент ФЛ с ИНН', function () { })
-            it('#3812. Контрагент ФЛ без ИНН', function () { })
-            it('#3813. Контрагент ИП', function () { })
-            it('#3814. Контрагент НАЛОГ', function () { })
-            it('#3815. Контрагент ТАМОЖ', function () { })
+            it('#3810. Контрагент ЮЛ', function () {
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.UL.type["Наименование получателя или ИНН"])
+                //Перехожу "Контрагенты/Просмотр"
+                cy.get('[data-qa="16578861119580"]').click()
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuDetails("Изменить")
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886535621"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Юридическое лицо ')
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.UL.type["Наименование получателя или ИНН"]));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.UL.type["ИНН получателя"]));
+
+                //Проверяю поле "КПП" контрагента
+                cy.contains('.dynamic-input', ' КПП ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.UL.type["КПП получателя"]));
+
+                //Проверяю поле "БИК банка получателя" контрагента
+                cy.contains('.dynamic-input', ' БИК банка получателя ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.UL.type["БИК банка получателя"]));
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.UL.type["Счет получателя"])
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+                //ВВОЖУ НОВЫЕ ДАННЫЕ В ПОЛЯ
+                //Ищем поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.UL.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+
+                //Ищем поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.UL.type["ИНН получателя"].slice(0, -1) + 2)
+
+                //Ищем поле "КПП" контрагента
+                cy.contains('.dynamic-input', ' КПП ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.UL.type["КПП получателя"].slice(0, -1) + 2)
+
+                //Ищем поле "Счет получателя"
+                cy.contains('.dynamic-input', ' Номер счета ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.UL.type["Счет получателя"].slice(0, -1) + 2)
+
+                //Нажимаю кнопку "Сохранить"
+                cy.contains('[data-qa="1658987981978"]', ' Сохранить').click()
+
+                //Жду пока пропадет лоадер со страницы
+                cy.get('.loader').should('not.exist')
+
+                //ПРОВЕРЯЮ СОХРАНЕННЫЕ ДАННЫЕ
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.UL.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuСounterpart("Изменить")
+
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886535621"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Юридическое лицо ')
+
+                cy.wait(500)
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.UL.type["Наименование получателя или ИНН"].slice(0, -1) + 2));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.UL.type["ИНН получателя"].slice(0, -1) + 2));
+
+                //Проверяю поле "КПП" контрагента
+                cy.contains('.dynamic-input', ' КПП ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.UL.type["КПП получателя"].slice(0, -1) + 2));
+
+                cy.wait(500)
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.UL.type["Счет получателя"].slice(0, -1) + 2)
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+            })
+            it('#3811. Контрагент ФЛ с ИНН', function () {
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.FL_With_INN.type["Наименование получателя или ИНН"])
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuСounterpart("Изменить")
+
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886538322"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Физическое лицо ')
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.FL_With_INN.type["Наименование получателя или ИНН"]));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.FL_With_INN.type["ИНН получателя"]));
+
+                // //Проверяю поле "КПП" контрагента
+                // cy.contains('.dynamic-input', ' КПП ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .invoke('val')
+                //     .then(sometext => expect(sometext).to.equal(this.testData.FL_With_INN.type["КПП получателя"]));
+
+                //Проверяю поле "БИК банка получателя" контрагента
+                cy.contains('.dynamic-input', ' БИК банка получателя ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.FL_With_INN.type["БИК банка получателя"]));
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.FL_With_INN.type["Счет получателя"])
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+                //ВВОЖУ НОВЫЕ ДАННЫЕ В ПОЛЯ
+                //Ищем поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.FL_With_INN.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+
+                //Ищем поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.FL_With_INN.type["ИНН получателя"].slice(0, -1) + 2)
+
+                // //Ищем поле "КПП" контрагента
+                // cy.contains('.dynamic-input', ' КПП ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .click()
+                //     .clear()
+                //     .type(this.testData.FL_With_INN.type["КПП получателя"].slice(0, -1) + 2)
+
+                //Ищем поле "Счет получателя"
+                cy.contains('.dynamic-input', ' Номер счета ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.FL_With_INN.type["Счет получателя"].slice(0, -1) + 2)
+
+                //Нажимаю кнопку "Сохранить"
+                cy.contains('[data-qa="1658987981978"]', ' Сохранить').click()
+
+                //Жду пока пропадет лоадер со страницы
+                cy.get('.loader').should('not.exist')
+
+                //ПРОВЕРЯЮ СОХРАНЕННЫЕ ДАННЫЕ
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.FL_With_INN.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuСounterpart("Изменить")
+
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886538322"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Физическое лицо ')
+
+                cy.wait(500)
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.FL_With_INN.type["Наименование получателя или ИНН"].slice(0, -1) + 2));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.FL_With_INN.type["ИНН получателя"].slice(0, -1) + 2));
+
+                // //Проверяю поле "КПП" контрагента
+                // cy.contains('.dynamic-input', ' КПП ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .invoke('val')
+                //     .then(sometext => expect(sometext).to.equal(this.testData.FL_With_INN.type["КПП получателя"].slice(0, -1) + 2));
+
+                cy.wait(500)
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.FL_With_INN.type["Счет получателя"].slice(0, -1) + 2)
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+            })
+            it('#3812. Контрагент ФЛ без ИНН', function () {
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.FL_Without_INN.type["Наименование получателя или ИНН"])
+                //Перехожу "Контрагенты/Просмотр"
+                cy.get('[data-qa="16578861119580"]').click()
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuDetails("Изменить")
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886538322"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Физическое лицо ')
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.FL_Without_INN.type["Наименование получателя или ИНН"]));
+
+                // //Проверяю поле "ИНН" контрагента
+                // cy.contains('.dynamic-input', ' ИНН ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .invoke('val')
+                //     .then(sometext => expect(sometext).to.equal(this.testData.FL_Without_INN.type["ИНН получателя"]));
+
+                // //Проверяю поле "КПП" контрагента
+                // cy.contains('.dynamic-input', ' КПП ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .invoke('val')
+                //     .then(sometext => expect(sometext).to.equal(this.testData.FL_With_INN.type["КПП получателя"]));
+
+                //Проверяю поле "БИК банка получателя" контрагента
+                cy.contains('.dynamic-input', ' БИК банка получателя ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.FL_Without_INN.type["БИК банка получателя"]));
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.FL_Without_INN.type["Счет получателя"])
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+                //ВВОЖУ НОВЫЕ ДАННЫЕ В ПОЛЯ
+                //Ищем поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.FL_Without_INN.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+
+                // //Ищем поле "ИНН" контрагента
+                // cy.contains('.dynamic-input', ' ИНН ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .click()
+                //     .clear()
+                //     .type(this.testData.FL_Without_INN.type["ИНН получателя"].slice(0, -1) + 2)
+
+                // //Ищем поле "КПП" контрагента
+                // cy.contains('.dynamic-input', ' КПП ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .click()
+                //     .clear()
+                //     .type(this.testData.FL_With_INN.type["КПП получателя"].slice(0, -1) + 2)
+
+                //Ищем поле "Счет получателя"
+                cy.contains('.dynamic-input', ' Номер счета ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.FL_Without_INN.type["Счет получателя"].slice(0, -1) + 2)
+
+                //Нажимаю кнопку "Сохранить"
+                cy.contains('[data-qa="1658987981978"]', ' Сохранить').click()
+
+                //Жду пока пропадет лоадер со страницы
+                cy.get('.loader').should('not.exist')
+
+                //ПРОВЕРЯЮ СОХРАНЕННЫЕ ДАННЫЕ
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.FL_Without_INN.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuСounterpart("Изменить")
+
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886538322"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Физическое лицо ')
+
+                cy.wait(500)
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.FL_Without_INN.type["Наименование получателя или ИНН"].slice(0, -1) + 2));
+
+                // //Проверяю поле "ИНН" контрагента
+                // cy.contains('.dynamic-input', ' ИНН ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .invoke('val')
+                //     .then(sometext => expect(sometext).to.equal(this.testData.FL_Without_INN.type["ИНН получателя"].slice(0, -1) + 2));
+
+                // //Проверяю поле "КПП" контрагента
+                // cy.contains('.dynamic-input', ' КПП ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .invoke('val')
+                //     .then(sometext => expect(sometext).to.equal(this.testData.FL_With_INN.type["КПП получателя"].slice(0, -1) + 2));
+
+                cy.wait(500)
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.FL_Without_INN.type["Счет получателя"].slice(0, -1) + 2)
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+            })
+            it('#3813. Контрагент ИП', function () {
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.IP.type["Наименование получателя или ИНН"])
+                //Перехожу "Контрагенты/Просмотр"
+                cy.get('[data-qa="16578861119580"]').click()
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuDetails("Изменить")
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886543298"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' ИП ')
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.IP.type["Наименование получателя или ИНН"]));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.IP.type["ИНН получателя"]));
+
+                // //Проверяю поле "КПП" контрагента
+                // cy.contains('.dynamic-input', ' КПП ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .invoke('val')
+                //     .then(sometext => expect(sometext).to.equal(this.testData.IP.type["КПП получателя"]));
+
+                //Проверяю поле "БИК банка получателя" контрагента
+                cy.contains('.dynamic-input', ' БИК банка получателя ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.IP.type["БИК банка получателя"]));
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.IP.type["Счет получателя"])
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+                //ВВОЖУ НОВЫЕ ДАННЫЕ В ПОЛЯ
+                //Ищем поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.IP.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+
+                //Ищем поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.IP.type["ИНН получателя"].slice(0, -1) + 2)
+
+                // //Ищем поле "КПП" контрагента
+                // cy.contains('.dynamic-input', ' КПП ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .click()
+                //     .clear()
+                //     .type(this.testData.IP.type["КПП получателя"].slice(0, -1) + 2)
+
+                //Ищем поле "Счет получателя"
+                cy.contains('.dynamic-input', ' Номер счета ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.IP.type["Счет получателя"].slice(0, -1) + 2)
+
+                //Нажимаю кнопку "Сохранить"
+                cy.contains('[data-qa="1658987981978"]', ' Сохранить').click()
+
+                //Жду пока пропадет лоадер со страницы
+                cy.get('.loader').should('not.exist')
+
+                //ПРОВЕРЯЮ СОХРАНЕННЫЕ ДАННЫЕ
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.IP.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuСounterpart("Изменить")
+
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886543298"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' ИП ')
+
+                cy.wait(500)
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.IP.type["Наименование получателя или ИНН"].slice(0, -1) + 2));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.IP.type["ИНН получателя"].slice(0, -1) + 2));
+
+                // //Проверяю поле "КПП" контрагента
+                // cy.contains('.dynamic-input', ' КПП ')
+                //     .find('[placeholder="Введите данные"]')
+                //     .invoke('val')
+                //     .then(sometext => expect(sometext).to.equal(this.testData.IP.type["КПП получателя"].slice(0, -1) + 2));
+
+                cy.wait(500)
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.IP.type["Счет получателя"].slice(0, -1) + 2)
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+            })
+            it('#3814. Контрагент НАЛОГ', function () {
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.NALOG.type["Наименование получателя или ИНН"])
+                //Перехожу "Контрагенты/Просмотр"
+                cy.get('[data-qa="16578861119580"]').click()
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuDetails("Изменить")
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886546830"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Налоговый/Бюджетный ')
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.NALOG.type["Наименование получателя или ИНН"]));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.NALOG.type["ИНН получателя"]));
+
+                //Проверяю поле "КПП" контрагента
+                cy.contains('.dynamic-input', ' КПП ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.NALOG.type["КПП получателя"]));
+
+                //Проверяю поле "БИК банка получателя" контрагента
+                cy.contains('.dynamic-input', ' БИК банка получателя ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.NALOG.type["БИК банка получателя"]));
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.NALOG.type["Счет получателя"])
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+                //ВВОЖУ НОВЫЕ ДАННЫЕ В ПОЛЯ
+                //Ищем поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.NALOG.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+
+                //Ищем поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.NALOG.type["ИНН получателя"].slice(0, -1) + 2)
+
+                //Ищем поле "КПП" контрагента
+                cy.contains('.dynamic-input', ' КПП ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.NALOG.type["КПП получателя"].slice(0, -1) + 2)
+
+                //Ищем поле "Счет получателя"
+                cy.contains('.dynamic-input', ' Номер счета ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.NALOG.type["Счет получателя"].slice(0, -1) + 2)
+
+                //Нажимаю кнопку "Сохранить"
+                cy.contains('[data-qa="1658987981978"]', ' Сохранить').click()
+
+                //Жду пока пропадет лоадер со страницы
+                cy.get('.loader').should('not.exist')
+
+                //ПРОВЕРЯЮ СОХРАНЕННЫЕ ДАННЫЕ
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.NALOG.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuСounterpart("Изменить")
+
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886546830"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Налоговый/Бюджетный ')
+
+                cy.wait(500)
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.NALOG.type["Наименование получателя или ИНН"].slice(0, -1) + 2));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.NALOG.type["ИНН получателя"].slice(0, -1) + 2));
+
+                //Проверяю поле "КПП" контрагента
+                cy.contains('.dynamic-input', ' КПП ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.NALOG.type["КПП получателя"].slice(0, -1) + 2));
+
+                cy.wait(500)
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.NALOG.type["Счет получателя"].slice(0, -1) + 2)
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+            })
+            it('#3815. Контрагент ТАМОЖ', function () {
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.TAMOZH.type["Наименование получателя или ИНН"])
+                //Перехожу "Контрагенты/Просмотр"
+                cy.get('[data-qa="16578861119580"]').click()
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuDetails("Изменить")
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886550146"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Таможенный ')
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.TAMOZH.type["Наименование получателя или ИНН"]));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.TAMOZH.type["ИНН получателя"]));
+
+                //Проверяю поле "КПП" контрагента
+                cy.contains('.dynamic-input', ' КПП ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.TAMOZH.type["КПП получателя"]));
+
+                //Проверяю поле "БИК банка получателя" контрагента
+                cy.contains('.dynamic-input', ' БИК банка получателя ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.TAMOZH.type["БИК банка получателя"]));
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.TAMOZH.type["Счет получателя"])
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+                //ВВОЖУ НОВЫЕ ДАННЫЕ В ПОЛЯ
+                //Ищем поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.TAMOZH.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+
+                //Ищем поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.TAMOZH.type["ИНН получателя"].slice(0, -1) + 2)
+
+                //Ищем поле "КПП" контрагента
+                cy.contains('.dynamic-input', ' КПП ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.TAMOZH.type["КПП получателя"].slice(0, -1) + 2)
+
+                //Ищем поле "Счет получателя"
+                cy.contains('.dynamic-input', ' Номер счета ')
+                    .find('[placeholder="Введите данные"]')
+                    .click()
+                    .clear()
+                    .type(this.testData.TAMOZH.type["Счет получателя"].slice(0, -1) + 2)
+
+                //Нажимаю кнопку "Сохранить"
+                cy.contains('[data-qa="1658987981978"]', ' Сохранить').click()
+
+                //Жду пока пропадет лоадер со страницы
+                cy.get('.loader').should('not.exist')
+
+                //ПРОВЕРЯЮ СОХРАНЕННЫЕ ДАННЫЕ
+                //Ввожу ИНН ранее созданного контрагента в строку поиска
+                cy.get('[data-qa="1658988187497"]')
+                    .clear()
+                    .type(this.testData.TAMOZH.type["Наименование получателя или ИНН"].slice(0, -1) + 2)
+                //Нажимаю кебаб-меню / Изменить
+                cy.clickKebabMenuСounterpart("Изменить")
+
+                //Проверяю, что выбрана нужная вкладка
+                cy.get('[data-qa="1657886550146"]')
+                    .should('have.class', 'active')
+                    .should('contain', ' Таможенный ')
+
+                cy.wait(500)
+
+                //Проверяю поле "Наименование" контрагента
+                cy.contains('.dynamic-input', ' Наименование ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.TAMOZH.type["Наименование получателя или ИНН"].slice(0, -1) + 2));
+
+                //Проверяю поле "ИНН" контрагента
+                cy.contains('.dynamic-input', ' ИНН ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.TAMOZH.type["ИНН получателя"].slice(0, -1) + 2));
+
+                //Проверяю поле "КПП" контрагента
+                cy.contains('.dynamic-input', ' КПП ')
+                    .find('[placeholder="Введите данные"]')
+                    .invoke('val')
+                    .then(sometext => expect(sometext).to.equal(this.testData.TAMOZH.type["КПП получателя"].slice(0, -1) + 2));
+
+                cy.wait(500)
+
+                //Проверяю поле "Счет получателя"
+                cy.modificationAccNumberSpace(this.testData.TAMOZH.type["Счет получателя"].slice(0, -1) + 2)
+                    .then((modifiedNumber) => {
+                        cy.contains('.dynamic-input', ' Номер счета ')
+                            .find('[placeholder="Введите данные"]')
+                            .invoke('val')
+                            .then(sometext => expect(sometext).to.equal(modifiedNumber));
+                    });
+            })
         })
         after('Удаление всех контрагентов через API', () => {
             cy.deleteAllCounterparts()
         })
     })
-    context('Кейсы, где нужно создавать 300 контрагентов', () => {
+    context.only('Кейсы, где нужно создавать 100 контрагентов', () => {
+        beforeEach(function () {
+            //Смена компании на "Захарова Яна Николаевна"
+            cy.changeCompanyApi('3448774')
+        })
         it('#1359. Проверка пагинации', function () {
             //Удаление всех контрагентов через API
             cy.deleteAllCounterparts()
 
             //Создаю 300 контрагентов через API (это не в before, так как this.testData.UL не срабатывает не, если находится не в блоке it)
-            cy.createSomeCounterpartsApi(300, this.testData.UL)
+            cy.createSomeCounterpartsApi(100, this.testData.UL)
 
             //Перехожу в раздел "Контрагенты"
             cy.visit('/counterparts')
@@ -940,7 +1688,7 @@ describe('Общие кейсы', () => {
                 .should('contain', '/counterparts')
             //Проверяю пагинацию при 10 элементах на странице
             cy.get('.select-value').should('contain', '10')
-            cy.get('.current-page').should('contain', 'Страница 1 из 30')
+            cy.get('.current-page').should('contain', 'Страница 1 из 10')
             cy.get('[data-qa="1657885988801"]')
                 .find('.counterpart-list__item')
                 .should('have.length', 10)
@@ -951,7 +1699,7 @@ describe('Общие кейсы', () => {
             cy.contains('.item-dropdown', '25').click()
             //Проверяю пагинацию при 25 элементах на странице
             cy.get('.select-value').should('contain', '25')
-            cy.get('.current-page').should('contain', 'Страница 1 из 12')
+            cy.get('.current-page').should('contain', 'Страница 1 из 4')
             cy.get('[data-qa="1657885988801"]')
                 .find('.counterpart-list__item')
                 .should('have.length', 25)
@@ -962,15 +1710,21 @@ describe('Общие кейсы', () => {
             cy.contains('.item-dropdown', '100').click()
             //Проверяю пагинацию при 100 элементах на странице
             cy.get('.select-value').should('contain', '100')
-            cy.get('.current-page').should('contain', 'Страница 1 из 3')
+            cy.get('.current-page').should('contain', 'Страница 1 из 1')
             cy.get('[data-qa="1657885988801"]')
                 .find('.counterpart-list__item')
                 .should('have.length', 100)
         })
         it('#1372. Проверка скорости загрузки страницы "Контрагенты"', function () {
-            //Перехватываю запрос
-            cy.intercept('GET', `${Cypress.config('baseUrl')}rest/stateful/corp/dic/corr/list?kontur_focus=true`).as('request');
-
+            //Проверяю, что создались 300 контрагентов
+            cy.request({
+                method: 'GET',
+                url: `${Cypress.config('baseUrl')}rest/stateful/corp/dic/corr/list?kontur_focus=true`,
+            }).then((response) => {
+                console.log(response.body); //Вывести ответ в консоль для отладки
+                expect(response.status).to.equal(200);
+                expect(response.body.corrDicElementUl).to.have.lengthOf(300); //Количество контрагентов = 300
+            });
             //Перехожу в раздел "Контрагенты"
             cy.visit('/counterparts')
                 .url()
@@ -978,14 +1732,6 @@ describe('Общие кейсы', () => {
             //Проверяю, что рест загрузился за время defaultCommandTimeout (cypress.config.js)
             cy.get('.counterpart-list__items')
                 .should('be.visible')
-
-            //Проверяю количество контрагентов в ресте
-            cy.wait('@request').then((interception) => {
-                expect(interception.response.body.corrDicElementUl).to.have.lengthOf(300);
-            });
-
-            //Удаление всех контрагентов через API
-            cy.deleteAllCounterparts()
         })
         after('Удаление всех контрагентов через API', () => {
             cy.deleteAllCounterparts()

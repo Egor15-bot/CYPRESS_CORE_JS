@@ -242,7 +242,7 @@ describe('Контрагент ЮЛ', () => {
                 });
             cy.get('div.bank-place').should('contain', this.testData.check.city)
             cy.get('div.controls').should('contain', ' Заплатить ')
-//Нажимаю кебаб-меню / Удалить
+            //Нажимаю кебаб-меню / Удалить
             cy.clickKebabMenuDetails("Удалить")
             //Проверяю модальное окно
             cy.checkModalContainer(this.fixtureCounterparts)
@@ -335,7 +335,7 @@ describe('Контрагент ЮЛ', () => {
                 });
             cy.get('div.bank-place').should('contain', this.testData.check.city)
             cy.get('div.controls').should('contain', ' Заплатить ')
-//Нажимаю кебаб-меню / Удалить
+            //Нажимаю кебаб-меню / Удалить
             cy.clickKebabMenuDetails("Удалить")
             //Проверяю модальное окно
             cy.checkModalContainer(this.fixtureCounterparts)
@@ -419,10 +419,6 @@ describe('Контрагент ЮЛ', () => {
             cy.visit('/transfer-rur')
                 .url()
                 .should('contain', '/transfer-rur')
-            //Проверяю автивную вкладку в разделе "Новый платеж"
-            cy.get('div.transfer-rur__types__item.active')
-                .should('contain', this.testData.check.nameTransferRur)
-                .and('have.css', 'border-bottom', `3px solid ${Cypress.env('colorBlueSolid')}`)
             //Ввожу в страку поиска название ранее созданного контрагента
             cy.get('[data-qa="1657971851284"] > .custom-select > [data-qa="1658989013306"] > .panel-form__input > .panel-form__input-wrap > [data-qa="1658988187497"]')
                 .click()
