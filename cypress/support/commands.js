@@ -203,3 +203,9 @@ Cypress.Commands.add('modificationAccNumberDot', (accNumber) => {
     })
     return newAccNumber
 })
+//Проверяю буфер обмена (РАБОТАЕТ ТОЛЬКО НА CHROME и ELECTRON)
+Cypress.Commands.add('checkClipboard', text => {
+    cy.window().its('navigator.clipboard')
+        .then((clip) => clip.readText())
+        .should('equal', text)
+})
