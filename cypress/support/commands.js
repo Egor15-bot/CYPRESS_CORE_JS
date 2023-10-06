@@ -82,7 +82,7 @@ Cypress.Commands.add('fillForm', (fixture) => {
             }
             cy.contains('label.dynamic-input', `${key}`)
                 .find('div.dynamic-input__placeholder')
-                .click()
+                // .click()
                 .type(`${value}`);
         });
     });
@@ -176,6 +176,20 @@ function modificationAccNumberSpace(accNumber) {
     })
     return newAccNumber
 }
+
+//Делаю номер счета accNumber в формате "00000 000 0 00000000000"
+Cypress.Commands.add('modificationAccNumberSpace', (accNumber) => {
+    const str = accNumber;
+    let newAccNumber = '';
+    str.split('').forEach((letter, index) => {
+        if (index === 5 || index === 8 || index === 9) {
+            newAccNumber += ' ' + letter
+        } else {
+            newAccNumber += letter
+        }
+    })
+    return newAccNumber
+})
 // Делаю номер счета accNumber в формате "00000.000.0.00000000000"
 Cypress.Commands.add('modificationAccNumberDot', (accNumber) => {
     const str = accNumber;
