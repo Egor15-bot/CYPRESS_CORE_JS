@@ -2,7 +2,11 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   projectId: 'qc56ne',
-  env: {
+  watchForFileChanges:false,
+  // retries:2,
+    env: {
+    //enviroment variables
+    //
     //Синий цвет для кнопок в ДБО и девайдеров, красный цвет для валидации полей
     colorBlueSolid: 'rgb(47, 84, 235)',
     colorBlueGradient: 'linear-gradient(251.59deg, rgb(47, 84, 235) 0%, rgb(14, 131, 223) 99.45%)',
@@ -21,7 +25,7 @@ module.exports = defineConfig({
     viewportHeight: 1080,
     setupNodeEvents(on, config) {
       require('@cypress/grep/src/plugin')(config);
-      return config;
+      return config
     },
   },
 });

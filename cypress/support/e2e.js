@@ -14,6 +14,7 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+import './tarif'
 import './commands'
 import './api'
 import './counterparts'

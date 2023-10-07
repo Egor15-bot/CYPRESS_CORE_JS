@@ -1,4 +1,5 @@
 import '@testing-library/cypress/add-commands'
+import { sign } from 'crypto';
 import 'cypress-real-events/support';
 const registerCypressGrep = require('@cypress/grep')
 registerCypressGrep()
@@ -28,6 +29,16 @@ Cypress.Commands.add('getLocalStorageValue', (key) => {
         return value.should('exist')
     });
 })
+//Авторизация с сохранением сессии
+Cypress.Commands.add('loginStand', () => {
+    cy.session([], () => {
+        cy.visit("/")
+        cy.get('input[data-qa="1658988187497"][type="text"]').type("qa_eybondar_ul", { log: false })
+        cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345", { log: false })
+        cy.get('div[data-qa="1658987981978"]').click()
+        cy.url().should('contain', 'desktop')
+    })
+})
 //Метод для выбора любого элемента из хедера на главном меню
 Cypress.Commands.add('openHeaderTab', () => {
     cy.contains('div[class="main-menu__content-wrapper"] *', tabName).click()
@@ -39,21 +50,19 @@ Cypress.Commands.add('openBurgerTab', (tabName) => {
 })
 //Метод для работы с зеленым тостом 
 Cypress.Commands.add('checkGreenToastInfo', (text) => {
-    cy.get('#toast-container')
-        .invoke('text')
-        .should('eq', text);
-    cy.get('div.toast')
+    cy.get('div.toast-wrapper-text')
+        .should('have.text', text);
+    cy.get('.toast')
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(0, 168, 67) 0%, rgb(31, 208, 113) 100%)');
-    cy.get('app-svg-icon.toast-svg').click()
+    cy.get('.toast-svg > svg > use').click()
 })
 //Метод для работы с красным тостом 
 Cypress.Commands.add('checkRedToastInfo', (text) => {
-    cy.get('#toast-container')
-        .invoke('text')
-        .should('eq', text);
-    cy.get('div.toast')
+    cy.get('div.toast-wrapper-text')
+        .should('have.text', text);
+    cy.get('.toast')
         .should('have.css', 'background-image', 'linear-gradient(270deg, rgb(243, 144, 52) 0%, rgb(255, 39, 39) 100%)');
-    cy.get('app-svg-icon.toast-svg').click()
+    cy.get('.toast-svg > svg > use').click()
 })
 //Заполнение формы тестовыми данными
 Cypress.Commands.add('fillForm', (fixture) => {
@@ -189,3 +198,4 @@ Cypress.Commands.add('modificationAccNumberDot', (accNumber) => {
     })
     return newAccNumber
 })
+
