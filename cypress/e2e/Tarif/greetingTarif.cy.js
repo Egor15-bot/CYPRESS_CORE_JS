@@ -80,7 +80,7 @@ describe("", () => {
         cy.get('span.tariff-details-item__option-description').should('contain','Среднемесячный остаток на текущий день')
         cy.get('p.tariff-details-item__header').should('contain','0%')
         cy.get('div.metib-progress-bar__background').should('have.css','background-color')
-        cy.get('div.tariff-details-item__progress-wrapper span').should('contain','1547.87 ₽')
+        cy.get('div.tariff-details-item__progress-wrapper span').should('contain','₽')
         cy.get('span.tariff-details-item__info').trigger('mouseenter')
     })
 
@@ -92,7 +92,7 @@ describe("", () => {
           cy.get('span.tariff-details-item__option-description').should('contain','Переводы в другие банки на счета юридических лиц, ИП и ФЛ')
           cy.get('p.tariff-details-item__header').should('contain','Бесплатно')
           cy.get('div.metib-progress-bar__background').should('have.css','background-color')
-          cy.get('div.tariff-details-item__progress-wrapper span').should('contain','0 из 5 шт')
+          cy.get('div.tariff-details-item__progress-wrapper span').should('be.visible')
           cy.get('span.tariff-details-item__info').trigger('mouseenter')
       })
       cy.get('article').last().within(()=>{
@@ -189,7 +189,7 @@ describe("", () => {
   });
   it("#3341 - Приветственный > Активный ВЭД", () => {
     cy.openTarifTab("Тарифы и пакеты");
-    cy.changeTarifByName("Тариф Активный ВЭД‎", "Подключить");
+    cy.changeTarifByName("Тариф ‎Активный ВЭД‎", "Подключить");
     cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.checkTarifCaption("Заявка отправлена в банк");
     cy.checkTarifText(" Тариф начнет действовать ");

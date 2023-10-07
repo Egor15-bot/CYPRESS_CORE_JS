@@ -170,35 +170,28 @@ Cypress.Commands.add("cancelTariff", () => {
     });
   });
 });
-Cypress.Commands.add('checkDocsOrder',()=>{
+Cypress.Commands.add('checkDocsOrder', () => {
   cy.get("div.tariff-requests__list-item ")
-  .find(
-    "div.tariff-requests__list-left-col .tariff-requests__list-text-dark"
-  )
-  .filter(':contains("Заявление на смену тарифного плана")')
-  .closest("div.tariff-requests__list-item")
-  .find(
-    "div.tariff-requests__list-right-col span.tariff-requests__list-text-dark"
-  )
-  .then((elements) => {
-    const dates = elements.map((element) => Cypress.$(element).text());
-    let prevDate = new Date(
-      dates[0]
-        .replace("Дата подключения c ", "")
-        .split(".")
-        .reverse()
-        .join("-")
-    );
-    for (let i = 1; i < dates.length; i++) {
-      const currentDate = new Date(
-        dates[i]
-          .replace("Дата подключения c ", "")
-          .split(".")
-          .reverse()
-          .join("-")
-      );
-      expect(prevDate).to.be.at.most(currentDate);
-      prevDate = currentDate;
-    }
-  });
-})
+    .find("div.tariff-requests__list-left-col .tariff-requests__list-text-dark")
+    .filter(':contains("Заявление на смену тарифного плана")')
+    .closest("div.tariff-requests__list-item")
+    .find("div.tariff-requests__list-right-col span.tariff-requests__list-text-dark")
+    .then((elements) => {
+      const dates = [];
+      cy.wrap(elements).each((element) =>{
+          cy.wrap(element).invoke('text').then((text)=>{
+          const parts = text.split(' ');
+          const date = parts[parts.length - 1];
+          dates.push(date)
+        })      
+      })
+      .then(()=>{
+        for (let i = 0; i < dates.length - 1; i++) {
+          const currentDate = new Date(dates[i].split('.').reverse().join('-'));
+          const nextDate = new Date(dates[i + 1].split('.').reverse().join('-'));
+          expect(currentDate).to.be.at.most(nextDate);
+        }
+      })
+    });
+});
+

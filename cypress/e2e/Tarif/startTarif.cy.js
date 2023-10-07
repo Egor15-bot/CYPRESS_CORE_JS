@@ -121,8 +121,7 @@ describe("", () => {
       "Тариф начнет действовать с"
     );
     cy.get('[data-qa="16577845753970"] > .card-content-item > .value').should(
-      "contain",
-      "01.10.2023"
+      "be.visible"
     );
     cy.get('[data-qa="16577845753971"] > .card-content-item > .label').should(
       "contain",

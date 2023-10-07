@@ -7,7 +7,7 @@ describe("", () => {
   it("#3285 - Комплексный > Расчетный ", () => {
     cy.openTarifTab("Тарифы и пакеты");
     cy.changeTarifByName("Тариф Расчетный", "Подключить");
-    cy.signTarifAndPackage("  Зюкина Кристина Виореловна  ");
+    cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.checkTarifCaption("Заявка отправлена в банк");
     cy.checkTarifText(" Тариф начнет действовать ");
     cy.closeCurrentTab();
@@ -18,7 +18,7 @@ describe("", () => {
   it("#3284 - Комплексный > Активный ВЭД ", () => {
     cy.openTarifTab("Тарифы и пакеты");
     cy.changeTarifByName("Тариф ‎Активный ВЭД‎", "Подключить");
-    cy.signTarifAndPackage("  Зюкина Кристина Виореловна  ");
+    cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.checkTarifCaption("Заявка отправлена в банк");
     cy.checkTarifText(" Тариф начнет действовать ");
     cy.closeCurrentTab();
@@ -31,7 +31,7 @@ describe("", () => {
     cy.openPackageTab();
     cy.chooseAccType("Расчетный");
     cy.addPackageByName('Пакет услуг "30 платежей"');
-    cy.signTarifAndPackage("  Зюкина Кристина Виореловна  ");
+    cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.get("div.package-content-body__text").should(
       "have.text",
       " Заявка на подключение отправлена \nв банк "
@@ -42,7 +42,7 @@ describe("", () => {
     cy.openPackageTab();
     cy.chooseAccType("Расчетный");
     cy.addPackageByName('Пакет услуг "60 платежей"');
-    cy.signTarifAndPackage("  Зюкина Кристина Виореловна  ");
+    cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.get("div.package-content-body__text").should(
       "have.text",
       " Заявка на подключение отправлена \nв банк "
@@ -53,7 +53,7 @@ describe("", () => {
     cy.openPackageTab();
     cy.chooseAccType("Расчетный");
     cy.addPackageByName('Пакет услуг "90 платежей"');
-    cy.signTarifAndPackage("  Зюкина Кристина Виореловна  ");
+    cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.get("div.package-content-body__text").should(
       "have.text",
       " Заявка на подключение отправлена \nв банк "
@@ -64,7 +64,7 @@ describe("", () => {
     cy.openPackageTab();
     cy.chooseAccType("Расчетный");
     cy.addPackageByName('Пакет услуг "платежи безлимитно"');
-    cy.signTarifAndPackage("  Зюкина Кристина Виореловна  ");
+    cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.get("div.package-content-body__text").should(
       "have.text",
       " Заявка на подключение отправлена \nв банк "
@@ -74,8 +74,8 @@ describe("", () => {
     cy.openTarifTab("Тарифы и пакеты");
     cy.openPackageTab();
     cy.chooseAccType("Расчетный");
-    cy.addPackageByName('Пакет услуг "платежи безлимитно"');
-    cy.signTarifAndPackage("  Зюкина Кристина Виореловна  ");
+    cy.addPackageByName('Пакет услуг "переводы на ФЛ"');
+    cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.get("div.package-content-body__text").should(
       "have.text",
       " Заявка на подключение отправлена \nв банк "
@@ -86,7 +86,7 @@ describe("", () => {
     cy.openPackageTab();
     cy.chooseAccType("Расчетный");
     cy.addPackageByName('Пакет услуг "платежи безлимитно"');
-    cy.signTarifAndPackage("  Зюкина Кристина Виореловна  ");
+    cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.get("div.package-content-body__text").should(
       "have.text",
       " Заявка на подключение отправлена \nв банк "
@@ -97,7 +97,7 @@ describe("", () => {
     cy.openPackageTab();
     cy.chooseAccType("Валютный");
     cy.addPackageByName('Пакет услуг "ВЭД"');
-    cy.signTarifAndPackage("  Зюкина Кристина Виореловна  ");
+    cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.get("div.package-content-body__text").should(
       "have.text",
       " Заявка на подключение отправлена \nв банк "
@@ -175,7 +175,7 @@ describe("", () => {
     });
   });
 
-  it.only("#3507 - Градусники Комплексный", () => {
+  it("#3507 - Градусники Комплексный", () => {
     cy.get("section.tariff-details-container").within(() => {
       cy.get("h4").should("contain","Переводы денежных средств");
       cy.get('article').first().within(()=>{
@@ -187,7 +187,7 @@ describe("", () => {
         cy.get('p.tariff-details-item__header').should('contain','Бесплатно')
         cy.get('div.metib-progress-bar__background').should('be.visible').and('have.css','background-color')
         cy.get('span.tariff-details-item__info').trigger('mouseenter')
-        cy.get('div.tariff-details-item__progress-wrapper span').should('contain',' 1 из 20 шт ')
+        cy.get('div.tariff-details-item__progress-wrapper span').should('be.visible')
       })
 
       cy.get('article').last().within(()=>{

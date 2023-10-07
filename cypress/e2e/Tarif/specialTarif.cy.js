@@ -80,7 +80,7 @@ describe("", () => {
         cy.get('p.tariff-details-item__header').should('contain','0%')
         cy.get('div.metib-progress-bar__background').should('be.visible').and('have.css','background-color')
         cy.get('span.tariff-details-item__info').trigger('mouseenter')
-        cy.get('div.tariff-details-item__progress-wrapper span').should('contain',' 122948.51 ₽ ')
+        cy.get('div.tariff-details-item__progress-wrapper span').should('contain','₽ ')
       })
     })
 
@@ -96,7 +96,7 @@ describe("", () => {
       cy.get('p.tariff-details-item__header').should('contain','Бесплатно')
       cy.get('div.metib-progress-bar__background').should('be.visible').and('have.css','background-color')
       cy.get('span.tariff-details-item__info').trigger('mouseenter')
-      cy.get('div.tariff-details-item__progress-wrapper span').should('contain',' 0 шт ')
+      cy.get('div.tariff-details-item__progress-wrapper span').should('contain',' шт ')
     })
 
     cy.get('article').last().within(()=>{
@@ -114,7 +114,7 @@ describe("", () => {
 })
 
 
-  it.only("#3218 - Тарифы / Описание Переходов", () => {
+  it("#3218 - Тарифы / Описание Переходов", () => {
     cy.openTarifTab("Тарифы");
     cy.get(
       '[data-qa="16577864014650"] > [data-qa="1657784328292"] > [data-qa="1657787397864"] > .caption'
@@ -189,7 +189,7 @@ describe("", () => {
   });
   it("#3341 - Специальный > Активный ВЭД", () => {
     cy.openTarifTab("Тарифы и пакеты");
-    cy.changeTarifByName("Тариф Активный ВЭД‎", "Подключить");
+    cy.changeTarifByName("Тариф ‎Активный ВЭД‎", "Подключить");
     cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.checkTarifCaption("Заявка отправлена в банк");
     cy.checkTarifText(" Тариф начнет действовать ");

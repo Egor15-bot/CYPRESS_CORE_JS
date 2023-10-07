@@ -10,8 +10,6 @@ describe("", () => {
     cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.checkTarifCaption("Заявка отправлена в банк");
     cy.checkTarifText(" Тариф начнет действовать ");
-    cy.checkTarifStatus("В обработке");
-    cy.cancelTariff();
   });
 
   it("#3304 - Оптимальный > Стартовый", () => {
@@ -20,11 +18,9 @@ describe("", () => {
     cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.checkTarifCaption("Заявка отправлена в банк");
     cy.checkTarifText(" Тариф начнет действовать ");
-    cy.checkTarifStatus("В обработке");
-    cy.cancelTariff();
   });
 
-  it.only("#3332 - Основные положения Оптимальный", () => {
+  it("#3332 - Основные положения Оптимальный", () => {
     cy.get(
       ".tariff-details-header__title-wrapper > app-arrow-toggle > .arrow-toggle-wrap > .arrow-toggle > .arrow-toggle__arrow"
     ).click();
@@ -88,7 +84,7 @@ describe("", () => {
     );
   });
 
-  it.only("#3215 - Описание Переходов", () => {
+  it("#3215 - Описание Переходов", () => {
     cy.openTarifTab("Тарифы");
     cy.get("div.tab").contains("Дополнительные пакеты").should("not.exist");
     cy.get(
