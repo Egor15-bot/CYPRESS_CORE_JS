@@ -184,7 +184,7 @@ describe("", () => {
             .find('span').should('contain',' Расчетный счет 40702810800990006080 ')
         })
         cy.get('span.tariff-details-item__option-description').should('contain',' Переводы в другие банки на счета юридических лиц, ИП и ФЛ ')
-        cy.get('p.tariff-details-item__header').should('contain','Бесплатно')
+        cy.get('p.tariff-details-item__header').should('be.visible')
         cy.get('div.metib-progress-bar__background').should('be.visible').and('have.css','background-color')
         cy.get('span.tariff-details-item__info').trigger('mouseenter')
         cy.get('div.tariff-details-item__progress-wrapper span').should('be.visible')

@@ -59,6 +59,7 @@ Cypress.Commands.add("openPackageTab", () => {
       "contain",
       ' Пакеты "30/60/90 платежей" и "платежи безлимитно" не могут действовать одновременно. '
     );
+    cy.wait(2000)
 });
 
 Cypress.Commands.add("addPackageByName", (packageName) => {
@@ -71,7 +72,6 @@ Cypress.Commands.add("addPackageByName", (packageName) => {
 });
 
 Cypress.Commands.add("chooseAccType", (accType) => {
-  cy.wait(2000);
   cy.get(".arrow-down > use").click();
   cy.get("div.custom-select__container__item").contains(accType).click();
 });

@@ -79,20 +79,21 @@ describe("", () => {
     cy.checkTarifStatus("В обработке");
     cy.cancelTariff()
   });
-  it("#3239 - Тариф подпись частичная", () => {
+  it("#3239 - Пакеты подпись частичная", () => {
     cy.openTarifTab("Тарифы и пакеты");
     cy.openPackageTab();
+    cy.wait(2000)
     cy.chooseAccType("Расчетный");
-    cy.addPackageByName('Пакет услуг "30 платежей"');
+    cy.addPackageByName('"60 платежей"');
     cy.signTarifAndPackage(" Зюкина_Подпись1 ");
-
-    cy.get("div.package-content-body__text").should(
+    cy.get('div.package-content-body').should(
       "have.text",
-      " Заявка на подключение отправлена \nв банк "
+      " Необходимо поставить вторую подпись \nдля отправки заявки в банк "
     );
     cy.closeCurrentTab()
     cy.openTarifTab('Заявления')
-    cy.checkPackageStatus("В обработке");
+    cy.checkPackageStatus("Частично подписан");
+    //Дописать после фикса
   });
   it("#3351 - Отмена заявки на тариф", () => {
     cy.openTarifTab("Тарифы и пакеты");
@@ -165,7 +166,7 @@ describe("", () => {
     cy.openTarifTab("Тарифы и пакеты");
     cy.openPackageTab();
     cy.chooseAccType("Расчетный");
-    cy.addPackageByName('Пакет услуг "30 платежей"');
+    cy.addPackageByName('Пакет услуг "60 платежей"');
     cy.signTarifAndPackage(" Зюкина Кристина Виореловна ");
     cy.get("div.package-content-body__text").should(
       "have.text",
@@ -182,7 +183,7 @@ describe("", () => {
     cy.get("div.tab").should("have.length", "3");
   });
   
-  it("#3525 Пакеты подпись частичная", () => {
+  it("#3525 Тариф подпись частичная", () => {
     cy.openTarifTab("Тарифы и пакеты");
     cy.changeTarifByName("Тариф Расчетный", "Подключить");
     cy.signTarifAndPackage(" Зюкина_Подпись1 ");
@@ -231,11 +232,12 @@ describe("", () => {
     cy.get("div.package-card").should("have.length", 0);
   });
 
-  it.only("#3204 Заявления Сортировка по дате", () => {
+  it("#3204 Заявления Сортировка по дате", () => {
     cy.openTarifTab("Заявления");
     cy.checkDocsOrder();
   });
 
   it("#3121 Статусы тариф", () => {});
+
   it("#3529 Статусы пакет", () => {});
 });

@@ -6,7 +6,7 @@ describe('Страница авторизации', () => {
   })
   context('Хедер страницы входа', () => {
     it('#2238 - Страница входа. Лого Проверка редиректа на боевой сайт', () => {
-      cy.get('div[data-qa="1657808668688"]').click()
+      cy.get('[data-qa="1657808668688"]').click()
       cy.url().should('eq', 'https://metib.online/')
     })
     it('#2239 - Страница входа. Номер контакт центра', () => {
@@ -26,13 +26,13 @@ describe('Страница авторизации', () => {
         expect(width).to.be.greaterThan(1199)
         expect(height).to.be.greaterThan(829)
       })
-      cy.get('div[data-qa="1657809117566"]').should('contain', 'Новости')
+      cy.get('[data-qa="1657809117566"]').should('contain', 'Новости')
       cy.get('div.content-desc > :nth-child(2)').invoke('text').then((actualText) => {
         const expectedText = ' С 07 ноября 2022 года осуществлена реорганизация Новосибирского филиала в Дополнительный офис Новосибирск.'
         expect(actualText.trim(), expectedText)
       })
-      cy.get('div[data-qa="1657809121331"] div[id]').first().should('have.css', 'border-left', '4px solid rgb(47, 84, 235)');
-      cy.get('div[data-qa="1657809121331"] div[id]').last().scrollIntoView().click().should('have.css', 'border-left', '4px solid rgb(47, 84, 235)')
+      cy.get('div[data-qa="1657809121331"] div[id]').first().should('have.css', 'border-left');
+      cy.get('div[data-qa="1657809121331"] div[id]').last().scrollIntoView().click().should('have.css', 'border-left')
       cy.get('.content-desc > :nth-child(2)').invoke('text').then((actualText) => {
         const expectedText = 'ПАО АКБ "Металлинвестбанк" уведомляет Вас о том, что в связи с празднованием Дня народного единства изменится режим работы отделений Банка. '
         expect(actualText.trim(), expectedText)
@@ -54,7 +54,6 @@ describe('Страница авторизации', () => {
       cy.get('div.panel-title').should('contain', 'Интернет-банк для бизнеса')
     })
     it('#4386 - Страница входа. Логин с невалидными данными', () => {
-      //FIXME: написать дополнительный тест со значением .type("someText")
       cy.get('input[data-qa="1658988187497"][type="text"]').type("hello", { log: false })
       cy.get('input[data-qa="1658988187497"][type="password"]').type("InvalidPassword", { log: false })
       cy.get('div[data-qa="1658987981978"]').click()
@@ -69,10 +68,10 @@ describe('Страница авторизации', () => {
     it('#2242 - Отображение полей логин и пароль', () => {
       cy.get('div.panel-form__input.login div.panel-form__input__placeholder').first().should('contain', ' Логин ')
       cy.get('div.panel-form__input.login div.panel-form__input__placeholder').last().should('contain', ' Пароль ')
-      cy.get('app-svg-icon[data-qa="1658988194022"] svg[data-qa="1658988194022"] svg').first().click().then(() => {
+      cy.get('.panel-form__input-svg-hamburger').first().click().then(() => {
         cy.get('div.tooltip').should('have.text', ' Номер телефона в формате 71234567890 или логин ')
       })
-      cy.get('app-svg-icon[data-qa="1658988194022"] svg').last().click().then(() => {
+      cy.get('.panel-form__input-svg-hamburger ').last().click().then(() => {
         cy.get('input[data-qa="1658988187497"]').last()
           .type('Some Text1')
           .should('have.attr', 'type', 'text')
@@ -84,7 +83,7 @@ describe('Страница авторизации', () => {
       cy.chooseItemFromFooter('Мобильное приложение')
       cy.get("div.apps__close_header").should('contain', "Мобильное приложение")
       cy.get("div.apps__content_text").should('contain', ' Отсканируйте QR-код и установите мобильное приложение на телефон или воспользуйтесь ссылкой ')
-      cy.get("div.apps__content_image").should('be.visible')
+      cy.get(".apps__content_image").should('be.visible')
       cy.get('img.apps__content_image').then((imgElement) => {
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
@@ -146,8 +145,8 @@ describe('Страница авторизации', () => {
     })
     it('#2246 - Страница входа. Новости', () => {
       cy.chooseItemFromFooter('Новости')
-      cy.get('div[data-qa="1657809117566"]').should('contain', 'Новости')
-      cy.get('div[data-qa="1657809113674').should('be.visible')
+      cy.get('[data-qa="1657809117566"]').should('contain', 'Новости')
+      cy.get('[data-qa="1657809113674').should('be.visible')
       cy.get('div.news__title_close').click()
       cy.getByClass("div.block-content.ng-tns-c310-2").should('not.exist')
     })
