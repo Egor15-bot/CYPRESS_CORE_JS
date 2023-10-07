@@ -1,6 +1,6 @@
 describe("", () => {
   beforeEach(() => {
-    cy.loginApi();
+    cy.loginApi('TOKEN');
     cy.changeCompanyApi("7978049");
     cy.visit("/tarif");
   });

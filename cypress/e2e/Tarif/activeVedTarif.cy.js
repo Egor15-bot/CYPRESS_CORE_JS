@@ -1,8 +1,10 @@
 describe("", () => {
   beforeEach(() => {
-    cy.loginApi();
+    cy.clearAllCookies()
+    cy.loginApi('TOKEN');
     cy.changeCompanyApi("7978044");
     cy.visit("/tarif");
+    
   });
   it("#3285 - Активный > Комплексный ", () => {
     cy.openTarifTab("Тарифы и пакеты");
