@@ -35,12 +35,13 @@
     "run": "npx cypress run",
     "record": "npx cypress run --record --key d43973ab-655d-4198-9f44-11126ff677d3",
     "cy:parallel-record": "cypress-parallel -d cypress/e2e -t 5 -s cy:run --record --key d43973ab-655d-4198-9f44-11126ff677d3",
-    "cy:ci":"npx cypress run --env LOGIN=${{ secrets.PREDPROD_LOGIN }},PASSWORD=${{ secrets.PREDPROD_PASSWORD }},TOKEN=${{ secrets.PREDPROD_TOKEN }}"    
+    "cy:ci": "npx cypress run --env LOGIN=${{ secrets.PREDPROD_LOGIN }},PASSWORD=${{ secrets.PREDPROD_PASSWORD }},TOKEN=${{ secrets.PREDPROD_TOKEN }}"
   },
   "dependencies": {
     "as-a": "^2.2.2",
     "cypress": "^13.3.0",
     "axios": "^1.4.0",
+    "clipboardy": "^3.0.0",
     "cypress-parallel": "^0.13.0",
     "cypress-plugin-api": "^2.11.0",
     "cypress-testing-library": "^4.0.0",
