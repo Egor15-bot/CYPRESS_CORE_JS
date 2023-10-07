@@ -29,16 +29,6 @@ Cypress.Commands.add('getLocalStorageValue', (key) => {
         return value.should('exist')
     });
 })
-//Авторизация с сохранением сессии
-Cypress.Commands.add('loginStand', () => {
-    cy.session([], () => {
-        cy.visit("/")
-        cy.get('input[data-qa="1658988187497"][type="text"]').type("qa_eybondar_ul", { log: false })
-        cy.get('input[data-qa="1658988187497"][type="password"]').type("Qq12345", { log: false })
-        cy.get('div[data-qa="1658987981978"]').click()
-        cy.url().should('contain', 'desktop')
-    })
-})
 //Метод для выбора любого элемента из хедера на главном меню
 Cypress.Commands.add('openHeaderTab', () => {
     cy.contains('div[class="main-menu__content-wrapper"] *', tabName).click()
