@@ -18,4 +18,6 @@ Cypress.Commands.add('setDocType',(docType) =>{
 
 Cypress.Commands.add('setDocStatus',(docStatus) =>{
     cy.get('div.multi-select__title').contains('Все статусы документов').click()
+    cy.get('[data-qa="16589845151671"] div.multi-select__menu > div > app-checkbox').contains('Все статусы документов').uncheck()
+    cy.get('[data-qa="16589845151671"] div.multi-select__menu > div > app-checkbox').contains(docStatus).check()
 })
