@@ -12,8 +12,8 @@ Cypress.Commands.add('openVedSubTab',(tabName)=>{
 
 Cypress.Commands.add('setDocType',(docType) =>{
     cy.get('div.multi-select__title').contains('Все типы').click()
-    cy.get('[data-qa="16589845151673"] div.multi-select__menu > div > app-checkbox').contains('Все типы').uncheck()
-    cy.get('[data-qa="16589845151673"] div.multi-select__menu > div > app-checkbox').contains(docType).check()
+    cy.get('[data-qa="16589845151673"] div.multi-select__menu > div > app-checkbox').contains('Все типы').click()
+    cy.get('[data-qa="16589845151673"] div.multi-select__menu > div > app-checkbox').contains(docType).click()
 })
 
 Cypress.Commands.add('setDocStatus',(docStatus) =>{
