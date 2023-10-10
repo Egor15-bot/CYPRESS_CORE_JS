@@ -1670,7 +1670,7 @@ describe('Общие кейсы', () => {
             cy.deleteAllCounterparts()
         })
     })
-    context.only('Кейсы, где нужно создавать 100 контрагентов', () => {
+    context('Кейсы, где нужно создавать 100 контрагентов', () => {
         beforeEach(function () {
             //Смена компании на "Захарова Яна Николаевна"
             cy.changeCompanyApi('3448774')
