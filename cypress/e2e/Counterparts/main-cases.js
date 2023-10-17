@@ -1679,7 +1679,7 @@ describe('Общие кейсы', () => {
             //Удаление всех контрагентов через API
             cy.deleteAllCounterparts()
 
-            //Создаю 300 контрагентов через API (это не в before, так как this.testData.UL не срабатывает не, если находится не в блоке it)
+            //Создаю 100 контрагентов через API (это не в before, так как this.testData.UL не срабатывает не, если находится не в блоке it)
             cy.createSomeCounterpartsApi(100, this.testData.UL)
 
             //Перехожу в раздел "Контрагенты"
@@ -1716,14 +1716,14 @@ describe('Общие кейсы', () => {
                 .should('have.length', 100)
         })
         it('#1372. Проверка скорости загрузки страницы "Контрагенты"', function () {
-            //Проверяю, что создались 300 контрагентов
+            //Проверяю, что создались 100 контрагентов
             cy.request({
                 method: 'GET',
                 url: `${Cypress.config('baseUrl')}rest/stateful/corp/dic/corr/list?kontur_focus=true`,
             }).then((response) => {
                 console.log(response.body); //Вывести ответ в консоль для отладки
                 expect(response.status).to.equal(200);
-                expect(response.body.corrDicElementUl).to.have.lengthOf(300); //Количество контрагентов = 300
+                expect(response.body.corrDicElementUl).to.have.lengthOf(100); //Количество контрагентов = 100
             });
             //Перехожу в раздел "Контрагенты"
             cy.visit('/counterparts')
