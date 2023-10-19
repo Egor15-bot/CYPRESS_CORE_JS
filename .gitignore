@@ -6,3 +6,4 @@ runner-results
 multi-reporter-config.json
 cypress/downloads
 allure-report/
+allure-results/
